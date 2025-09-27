@@ -1,29 +1,31 @@
 import api from "../api/axios";
 import type {
-  SignUpConfirmType,
-  ForgetPasswordConfirmType,
-  ForgetPasswordType,
-  SignInType,
-  SignUpType,
+  SignUpConfirmRequest,
+  ForgetPasswordConfirmRequest,
+  ForgetPasswordRequest,
+  SignInRequest,
+  SignUpRequest,
 } from "../types/auth.types";
 
-export const signUp = async (data: SignUpType) => {
+export const signUp = async (data: SignUpRequest) => {
   return await api.post("/auth/sign-up", data);
 };
 
-export const verifySignUp = async (data: SignUpConfirmType) => {
+export const verifySignUp = async (data: SignUpConfirmRequest) => {
   return await api.post("/auth/verify-sign-up", data);
 };
 
-export const signIn = async (data: SignInType) => {
+export const signIn = async (data: SignInRequest) => {
   return await api.post("/auth/sign-in", data);
 };
 
-export const forgetPassword = async (data: ForgetPasswordType) => {
+export const forgetPassword = async (data: ForgetPasswordRequest) => {
   return await api.post("/auth/forget-password", data);
 };
 
-export const verifyForgetPassword = async (data: ForgetPasswordConfirmType) => {
+export const verifyForgetPassword = async (
+  data: ForgetPasswordConfirmRequest
+) => {
   return await api.post("/auth/verify-forget-password", data);
 };
 

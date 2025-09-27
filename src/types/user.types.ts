@@ -3,6 +3,17 @@ export interface User {
   phone: string;
   email: string;
   birthday: string;
-  avatarUrl: string;
+  avatarUrl: string | null;
   role: string;
+}
+
+export interface UpdateUserRequest {
+  name: string;
+  email: string;
+  birthdayString: string;
+}
+
+export interface ChangePasswordRequest {
+  password: string;
+  newPassword: string;
 }

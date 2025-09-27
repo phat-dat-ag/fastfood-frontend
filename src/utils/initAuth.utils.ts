@@ -2,8 +2,9 @@ import type { Router } from "vue-router";
 import { verify } from "../service/auth.service";
 import { useUserStore } from "../store/useUserStore";
 import type { ApiResponse } from "../types/api.types";
-import type { SignInResponseType } from "../types/auth.types";
+import type { SignInResponse } from "../types/auth.types";
 import { ADMIN, STAFF } from "../constants/user-role.constant";
+import type { AxiosError } from "axios";
 
 export async function initAuth(router: Router) {
   const token = localStorage.getItem("token");
@@ -16,7 +17,7 @@ export async function initAuth(router: Router) {
 
   try {
     const res = await verify();
-    const resData: ApiResponse<SignInResponseType> = res.data;
+    const resData: ApiResponse<SignInResponse> = res.data;
     if (!resData.data) {
       localStorage.removeItem("token");
       userStore.clearUser();
@@ -36,9 +37,10 @@ export async function initAuth(router: Router) {
         router.push({ name: "UserPage" });
     }
   } catch (e) {
+    const err = e as AxiosError<any>;
     localStorage.removeItem("token");
     userStore.clearUser();
-    console.log("Lỗi xử lý token", e);
+    console.log("Lỗi xử lý token", err.response?.data || err.message || err);
     return router.push({ name: "GuestPage" });
   }
 }

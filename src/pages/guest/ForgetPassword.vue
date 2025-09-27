@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import type { ForgetPasswordFormType, ForgetPasswordType, OTPResponseType } from '../../types/auth.types';
+import type { ForgetPasswordRequest, OTPResponseType } from '../../types/auth.types';
 import OTPModal from '../../components/OTPModal.vue';
 import { onUnmounted, ref } from 'vue';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -63,7 +63,7 @@ onUnmounted(() => {
 })
 
 async function forgetPasswordHandle() {
-    const forgetPasswordData: ForgetPasswordType | null = authStore.forgetPasswordData;
+    const forgetPasswordData: ForgetPasswordRequest | null = authStore.forgetPasswordData;
     if (!forgetPasswordData) {
         notifyError("Lỗi", "Không có dữ liệu để yêu cầu quên mật khẩu");
         return;
@@ -93,11 +93,10 @@ async function forgetPasswordHandle() {
     }
 }
 
-const onSubmit = async (value: any) => {
-    const forgetPasswordDataForm: ForgetPasswordFormType = value;
+const onSubmit = async (values: any) => {
     authStore.setForgetPasswordData({
-        phone: forgetPasswordDataForm.phone,
-        newPassword: forgetPasswordDataForm.newPassword
+        phone: values.phone,
+        newPassword: values.newPassword,
     });
     await forgetPasswordHandle();
 }
@@ -130,7 +129,7 @@ const checkOTP = async (otp: string): Promise<string> => {
 
 </script>
 <template>
-    <div class="flex justify-center items-center py-4">
+    <div class="flex justify-center items-center">
         <div class="w-full max-w-md p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6">Tạo mật khẩu mới</h2>
             <!-- Form -->
@@ -162,11 +161,17 @@ const checkOTP = async (otp: string): Promise<string> => {
                     <ErrorMessage name="confirmPassword" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <!-- Confirm button -->
-                <button
-                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                    Xác nhận
-                </button>
+                <div class="flex gap-4">
+                    <button type="button"
+                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
+                        @click="() => router.back()">
+                        Quay lại
+                    </button>
+                    <button
+                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
+                        Xác nhận
+                    </button>
+                </div>
             </Form>
 
             <!-- Modal -->

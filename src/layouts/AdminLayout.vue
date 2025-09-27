@@ -36,7 +36,7 @@ function signOut() {
             </div>
         </div>
         <div class="grow">
-            <main class="w-[96%] mx-auto mt-4">
+            <main class="w-[96%] my-4 mx-auto">
                 <router-view></router-view>
             </main>
         </div>

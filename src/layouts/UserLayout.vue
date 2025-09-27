@@ -6,7 +6,7 @@ import { USER } from '../constants/user-role.constant';
 </script>
 <template>
     <Header :role="USER"></Header>
-    <main class="w-[80%] mx-auto">
+    <main class="w-[80%] my-4 mx-auto">
         <router-view></router-view>
     </main>
     <Footer></Footer>

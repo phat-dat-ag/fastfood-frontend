@@ -2,7 +2,7 @@
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import * as yup from 'yup';
 import { nomarlizeSpaces } from '../../utils/string.utils';
-import type { OTPResponseType, SignUpFormType, SignUpType } from '../../types/auth.types';
+import type { OTPResponseType, SignUpRequest } from '../../types/auth.types';
 import { onUnmounted, ref } from 'vue';
 import OTPModal from '../../components/OTPModal.vue';
 import { signUp, verifySignUp } from '../../service/auth.service';
@@ -77,7 +77,7 @@ onUnmounted(() => {
 })
 
 async function signUpHandle() {
-    const signUpData: SignUpType | null = authStore.signUpData;
+    const signUpData: SignUpRequest | null = authStore.signUpData;
     if (!signUpData) {
         notifyError("Lỗi", "Không có dữ liệu để đăng ký");
         return;
@@ -108,20 +108,19 @@ async function signUpHandle() {
 }
 
 
-const onSubmit = async (value: any) => {
-    const signUpFormData: SignUpFormType = value;
+const onSubmit = async (values: any) => {
     authStore.setSignUpData({
-        phone: signUpFormData.phone,
-        name: signUpFormData.name,
-        email: signUpFormData.email,
-        birthdayString: signUpFormData.birthdayString,
-        password: signUpFormData.password
+        phone: values.phone,
+        name: values.name,
+        email: values.email,
+        birthdayString: values.birthdayString,
+        password: values.password
     });
     await signUpHandle();
 }
 
 const checkOTP = async (otp: string): Promise<string> => {
-    const signUpData: SignUpType | null = authStore.signUpData;
+    const signUpData: SignUpRequest | null = authStore.signUpData;
     if (!signUpData) {
         notifyError("Lỗi", "Không có dữ liệu để đăng ký");
         return "Không có dữ liệu để đăng ký";
@@ -145,7 +144,7 @@ const checkOTP = async (otp: string): Promise<string> => {
 </script>
 
 <template>
-    <div class="flex justify-center items-center py-4">
+    <div class="flex justify-center items-center">
         <div class="w-full max-w-md p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6">Đăng ký</h2>
             <!-- Form -->
@@ -197,11 +196,18 @@ const checkOTP = async (otp: string): Promise<string> => {
                         placeholder="Nhập mật khẩu để xác nhận" />
                     <ErrorMessage name="confirmPassword" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- Sign Up button -->
-                <button
-                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                    Đăng ký
-                </button>
+
+                <div class="flex gap-4">
+                    <button type="button"
+                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
+                        @click="() => router.push({ name: 'GuestPage' })">
+                        Quay lại
+                    </button>
+                    <button
+                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
+                        Đăng ký
+                    </button>
+                </div>
 
                 <div>
                     <p class="text-center">

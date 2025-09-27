@@ -7,16 +7,7 @@ export interface OTPResponseType {
 }
 
 // sign up
-export interface SignUpFormType {
-  name: string;
-  phone: string;
-  birthdayString: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface SignUpType {
+export interface SignUpRequest {
   name: string;
   phone: string;
   birthdayString: string;
@@ -24,35 +15,29 @@ export interface SignUpType {
   password: string;
 }
 
-export interface SignUpConfirmType {
+export interface SignUpConfirmRequest {
   phone: string;
   otp: string;
 }
 
 // sign in
-export interface SignInType {
+export interface SignInRequest {
   phone: string;
   password: string;
 }
 
-export interface SignInResponseType {
+export interface SignInResponse {
   token: string;
   user: User;
 }
 
 // forget password
-export interface ForgetPasswordFormType {
-  phone: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-export interface ForgetPasswordType {
+export interface ForgetPasswordRequest {
   phone: string;
   newPassword: string;
 }
 
-export interface ForgetPasswordConfirmType {
+export interface ForgetPasswordConfirmRequest {
   phone: string;
   otp: string;
   newPassword: string;

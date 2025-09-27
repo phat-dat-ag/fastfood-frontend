@@ -12,6 +12,9 @@ import AdminLayout from "../layouts/AdminLayout.vue";
 import AdminHome from "../pages/admin/AdminHome.vue";
 import { useUserStore } from "../store/useUserStore";
 import { ADMIN, STAFF, USER } from "../constants/user-role.constant";
+import Account from "../pages/Account.vue";
+import UpdateAccount from "../pages/UpdateAccount.vue";
+import ChangePassword from "../pages/ChangePassword.vue";
 
 const routes = [
   {
@@ -21,10 +24,10 @@ const routes = [
     redirect: { name: "Home" },
     children: [
       { path: "", name: "Home", component: Home },
-      { path: "/sign-up", name: "SignUp", component: SignUp },
-      { path: "/sign-in", name: "SignIn", component: SignIn },
+      { path: "sign-up", name: "SignUp", component: SignUp },
+      { path: "sign-in", name: "SignIn", component: SignIn },
       {
-        path: "/forget-password",
+        path: "forget-password",
         name: "ForgetPassword",
         component: ForgetPassword,
       },
@@ -36,7 +39,24 @@ const routes = [
     component: UserLayout,
     meta: { requireAuth: true, roles: [USER] },
     redirect: { name: "UserHome" },
-    children: [{ path: "", name: "UserHome", component: UserHome }],
+    children: [
+      { path: "", name: "UserHome", component: UserHome },
+      {
+        path: "account",
+        name: "UserAccount",
+        component: Account,
+      },
+      {
+        path: "update-infor",
+        name: "UpdateUserAccount",
+        component: UpdateAccount,
+      },
+      {
+        path: "change-password",
+        name: "ChangeUserPassword",
+        component: ChangePassword,
+      },
+    ],
   },
   {
     path: "/staff",
@@ -44,7 +64,24 @@ const routes = [
     component: StaffLayout,
     meta: { requireAuth: true, roles: [STAFF] },
     redirect: { name: "StaffHome" },
-    children: [{ path: "", name: "StaffHome", component: StaffHome }],
+    children: [
+      { path: "", name: "StaffHome", component: StaffHome },
+      {
+        path: "account",
+        name: "StaffAccount",
+        component: Account,
+      },
+      {
+        path: "update-infor",
+        name: "UpdateStaffAccount",
+        component: UpdateAccount,
+      },
+      {
+        path: "change-password",
+        name: "ChangeStaffPassword",
+        component: ChangePassword,
+      },
+    ],
   },
   {
     path: "/admin",

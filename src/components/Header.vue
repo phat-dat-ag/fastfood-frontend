@@ -5,6 +5,7 @@ import { STAFF, USER } from '../constants/user-role.constant';
 import { ElBadge, ElDropdown, ElTooltip } from 'element-plus';
 import { useUserStore } from '../store/useUserStore';
 import { Box, ShoppingCartFull } from "@element-plus/icons-vue"
+import { notifyError } from '../utils/notification.utils';
 
 interface HeaderProps {
     role: string;
@@ -12,6 +13,8 @@ interface HeaderProps {
 const router = useRouter();
 
 const props = defineProps<HeaderProps>();
+
+const defaultAvatarUrl: string = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1747122687/books/mzkfsohlqelvamwm0wzk.jpg';
 
 const userStore = useUserStore();
 
@@ -28,11 +31,11 @@ const onClickMenuItem = (id: string) => {
 }
 
 // GUEST
-const onCLickSignUpButton = () => {
+const onClickSignUpButton = () => {
     router.push({ name: "SignUp" });
 }
 
-const onCLickSignInButton = () => {
+const onClickSignInButton = () => {
     router.push({ name: "SignIn" });
 }
 
@@ -42,6 +45,20 @@ function signOut() {
     router.push({ name: "GuestPage" });
 }
 
+// USER AND STAFF
+
+function goToAccountPage() {
+    switch (userStore.user?.role) {
+        case USER:
+            router.push({ name: "UserAccount" });
+            break;
+        case STAFF:
+            router.push({ name: "StaffAccount" });
+            break;
+        default:
+            notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
+    }
+}
 </script>
 <template>
     <header class="w-[80%] mx-auto flex gap-4 border-b border-red-300">
@@ -69,10 +86,10 @@ function signOut() {
                 </ElTooltip>
             </ElBadge>
             <ElDropdown>
-                <el-avatar :size="80" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                <el-avatar :size="80" :src="userStore.user?.avatarUrl || defaultAvatarUrl" />
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item>Thông tin cá nhân</el-dropdown-item>
+                        <el-dropdown-item @click="goToAccountPage">Thông tin cá nhân</el-dropdown-item>
                         <el-dropdown-item>Lịch sử mua hàng</el-dropdown-item>
                         <el-dropdown-item>Lịch sử thách thức</el-dropdown-item>
                         <el-dropdown-item @click="signOut">Đăng xuất</el-dropdown-item>
@@ -89,10 +106,10 @@ function signOut() {
                 </ElTooltip>
             </ElBadge>
             <ElDropdown>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                <el-avatar :src="userStore.user?.avatarUrl || defaultAvatarUrl" />
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item>Thông tin cá nhân</el-dropdown-item>
+                        <el-dropdown-item @click="goToAccountPage">Thông tin cá nhân</el-dropdown-item>
                         <el-dropdown-item>Lịch sử mua hàng</el-dropdown-item>
                         <el-dropdown-item>Lịch sử thách thức</el-dropdown-item>
                         <el-dropdown-item @click="signOut">Đăng xuất</el-dropdown-item>
@@ -101,8 +118,8 @@ function signOut() {
             </ElDropdown>
         </div>
         <div v-else class="w-[20%] flex justify-end gap-4">
-            <button class="hover:underline hover:text-orange-500" @click="onCLickSignUpButton">Đăng ký ngay</button>
-            <button class="hover:underline hover:text-orange-500" @click="onCLickSignInButton">Đăng nhập</button>
+            <button class="hover:underline hover:text-orange-500" @click="onClickSignUpButton">Đăng ký ngay</button>
+            <button class="hover:underline hover:text-orange-500" @click="onClickSignInButton">Đăng nhập</button>
         </div>
     </header>
 </template>

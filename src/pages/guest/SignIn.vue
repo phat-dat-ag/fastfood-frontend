@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import type { SignInResponseType, SignInType } from '../../types/auth.types';
+import type { SignInResponse, SignInRequest } from '../../types/auth.types';
 import { useRouter } from 'vue-router';
 import { signIn } from '../../service/auth.service';
 import { useUserStore } from '../../store/useUserStore';
@@ -32,11 +32,11 @@ const schema = yup.object({
 let signInError = ref<string>("");
 
 const onSubmit = async (value: any) => {
-    const signInData: SignInType = value;
+    const signInData: SignInRequest = value;
     const loading: any = openLoading("Đang đăng nhập");
     try {
         const res = await signIn(signInData);
-        const dataRes: ApiResponse<SignInResponseType> = res.data;
+        const dataRes: ApiResponse<SignInResponse> = res.data;
         if (!dataRes.data) {
             notifyError("Lỗi", "Không thấy dữ liệu trả về sau khi đăng nhập");
             return;
@@ -55,8 +55,8 @@ const onSubmit = async (value: any) => {
         }
     } catch (e) {
         const err = e as AxiosError<any>;
-        // console.log("Status:", err.response?.status);
-        // console.log("Data:", err.response?.data);
+        console.log("Status: ", err.response?.status);
+        console.log("Data: ", err.response?.data);
         signInError.value = err.response?.data.message || "Số điện thoại hoặc mật khẩu sai";
     } finally {
         closeLoading(loading);
@@ -64,7 +64,7 @@ const onSubmit = async (value: any) => {
 }
 </script>
 <template>
-    <div class="flex justify-center items-center py-4">
+    <div class="flex justify-center items-center">
         <div class="w-full max-w-md p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6">Đăng nhập</h2>
             <Form :validation-schema="schema" @submit="onSubmit" class="space-y-4">
@@ -92,11 +92,17 @@ const onSubmit = async (value: any) => {
                     Quên mật khẩu?
                 </button>
 
-                <!-- Sign In button -->
-                <button
-                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                    Đăng nhập
-                </button>
+                <div class="flex gap-4">
+                    <button type="button"
+                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
+                        @click="() => router.push({ name: 'GuestPage' })">
+                        Quay lại
+                    </button>
+                    <button
+                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
+                        Đăng nhập
+                    </button>
+                </div>
 
                 <div>
                     <p class="text-center">

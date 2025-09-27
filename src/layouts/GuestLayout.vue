@@ -8,7 +8,7 @@ import { GUEST } from '../constants/user-role.constant';
 <template>
   <div>
     <Header :role="GUEST"></Header>
-    <main class="w-[80%] mx-auto">
+    <main class="w-[80%] my-4 mx-auto">
       <router-view></router-view>
     </main>
     <Footer></Footer>
