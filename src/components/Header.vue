@@ -42,7 +42,7 @@ const onClickSignInButton = () => {
 function signOut() {
     localStorage.removeItem("token");
     userStore.clearUser();
-    router.push({ name: "GuestPage" });
+    router.push({ name: "GuestHome" });
 }
 
 // USER AND STAFF

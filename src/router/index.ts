@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import GuestLayout from "../layouts/GuestLayout.vue";
-import Home from "../pages/guest/Home.vue";
+import GuestHome from "../pages/guest/GuestHome.vue";
 import SignUp from "../pages/guest/SignUp.vue";
 import SignIn from "../pages/guest/SignIn.vue";
 import ForgetPassword from "../pages/guest/ForgetPassword.vue";
@@ -19,11 +19,9 @@ import ChangePassword from "../pages/ChangePassword.vue";
 const routes = [
   {
     path: "/",
-    name: "GuestPage",
     component: GuestLayout,
-    redirect: { name: "Home" },
     children: [
-      { path: "", name: "Home", component: Home },
+      { path: "", name: "GuestHome", component: GuestHome },
       { path: "sign-up", name: "SignUp", component: SignUp },
       { path: "sign-in", name: "SignIn", component: SignIn },
       {
@@ -35,10 +33,8 @@ const routes = [
   },
   {
     path: "/user",
-    name: "UserPage",
     component: UserLayout,
     meta: { requireAuth: true, roles: [USER] },
-    redirect: { name: "UserHome" },
     children: [
       { path: "", name: "UserHome", component: UserHome },
       {
@@ -60,10 +56,8 @@ const routes = [
   },
   {
     path: "/staff",
-    name: "StaffPage",
     component: StaffLayout,
     meta: { requireAuth: true, roles: [STAFF] },
-    redirect: { name: "StaffHome" },
     children: [
       { path: "", name: "StaffHome", component: StaffHome },
       {
@@ -85,10 +79,8 @@ const routes = [
   },
   {
     path: "/admin",
-    name: "AdminPage",
     component: AdminLayout,
     meta: { requireAuth: true, roles: [ADMIN] },
-    redirect: { name: "AdminHome" },
     children: [{ path: "", name: "AdminHome", component: AdminHome }],
   },
 ];
@@ -112,13 +104,13 @@ router.beforeEach((to, from, next) => {
     if (to.meta.roles && !roles.includes(userRole)) {
       switch (userStore.user?.role) {
         case ADMIN:
-          return next({ name: "AdminPage" });
+          return next({ name: "AdminHome" });
         case STAFF:
-          return next({ name: "StaffPage" });
+          return next({ name: "StaffHome" });
         case USER:
-          return next({ name: "UserPage" });
+          return next({ name: "UserHome" });
         default:
-          return next({ name: "UserPage" });
+          return next({ name: "UserHome" });
       }
     }
   }

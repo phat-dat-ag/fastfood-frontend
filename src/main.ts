@@ -11,8 +11,9 @@ import { createPinia } from "pinia";
 import { initAuth } from "./utils/initAuth.utils";
 const pinia = createPinia();
 
-const app = createApp(App).use(router).use(ElementPlus).use(pinia);
+const app = createApp(App).use(pinia).use(ElementPlus);
 
 initAuth(router).then(() => {
+  app.use(router);
   app.mount("#app");
 });

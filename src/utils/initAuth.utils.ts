@@ -21,26 +21,39 @@ export async function initAuth(router: Router) {
     if (!resData.data) {
       localStorage.removeItem("token");
       userStore.clearUser();
-      return router.push({ name: "GuestPage" });
+      return router.push({ name: "GuestHome" });
     }
 
     localStorage.setItem("token", resData.data.token);
     userStore.setUser(resData.data.user);
-    switch (userStore.user?.role) {
-      case ADMIN:
-        router.push({ name: "AdminPage" });
-        break;
-      case STAFF:
-        router.push({ name: "StaffPage" });
-        break;
-      default:
-        router.push({ name: "UserPage" });
-    }
+
+    router.isReady().then(async () => {
+      const current = router.currentRoute.value;
+      const guestEntryRoutes = [
+        "GuestHome",
+        "SignIn",
+        "SignUp",
+        "ForgetPassword",
+      ];
+
+      if (guestEntryRoutes.includes(current.name as string)) {
+        switch (userStore.user?.role) {
+          case ADMIN:
+            await router.push({ name: "AdminHome" });
+            break;
+          case STAFF:
+            await router.push({ name: "StaffHome" });
+            break;
+          default:
+            await router.push({ name: "UserHome" });
+        }
+      }
+    });
   } catch (e) {
     const err = e as AxiosError<any>;
     localStorage.removeItem("token");
     userStore.clearUser();
     console.log("Lỗi xử lý token", err.response?.data || err.message || err);
-    return router.push({ name: "GuestPage" });
+    return router.push({ name: "GuestHome" });
   }
 }

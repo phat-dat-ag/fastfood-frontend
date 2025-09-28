@@ -45,13 +45,13 @@ const onSubmit = async (value: any) => {
         localStorage.setItem("token", dataRes.data.token);
         switch (userStore.user?.role) {
             case ADMIN:
-                router.push({ name: "AdminPage" });
+                router.push({ name: "AdminHome" });
                 break;
             case STAFF:
-                router.push({ name: "StaffPage" });
+                router.push({ name: "StaffHome" });
                 break;
             default:
-                router.push({ name: "UserPage" });
+                router.push({ name: "UserHome" });
         }
     } catch (e) {
         const err = e as AxiosError<any>;
