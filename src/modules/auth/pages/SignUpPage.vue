@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import * as yup from 'yup';
-import { nomarlizeSpaces } from '../../utils/string.utils';
-import type { OTPResponseType, SignUpRequest } from '../../types/auth.types';
+import { nomarlizeSpaces } from '../../../utils/string.utils';
+import type { OTPResponseType, SignUpRequest } from '../../../types/auth.types';
 import { onUnmounted, ref } from 'vue';
-import OTPModal from '../../components/OTPModal.vue';
-import { signUp, verifySignUp } from '../../service/auth.service';
+import OTPModal from '../components/OTPModal.vue';
+import { signUp, verifySignUp } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../store/useAuthStore';
-import { notifyError, notifySuccess } from '../../utils/notification.utils';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { notifyError, notifySuccess } from '../../../utils/notification.utils';
 import type { AxiosError } from 'axios';
-import type { ApiResponse } from '../../types/api.types';
-import { closeLoading, openLoading } from '../../utils/loading.utils';
+import type { ApiResponse } from '../../../types/api.types';
+import { closeLoading, openLoading } from '../../../utils/loading.utils';
+import { ROUTE_NAMES } from '../../../constants/route-names';
 
 const schema = yup.object({
     name: yup
@@ -130,7 +131,7 @@ const checkOTP = async (otp: string): Promise<string> => {
         await verifySignUp({ phone: signUpData.phone, otp });
         toggleOTPModal.value = false;
         notifySuccess("Đã tạo tài khoản", "Hãy đăng nhập");
-        router.push({ name: "SignIn" });
+        router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
         return ""
     } catch (e) {
         const err = e as AxiosError<any>;
@@ -200,7 +201,7 @@ const checkOTP = async (otp: string): Promise<string> => {
                 <div class="flex gap-4">
                     <button type="button"
                         class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
-                        @click="() => router.push({ name: 'GuestPage' })">
+                        @click="() => router.back()">
                         Quay lại
                     </button>
                     <button
@@ -213,7 +214,7 @@ const checkOTP = async (otp: string): Promise<string> => {
                     <p class="text-center">
                         Bạn đã có tài khoản?
                         <button type="button" class="hover:underline hover:text-blue-500"
-                            @click="router.push({ name: 'SignIn' })">
+                            @click="router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })">
                             Đăng nhập tại đây
                         </button>
                     </p>

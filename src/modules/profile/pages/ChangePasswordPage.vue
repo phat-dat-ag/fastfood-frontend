@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../store/useUserStore';
+import { useUserStore } from '../../../store/useUserStore';
 import * as yup from "yup";
 import { ErrorMessage, Field, Form } from 'vee-validate';
-import type { ChangePasswordRequest, User } from '../types/user.types';
-import { closeLoading, openLoading } from '../utils/loading.utils';
-import { changePassword } from '../service/user.service';
-import type { ApiResponse } from '../types/api.types';
-import { notifyError, notifySuccess } from '../utils/notification.utils';
+import type { ChangePasswordRequest, User } from '../../../types/user.types';
+import { closeLoading, openLoading } from '../../../utils/loading.utils';
+import { changePassword } from '../../../service/user.service';
+import type { ApiResponse } from '../../../types/api.types';
+import { notifyError, notifySuccess } from '../../../utils/notification.utils';
 import type { AxiosError } from 'axios';
 import { ref } from 'vue';
 
@@ -100,7 +100,7 @@ async function onSubmit(values: any) {
                 </div>
 
                 <p v-if="changePasswordError" class="text-center text-red-500 text-sm mt-1 block">{{ changePasswordError
-                }}</p>
+                    }}</p>
 
                 <div class="flex gap-4">
                     <button type="button"

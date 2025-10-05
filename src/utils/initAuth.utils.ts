@@ -3,8 +3,9 @@ import { verify } from "../service/auth.service";
 import { useUserStore } from "../store/useUserStore";
 import type { ApiResponse } from "../types/api.types";
 import type { SignInResponse } from "../types/auth.types";
-import { ADMIN, STAFF } from "../constants/user-role.constant";
 import type { AxiosError } from "axios";
+import { ROUTE_NAMES } from "../constants/route-names";
+import { USER_ROLES } from "../constants/user-roles";
 
 export async function initAuth(router: Router) {
   const token = localStorage.getItem("token");
@@ -21,7 +22,7 @@ export async function initAuth(router: Router) {
     if (!resData.data) {
       localStorage.removeItem("token");
       userStore.clearUser();
-      return router.push({ name: "GuestHome" });
+      return router.push({ name: ROUTE_NAMES.GUEST.HOME });
     }
 
     localStorage.setItem("token", resData.data.token);
@@ -30,22 +31,22 @@ export async function initAuth(router: Router) {
     router.isReady().then(async () => {
       const current = router.currentRoute.value;
       const guestEntryRoutes = [
-        "GuestHome",
-        "SignIn",
-        "SignUp",
-        "ForgetPassword",
+        ROUTE_NAMES.GUEST.HOME,
+        ROUTE_NAMES.AUTH.SIGN_UP,
+        ROUTE_NAMES.AUTH.SIGN_IN,
+        ROUTE_NAMES.AUTH.FORGET_PASSWORD,
       ];
 
       if (guestEntryRoutes.includes(current.name as string)) {
         switch (userStore.user?.role) {
-          case ADMIN:
-            await router.push({ name: "AdminHome" });
+          case USER_ROLES.ADMIN:
+            await router.push({ name: ROUTE_NAMES.ADMIN.HOME });
             break;
-          case STAFF:
-            await router.push({ name: "StaffHome" });
+          case USER_ROLES.STAFF:
+            await router.push({ name: ROUTE_NAMES.STAFF.HOME });
             break;
           default:
-            await router.push({ name: "UserHome" });
+            await router.push({ name: ROUTE_NAMES.USER.HOME });
         }
       }
     });
@@ -54,6 +55,6 @@ export async function initAuth(router: Router) {
     localStorage.removeItem("token");
     userStore.clearUser();
     console.log("Lỗi xử lý token", err.response?.data || err.message || err);
-    return router.push({ name: "GuestHome" });
+    return router.push({ name: ROUTE_NAMES.GUEST.HOME });
   }
 }

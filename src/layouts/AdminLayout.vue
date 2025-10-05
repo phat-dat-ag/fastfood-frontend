@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../store/useUserStore';
+import { ROUTE_NAMES } from '../constants/route-names';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -8,7 +9,7 @@ const userStore = useUserStore();
 function signOut() {
     userStore.clearUser();
     localStorage.removeItem("token");
-    router.push({ name: 'GuestPage' });
+    router.push({ name: ROUTE_NAMES.GUEST.HOME });
 }
 </script>
 <template>

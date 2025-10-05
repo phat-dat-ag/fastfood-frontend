@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useUserStore } from '../store/useUserStore';
-import { formatDateString } from '../utils/time.utils';
+import { useUserStore } from '../../../store/useUserStore';
+import { formatDateString } from '../../../utils/time.utils';
 import { ElAvatar } from 'element-plus';
-import { updateAvatar } from '../service/user.service';
+import { updateAvatar } from '../../../service/user.service';
 import type { AxiosError } from 'axios';
-import { notifyError, notifySuccess } from '../utils/notification.utils';
-import { closeLoading, openLoading } from '../utils/loading.utils';
-import type { ApiResponse } from '../types/api.types';
-import type { User } from '../types/user.types';
-import { STAFF, USER } from '../constants/user-role.constant';
+import { notifyError, notifySuccess } from '../../../utils/notification.utils';
+import { closeLoading, openLoading } from '../../../utils/loading.utils';
+import type { ApiResponse } from '../../../types/api.types';
+import type { User } from '../../../types/user.types';
 import { useRouter } from 'vue-router';
+import { ROUTE_NAMES } from '../../../constants/route-names';
+import { USER_ROLES } from '../../../constants/user-roles';
 
 const router = useRouter();
 
@@ -59,13 +60,13 @@ async function handleUpdateAvatar() {
     }
 }
 
-function goToUpdateAccountPage() {
+function goToEditProfilePage() {
     switch (userStore.user?.role) {
-        case USER:
-            router.push({ name: "UpdateUserAccount" });
+        case USER_ROLES.USER:
+            router.push({ name: ROUTE_NAMES.USER.EDIT_PROFILE });
             break;
-        case STAFF:
-            router.push({ name: "UpdateStaffAccount" });
+        case USER_ROLES.STAFF:
+            router.push({ name: ROUTE_NAMES.STAFF.EDIT_PROFILE });
             break;
         default:
             notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
@@ -74,11 +75,11 @@ function goToUpdateAccountPage() {
 
 function goToChangePasswordPage() {
     switch (userStore.user?.role) {
-        case USER:
-            router.push({ name: "ChangeUserPassword" });
+        case USER_ROLES.USER:
+            router.push({ name: ROUTE_NAMES.USER.CHANGE_PASSWORD });
             break;
-        case STAFF:
-            router.push({ name: "ChangeStaffPassword" });
+        case USER_ROLES.STAFF:
+            router.push({ name: ROUTE_NAMES.STAFF.CHANGE_PASSWORD });
             break;
         default:
             notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
@@ -117,7 +118,7 @@ function goToChangePasswordPage() {
                     <h2>{{ formatDateString(userStore.user?.birthday) || "Không xác định" }}</h2>
                 </div>
                 <div class="grow flex flex-col items-start">
-                    <button class="underline text-blue-500" @click="goToUpdateAccountPage">Chỉnh sửa thông tin</button>
+                    <button class="underline text-blue-500" @click="goToEditProfilePage">Chỉnh sửa thông tin</button>
                     <button class="underline text-blue-500" @click="goToChangePasswordPage">Đổi mật khẩu</button>
                 </div>
             </div>

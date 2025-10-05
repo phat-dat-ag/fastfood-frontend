@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import type { SignInResponse, SignInRequest } from '../../types/auth.types';
+import type { SignInResponse, SignInRequest } from '../../../types/auth.types';
 import { useRouter } from 'vue-router';
-import { signIn } from '../../service/auth.service';
-import { useUserStore } from '../../store/useUserStore';
-import { notifyError } from '../../utils/notification.utils';
+import { signIn } from '../../../service/auth.service';
+import { useUserStore } from '../../../store/useUserStore';
+import { notifyError } from '../../../utils/notification.utils';
 import type { AxiosError } from 'axios';
-import { closeLoading, openLoading } from '../../utils/loading.utils';
-import { ADMIN, STAFF } from '../../constants/user-role.constant';
-import type { ApiResponse } from '../../types/api.types';
+import { closeLoading, openLoading } from '../../../utils/loading.utils';
+import type { ApiResponse } from '../../../types/api.types';
 import { ref } from 'vue';
+import { USER_ROLES } from '../../../constants/user-roles';
+import { ROUTE_NAMES } from '../../../constants/route-names';
 
 const router = useRouter();
 
@@ -44,14 +45,14 @@ const onSubmit = async (value: any) => {
         userStore.setUser(dataRes.data.user);
         localStorage.setItem("token", dataRes.data.token);
         switch (userStore.user?.role) {
-            case ADMIN:
-                router.push({ name: "AdminHome" });
+            case USER_ROLES.ADMIN:
+                router.push({ name: ROUTE_NAMES.ADMIN.HOME });
                 break;
-            case STAFF:
-                router.push({ name: "StaffHome" });
+            case USER_ROLES.STAFF:
+                router.push({ name: ROUTE_NAMES.STAFF.HOME });
                 break;
             default:
-                router.push({ name: "UserHome" });
+                router.push({ name: ROUTE_NAMES.USER.HOME });
         }
     } catch (e) {
         const err = e as AxiosError<any>;
@@ -95,7 +96,7 @@ const onSubmit = async (value: any) => {
                 <div class="flex gap-4">
                     <button type="button"
                         class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
-                        @click="() => router.push({ name: 'GuestPage' })">
+                        @click="() => router.back()">
                         Quay lại
                     </button>
                     <button
@@ -108,7 +109,7 @@ const onSubmit = async (value: any) => {
                     <p class="text-center">
                         Bạn chưa có tài khoản?
                         <button type="button" class="hover:underline hover:text-blue-500"
-                            @click="router.push({ name: 'SignUp' })">Đăng ký tại đây
+                            @click="router.push({ name: ROUTE_NAMES.AUTH.SIGN_UP })">Đăng ký tại đây
                         </button>
                     </p>
                 </div>

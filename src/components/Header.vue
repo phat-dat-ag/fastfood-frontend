@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { STAFF, USER } from '../constants/user-role.constant';
 import { ElBadge, ElDropdown, ElTooltip } from 'element-plus';
 import { useUserStore } from '../store/useUserStore';
 import { Box, ShoppingCartFull } from "@element-plus/icons-vue"
 import { notifyError } from '../utils/notification.utils';
+import { ROUTE_NAMES } from '../constants/route-names';
+import { USER_ROLES } from '../constants/user-roles';
 
 interface HeaderProps {
     role: string;
@@ -32,28 +33,28 @@ const onClickMenuItem = (id: string) => {
 
 // GUEST
 const onClickSignUpButton = () => {
-    router.push({ name: "SignUp" });
+    router.push({ name: ROUTE_NAMES.AUTH.SIGN_UP });
 }
 
 const onClickSignInButton = () => {
-    router.push({ name: "SignIn" });
+    router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
 }
 
 function signOut() {
     localStorage.removeItem("token");
     userStore.clearUser();
-    router.push({ name: "GuestHome" });
+    router.push({ name: ROUTE_NAMES.GUEST.HOME });
 }
 
 // USER AND STAFF
 
 function goToAccountPage() {
     switch (userStore.user?.role) {
-        case USER:
-            router.push({ name: "UserAccount" });
+        case USER_ROLES.USER:
+            router.push({ name: ROUTE_NAMES.USER.PROFILE });
             break;
-        case STAFF:
-            router.push({ name: "StaffAccount" });
+        case USER_ROLES.STAFF:
+            router.push({ name: ROUTE_NAMES.STAFF.PROFILE });
             break;
         default:
             notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
@@ -77,7 +78,7 @@ function goToAccountPage() {
             </div>
         </div>
         <!-- Avatar or Sign up, Sign in -->
-        <div v-if="props.role === USER" class="w-[20%] flex items-center justify-end gap-8">
+        <div v-if="props.role === USER_ROLES.USER" class="w-[20%] flex items-center justify-end gap-8">
             <ElBadge :value="30" :max="10">
                 <ElTooltip class="box-item" effect="dark" content="Giỏ hàng của tôi" placement="left-start">
                     <el-icon :size="32">
@@ -97,7 +98,7 @@ function goToAccountPage() {
                 </template>
             </ElDropdown>
         </div>
-        <div v-else-if="props.role === STAFF" class="w-[20%] flex items-center justify-end gap-8">
+        <div v-else-if="props.role === USER_ROLES.STAFF" class="w-[20%] flex items-center justify-end gap-8">
             <ElBadge :value="400" :max="50">
                 <ElTooltip class="box-item" effect="dark" content="Đơn hàng cần duyệt" placement="left-start">
                     <el-icon :size="32">

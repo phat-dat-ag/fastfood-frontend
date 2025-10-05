@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import type { ForgetPasswordRequest, OTPResponseType } from '../../types/auth.types';
-import OTPModal from '../../components/OTPModal.vue';
+import type { ForgetPasswordRequest, OTPResponseType } from '../../../types/auth.types';
+import OTPModal from '../components/OTPModal.vue';
 import { onUnmounted, ref } from 'vue';
-import { useAuthStore } from '../../store/useAuthStore';
-import { forgetPassword, verifyForgetPassword } from '../../service/auth.service';
-import { notifyError, notifySuccess } from '../../utils/notification.utils';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { forgetPassword, verifyForgetPassword } from '../../../service/auth.service';
+import { notifyError, notifySuccess } from '../../../utils/notification.utils';
 import { useRouter } from 'vue-router';
 import type { AxiosError } from 'axios';
-import type { ApiResponse } from '../../types/api.types';
-import { closeLoading, openLoading } from '../../utils/loading.utils';
+import type { ApiResponse } from '../../../types/api.types';
+import { closeLoading, openLoading } from '../../../utils/loading.utils';
+import { ROUTE_NAMES } from '../../../constants/route-names';
 
 const schema = yup.object({
     phone: yup
@@ -115,7 +116,7 @@ const checkOTP = async (otp: string): Promise<string> => {
         });
         toggleOTPModal.value = false;
         notifySuccess("Lấy lại mật khẩu thành công", "Hãy đăng nhập lại");
-        router.push({ name: "SignIn" });
+        router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
         return "";
     } catch (e) {
         const err = e as AxiosError<any>;

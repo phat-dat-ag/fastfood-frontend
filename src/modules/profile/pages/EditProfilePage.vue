@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import * as yup from "yup";
-import { useUserStore } from '../store/useUserStore';
+import { useUserStore } from '../../../store/useUserStore';
 import { Form, Field, ErrorMessage } from "vee-validate";
-import type { UpdateUserRequest, User } from "../types/user.types";
-import { closeLoading, openLoading } from "../utils/loading.utils";
-import { updateUserInformation } from "../service/user.service";
-import type { ApiResponse } from "../types/api.types";
-import { notifyError, notifySuccess } from "../utils/notification.utils";
+import type { UpdateUserRequest, User } from "../../../types/user.types";
+import { closeLoading, openLoading } from "../../../utils/loading.utils";
+import { updateUserInformation } from "../../../service/user.service";
+import type { ApiResponse } from "../../../types/api.types";
+import { notifyError, notifySuccess } from "../../../utils/notification.utils";
 import type { AxiosError } from "axios";
-import router from "../router";
+import router from "../../../router";
 
 const userStore = useUserStore();
 

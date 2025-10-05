@@ -1,25 +1,31 @@
 <script setup lang="ts">
-const informations = [
-    "Tin tức",
-    "Khuyến mãi",
-    "Tuyển dụng",
-    "Nhượng quyền",
-    "Đăng ký chào hàng",
-]
+const FOOTER_LINKS = {
+    INFORMATION: {
+        title: "Thông tin",
+        items: [
+            "Tin tức",
+            "Khuyến mãi",
+            "Tuyển dụng",
+            "Nhượng quyền",
+            "Đăng ký chào hàng",
+        ],
+    },
+    SUPPORT: {
+        title: "Hỗ trợ khách hàng",
+        items: [
+            "Điều khoản sử dụng",
+            "Chính sách bảo mật",
+            "Chính sách giao hàng",
+            "Chăm sóc khách hàng",
+            "Chính sách thành viên",
+        ],
+    },
+    CHANNELS: {
+        title: "Kênh liên hệ",
+        items: ["Facebook", "Instagram", "Zalo",],
+    },
+} as const;
 
-const supports = [
-    "Điều khoản sử dụng",
-    "Chính sách bảo mật",
-    "Chính sách giao hàng",
-    "Chăm sóc khách hàng",
-    "Chính sách thành viên",
-]
-
-const channels = [
-    "Facebook",
-    "Instagram",
-    "Zalo",
-]
 </script>
 <template>
     <footer>
@@ -30,17 +36,10 @@ const channels = [
                         <img src="../assets/img/Aurelion_Shop_Logo.png" alt="">
                     </div>
                 </div>
-                <div class="mt-4">
-                    <h1 class="text-xl font-bold">Thông tin</h1>
-                    <p v-for="(infor, indx) of informations" :key="indx">{{ infor }}</p>
-                </div>
-                <div class="mt-4">
-                    <h1 class="text-xl font-bold">Hỗ trợ</h1>
-                    <p v-for="(support, indx) of supports" :key="indx">{{ support }}</p>
-                </div>
-                <div class="mt-4">
-                    <h1 class="text-xl font-bold">Liên hệ chúng tôi</h1>
-                    <p v-for="(channel, indx) in channels" :key="indx">{{ channel }}</p>
+
+                <div v-for="section in FOOTER_LINKS" :key="section.title" class="mt-4">
+                    <h1 class="text-xl font-bold">{{ section.title }}</h1>
+                    <p v-for="item in section.items" :key="item">{{ item }}</p>
                 </div>
             </div>
         </div>
