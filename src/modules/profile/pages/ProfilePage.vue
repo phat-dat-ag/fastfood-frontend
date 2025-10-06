@@ -33,17 +33,16 @@ function onImageChange(e: Event) {
 }
 
 async function handleUpdateAvatar() {
-    let loading;
+    let loading = openLoading("Đang cập nhật ảnh đại diện");
     try {
         if (avatarFile) {
-            loading = openLoading("Đang cập nhật ảnh đại diện");
-            const res = await updateAvatar(avatarFile);
-            const dataRes: ApiResponse<User> = res.data;
-            if (!dataRes.data) {
+            const response = await updateAvatar(avatarFile);
+            const dataResponse: ApiResponse<User> = response.data;
+            if (!dataResponse.data) {
                 notifyError("Không có dữ liệu trả về khi đổi ảnh đại diện");
                 return;
             }
-            userStore.setUser(dataRes.data);
+            userStore.setUser(dataResponse.data);
             avatarFile = null;
             if (fileInputRef.value)
                 fileInputRef.value.value = '';

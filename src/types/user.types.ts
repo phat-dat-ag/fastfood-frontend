@@ -7,7 +7,7 @@ export interface User {
   role: string;
 }
 
-export interface UpdateUserRequest {
+export interface EidtUserRequest {
   name: string;
   email: string;
   birthdayString: string;

@@ -44,19 +44,19 @@ const schema = yup.object({
 });
 
 async function onSubmit(values: any) {
-    const data: ChangePasswordRequest = {
+    const changePasswordData: ChangePasswordRequest = {
         password: values.password,
         newPassword: values.newPassword,
     }
     const loading = openLoading("Đang xử lý đổi mật khẩu mới...");
     try {
-        const res = await changePassword(data);
-        const dataRes: ApiResponse<User> = res.data;
-        if (!dataRes.data) {
+        const response = await changePassword(changePasswordData);
+        const dataResponse: ApiResponse<User> = response.data;
+        if (!dataResponse.data) {
             notifyError("Không thấy dữ liệu trả về sau khi đổi mật khẩu");
             return;
         }
-        userStore.setUser(dataRes.data);
+        userStore.setUser(dataResponse.data);
         notifySuccess("Bạn đã đổi mật khẩu");
         router.back();
     } catch (e) {
