@@ -35,9 +35,11 @@ export async function initAuth(router: Router) {
         ROUTE_NAMES.AUTH.SIGN_UP,
         ROUTE_NAMES.AUTH.SIGN_IN,
         ROUTE_NAMES.AUTH.FORGET_PASSWORD,
-      ];
+      ] as const;
 
-      if (guestEntryRoutes.includes(current.name as string)) {
+      type GuestEntryRouteName = (typeof guestEntryRoutes)[number];
+
+      if (guestEntryRoutes.includes(current.name as GuestEntryRouteName)) {
         switch (userStore.user?.role) {
           case USER_ROLES.ADMIN:
             await router.push({ name: ROUTE_NAMES.ADMIN.HOME });
