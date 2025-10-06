@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElBadge, ElDropdown, ElTooltip } from 'element-plus';
+import { ElBadge, ElTooltip } from 'element-plus';
 import { useUserStore } from '../store/useUserStore';
 import { Box, ShoppingCartFull } from "@element-plus/icons-vue"
 import { notifyError } from '../utils/notification.utils';
 import { ROUTE_NAMES } from '../constants/route-names';
 import { USER_ROLES } from '../constants/user-roles';
+import AvatarDropdown from './AvatarDropdown.vue';
 
 interface HeaderProps {
     role: string;
@@ -45,7 +46,7 @@ function signOut() {
     router.push({ name: ROUTE_NAMES.GUEST.HOME });
 }
 
-function goToAccountPage() {
+function goToProfilePage() {
     switch (userStore.user?.role) {
         case USER_ROLES.USER:
             router.push({ name: ROUTE_NAMES.USER.PROFILE });
@@ -83,17 +84,8 @@ function goToAccountPage() {
                     </el-icon>
                 </ElTooltip>
             </ElBadge>
-            <ElDropdown>
-                <el-avatar :size="80" :src="userStore.user?.avatarUrl || defaultAvatarUrl" />
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item @click="goToAccountPage">Thông tin cá nhân</el-dropdown-item>
-                        <el-dropdown-item>Lịch sử mua hàng</el-dropdown-item>
-                        <el-dropdown-item>Lịch sử thách thức</el-dropdown-item>
-                        <el-dropdown-item @click="signOut">Đăng xuất</el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </ElDropdown>
+            <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
+                @goToProfilePage="goToProfilePage" @signOut="signOut"></AvatarDropdown>
         </div>
         <div v-else-if="props.role === USER_ROLES.STAFF" class="w-[20%] flex items-center justify-end gap-8">
             <ElBadge :value="400" :max="50">
@@ -103,17 +95,8 @@ function goToAccountPage() {
                     </el-icon>
                 </ElTooltip>
             </ElBadge>
-            <ElDropdown>
-                <el-avatar :src="userStore.user?.avatarUrl || defaultAvatarUrl" />
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item @click="goToAccountPage">Thông tin cá nhân</el-dropdown-item>
-                        <el-dropdown-item>Lịch sử mua hàng</el-dropdown-item>
-                        <el-dropdown-item>Lịch sử thách thức</el-dropdown-item>
-                        <el-dropdown-item @click="signOut">Đăng xuất</el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </ElDropdown>
+            <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
+                @goToProfilePage="goToProfilePage" @signOut="signOut"></AvatarDropdown>
         </div>
         <div v-else class="w-[20%] flex justify-end gap-4">
             <button class="hover:underline hover:text-orange-500" @click="onClickSignUpButton">Đăng ký ngay</button>

@@ -1,0 +1,20 @@
+<script setup lang="ts">
+import { ElDropdown } from 'element-plus';
+
+defineProps<{ avatarUrl: string }>();
+defineEmits(["signOut", "goToProfilePage"]);
+
+</script>
+<template>
+    <ElDropdown>
+        <el-avatar :size="80" :src="avatarUrl" />
+        <template #dropdown>
+            <el-dropdown-menu>
+                <el-dropdown-item @click="$emit('goToProfilePage')">Thông tin cá nhân</el-dropdown-item>
+                <el-dropdown-item>Lịch sử mua hàng</el-dropdown-item>
+                <el-dropdown-item>Lịch sử thách thức</el-dropdown-item>
+                <el-dropdown-item @click="$emit('signOut')">Đăng xuất</el-dropdown-item>
+            </el-dropdown-menu>
+        </template>
+    </ElDropdown>
+</template>
