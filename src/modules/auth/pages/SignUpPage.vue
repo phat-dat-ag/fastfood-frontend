@@ -2,17 +2,14 @@
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import * as yup from 'yup';
 import { nomarlizeSpaces } from '../../../utils/string.utils';
-import type { OTPResponseType, SignUpRequest } from '../../../types/auth.types';
-import { onUnmounted, ref } from 'vue';
+import type { OTPResponseType } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
 import { signUp, verifySignUp } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { notifyError, notifySuccess } from '../../../utils/notification.utils';
-import type { AxiosError } from 'axios';
 import type { ApiResponse } from '../../../types/api.types';
-import { closeLoading, openLoading } from '../../../utils/loading.utils';
 import { ROUTE_NAMES } from '../../../constants/route-names';
+import { useOtpHandler } from '../../../composables/useOtpHandler';
 
 const schema = yup.object({
     name: yup
@@ -54,57 +51,23 @@ const router = useRouter();
 
 const authStore = useAuthStore();
 
-let toggleOTPModal = ref(false);
+const { remainingTime, isOTPModalVisible, sendOTP, verifyOTP } = useOtpHandler(
+    async () => {
+        const signUpData = authStore.signUpData;
+        if (!signUpData) throw new Error("Thiếu dữ liệu đăng ký");
+        const response = await signUp(signUpData);
+        const dataRespone: ApiResponse<OTPResponseType> = response.data;
+        if (!dataRespone.data) throw new Error("Không có dữ liệu đăng ký trả về");
+        return dataRespone.data;
+    },
+    async (otp: string) => {
+        const signUpData = authStore.signUpData;
+        if (!signUpData) throw new Error("Thiếu dữ liệu đăng ký");
+        await verifySignUp({ phone: signUpData.phone, otp })
+    },
 
-const remainingTime = ref<number>(0);
-
-let timer: number | null = null;
-
-function countDown() {
-    if (timer) clearInterval(timer);
-
-    timer = setInterval(() => {
-        if (remainingTime.value > 0) {
-            remainingTime.value = remainingTime.value - 1;
-        } else {
-            clearInterval(timer!);
-            timer = null;
-        }
-    }, 1000);
-}
-
-onUnmounted(() => {
-    if (timer) clearInterval(timer);
-})
-
-async function signUpHandle() {
-    const signUpData: SignUpRequest | null = authStore.signUpData;
-    if (!signUpData) {
-        notifyError("Không có dữ liệu để đăng ký");
-        return;
-    }
-    const loading: any = openLoading("Đang xử lý...");
-    try {
-        const res = await signUp(signUpData);
-        const dataRes: ApiResponse<OTPResponseType> = res.data;
-        if (!dataRes.data) {
-            notifyError("Không tìm thấy dữ liệu trả về khi đăng ký");
-            return;
-        }
-
-        const now = new Date();
-        const expiredAt: Date = new Date(dataRes.data.expiredAt);
-        remainingTime.value = Math.floor((expiredAt.getTime() - now.getTime()) / 1000);
-
-        countDown();
-        toggleOTPModal.value = true;
-    } catch (e) {
-        const err = e as AxiosError<any>;
-        notifyError(err.response?.data.message || "Đăng ký thất bại, hãy thử lại");
-    } finally {
-        closeLoading(loading);
-    }
-}
+    () => router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })
+)
 
 
 const onSubmit = async (values: any) => {
@@ -115,28 +78,7 @@ const onSubmit = async (values: any) => {
         birthdayString: values.birthdayString,
         password: values.password
     });
-    await signUpHandle();
-}
-
-const checkOTP = async (otp: string): Promise<string> => {
-    const signUpData: SignUpRequest | null = authStore.signUpData;
-    if (!signUpData) {
-        notifyError("Không có dữ liệu để đăng ký");
-        return "Không có dữ liệu để đăng ký";
-    }
-    const loading: any = openLoading("Đang xác thực...");
-    try {
-        await verifySignUp({ phone: signUpData.phone, otp });
-        toggleOTPModal.value = false;
-        notifySuccess("Đã tạo tài khoản, hãy đăng nhập");
-        router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
-        return ""
-    } catch (e) {
-        const err = e as AxiosError<any>;
-        return err.response?.data.message || "OTP sai bét nha cưng";
-    } finally {
-        closeLoading(loading);
-    }
+    await sendOTP();
 }
 </script>
 
@@ -215,8 +157,8 @@ const checkOTP = async (otp: string): Promise<string> => {
                 </div>
             </Form>
 
-            <OTPModal v-model:toggleOTPModal="toggleOTPModal" :remainingTime="remainingTime" :checkOTP="checkOTP"
-                :resendOTP="signUpHandle" />
+            <OTPModal v-model:toggleOTPModal="isOTPModalVisible" :remainingTime="remainingTime" :checkOTP="verifyOTP"
+                :resendOTP="sendOTP" />
         </div>
     </div>
 </template>

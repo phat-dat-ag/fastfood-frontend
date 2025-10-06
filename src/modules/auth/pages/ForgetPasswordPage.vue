@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import type { ForgetPasswordRequest, OTPResponseType } from '../../../types/auth.types';
+import type { OTPResponseType } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
-import { onUnmounted, ref } from 'vue';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { forgetPassword, verifyForgetPassword } from '../../../service/auth.service';
-import { notifyError, notifySuccess } from '../../../utils/notification.utils';
 import { useRouter } from 'vue-router';
-import type { AxiosError } from 'axios';
 import type { ApiResponse } from '../../../types/api.types';
-import { closeLoading, openLoading } from '../../../utils/loading.utils';
 import { ROUTE_NAMES } from '../../../constants/route-names';
+import { useOtpHandler } from '../../../composables/useOtpHandler';
 
 const schema = yup.object({
     phone: yup
@@ -40,88 +37,29 @@ const router = useRouter();
 
 const authStore = useAuthStore();
 
-let remainingTime = ref<number>(0);
-
-let toggleOTPModal = ref(false);
-
-let timer: number | null = null;
-
-function countDown() {
-    if (timer) clearInterval(timer);
-
-    timer = setInterval(() => {
-        if (remainingTime.value > 0) {
-            remainingTime.value = remainingTime.value - 1;
-        } else {
-            clearInterval(timer!);
-            timer = null;
-        }
-    }, 1000);
-}
-
-onUnmounted(() => {
-    if (timer) clearInterval(timer);
-})
-
-async function forgetPasswordHandle() {
-    const forgetPasswordData: ForgetPasswordRequest | null = authStore.forgetPasswordData;
-    if (!forgetPasswordData) {
-        notifyError("Không có dữ liệu để yêu cầu quên mật khẩu");
-        return;
-    }
-    const loading: any = openLoading("Đang xử lý...");
-    try {
-        const res = await forgetPassword(forgetPasswordData);
-        const dataRes: ApiResponse<OTPResponseType> = res.data;
-        if (!dataRes.data) {
-            notifyError("Không tìm thấy dữ liệu trả về");
-            return;
-        }
-        const now = new Date();
-        const expiredAt: Date = new Date(dataRes.data.expiredAt);
-        remainingTime.value = Math.floor((expiredAt.getTime() - now.getTime()) / 1000);
-
-        countDown();
-        toggleOTPModal.value = true;
-        authStore.setForgetPasswordData(forgetPasswordData);
-    } catch (e) {
-        const err = e as AxiosError<any>
-        notifyError(err.response?.data.message || "Lỗi khi quên mật khẩu, hãy thử lại");
-    } finally {
-        closeLoading(loading);
-    }
-}
+const { remainingTime, isOTPModalVisible, sendOTP, verifyOTP } = useOtpHandler(
+    async (): Promise<OTPResponseType> => {
+        const forgetPasswordData = authStore.forgetPasswordData;
+        if (!forgetPasswordData) throw new Error("Thiếu dữ liệu quên mật khẩu");
+        const response = await forgetPassword(forgetPasswordData);
+        const dataRespone: ApiResponse<OTPResponseType> = response.data;
+        if (!dataRespone.data) throw new Error("Không có dữ liệu đăng ký trả về");
+        return dataRespone.data;
+    },
+    async (otp: string) => {
+        const forgetPasswordData = authStore.forgetPasswordData;
+        if (!forgetPasswordData) throw new Error("Thiếu dữ liệu quên mật khẩu");
+        await verifyForgetPassword({ ...forgetPasswordData, otp });
+    },
+    () => router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })
+);
 
 const onSubmit = async (values: any) => {
     authStore.setForgetPasswordData({
         phone: values.phone,
         newPassword: values.newPassword,
     });
-    await forgetPasswordHandle();
-}
-
-const checkOTP = async (otp: string): Promise<string> => {
-    if (!authStore.forgetPasswordData) {
-        notifyError("Không có dữ liệu để xác thực");
-        return "Lỗi không có dữ liệu xác thực quên mật khẩu";
-    }
-    const loading: any = openLoading("Đang xác thực");
-    try {
-        await verifyForgetPassword({
-            phone: authStore.forgetPasswordData.phone,
-            otp,
-            newPassword: authStore.forgetPasswordData.newPassword
-        });
-        toggleOTPModal.value = false;
-        notifySuccess("Đã lấy lại mật khẩu, hãy đăng nhập lại");
-        router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
-        return "";
-    } catch (e) {
-        const err = e as AxiosError<any>;
-        return err.response?.data.message || "OTP sai bét nha cưng";
-    } finally {
-        closeLoading(loading);
-    }
+    await sendOTP();
 }
 
 </script>
@@ -168,8 +106,8 @@ const checkOTP = async (otp: string): Promise<string> => {
                 </div>
             </Form>
 
-            <OTPModal v-model:toggleOTPModal="toggleOTPModal" :remainingTime="remainingTime" :checkOTP="checkOTP"
-                :resendOTP="forgetPasswordHandle" />
+            <OTPModal v-model:toggleOTPModal="isOTPModalVisible" :remainingTime="remainingTime" :checkOTP="verifyOTP"
+                :resendOTP="sendOTP" />
         </div>
     </div>
 </template>
