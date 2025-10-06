@@ -22,4 +22,4 @@ export const ROUTE_NAMES = {
   ADMIN: {
     HOME: "AdminHome",
   },
-};
+} as const;
