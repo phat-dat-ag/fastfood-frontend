@@ -36,14 +36,14 @@ const onSubmit = async (value: any) => {
     const signInData: SignInRequest = value;
     const loading: any = openLoading("Đang đăng nhập");
     try {
-        const res = await signIn(signInData);
-        const dataRes: ApiResponse<SignInResponse> = res.data;
-        if (!dataRes.data) {
+        const response = await signIn(signInData);
+        const dataResponse: ApiResponse<SignInResponse> = response.data;
+        if (!dataResponse.data) {
             notifyError("Không thấy dữ liệu trả về sau khi đăng nhập");
             return;
         }
-        userStore.setUser(dataRes.data.user);
-        localStorage.setItem("token", dataRes.data.token);
+        userStore.setUser(dataResponse.data.user);
+        localStorage.setItem("token", dataResponse.data.token);
         switch (userStore.user?.role) {
             case USER_ROLES.ADMIN:
                 router.push({ name: ROUTE_NAMES.ADMIN.HOME });
