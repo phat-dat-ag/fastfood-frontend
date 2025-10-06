@@ -66,7 +66,7 @@ onUnmounted(() => {
 async function forgetPasswordHandle() {
     const forgetPasswordData: ForgetPasswordRequest | null = authStore.forgetPasswordData;
     if (!forgetPasswordData) {
-        notifyError("Lỗi", "Không có dữ liệu để yêu cầu quên mật khẩu");
+        notifyError("Không có dữ liệu để yêu cầu quên mật khẩu");
         return;
     }
     const loading: any = openLoading("Đang xử lý...");
@@ -74,7 +74,7 @@ async function forgetPasswordHandle() {
         const res = await forgetPassword(forgetPasswordData);
         const dataRes: ApiResponse<OTPResponseType> = res.data;
         if (!dataRes.data) {
-            notifyError("Lỗi", "Không tìm thấy dữ liệu trả về");
+            notifyError("Không tìm thấy dữ liệu trả về");
             return;
         }
         const now = new Date();
@@ -86,9 +86,7 @@ async function forgetPasswordHandle() {
         authStore.setForgetPasswordData(forgetPasswordData);
     } catch (e) {
         const err = e as AxiosError<any>
-        // console.log("Status:", err.response?.status);
-        // console.log("Data:", err.response?.data);
-        notifyError("Lỗi khi xử lý quên mật khẩu", err.response?.data.message || "Lỗi đã xảy ra");
+        notifyError(err.response?.data.message || "Lỗi khi quên mật khẩu, hãy thử lại");
     } finally {
         closeLoading(loading);
     }
@@ -104,7 +102,7 @@ const onSubmit = async (values: any) => {
 
 const checkOTP = async (otp: string): Promise<string> => {
     if (!authStore.forgetPasswordData) {
-        notifyError("Lỗi", "Không có dữ liệu để xác thực");
+        notifyError("Không có dữ liệu để xác thực");
         return "Lỗi không có dữ liệu xác thực quên mật khẩu";
     }
     const loading: any = openLoading("Đang xác thực");
@@ -115,13 +113,11 @@ const checkOTP = async (otp: string): Promise<string> => {
             newPassword: authStore.forgetPasswordData.newPassword
         });
         toggleOTPModal.value = false;
-        notifySuccess("Lấy lại mật khẩu thành công", "Hãy đăng nhập lại");
+        notifySuccess("Đã lấy lại mật khẩu, hãy đăng nhập lại");
         router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
         return "";
     } catch (e) {
         const err = e as AxiosError<any>;
-        // console.log("Status:", err.response?.status);
-        // console.log("Data:", err.response?.data);
         return err.response?.data.message || "OTP sai bét nha cưng";
     } finally {
         closeLoading(loading);
@@ -133,9 +129,8 @@ const checkOTP = async (otp: string): Promise<string> => {
     <div class="flex justify-center items-center">
         <div class="w-full max-w-md p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6">Tạo mật khẩu mới</h2>
-            <!-- Form -->
+
             <Form :validation-schema="schema" @submit="onSubmit" class="space-y-4">
-                <!-- phone -->
                 <div>
                     <label for="phone" class="block text-gray-700 font-medium mb-1">Số điện thoại</label>
                     <Field id="phone" name="phone" type="text"
@@ -144,7 +139,6 @@ const checkOTP = async (otp: string): Promise<string> => {
                     <ErrorMessage name="phone" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <!-- newPassword -->
                 <div>
                     <label for="newPassword" class="block text-gray-700 font-medium mb-1">Mật khẩu mới</label>
                     <Field id="newPassword" name="newPassword" type="password"
@@ -153,7 +147,6 @@ const checkOTP = async (otp: string): Promise<string> => {
                     <ErrorMessage name="newPassword" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <!-- confirm newPassword -->
                 <div>
                     <label for="confirmPassword" class="block text-gray-700 font-medium mb-1">Xác nhận mật khẩu</label>
                     <Field id="confirmPassword" name="confirmPassword" type="password"
@@ -175,7 +168,6 @@ const checkOTP = async (otp: string): Promise<string> => {
                 </div>
             </Form>
 
-            <!-- Modal -->
             <OTPModal v-model:toggleOTPModal="toggleOTPModal" :remainingTime="remainingTime" :checkOTP="checkOTP"
                 :resendOTP="forgetPasswordHandle" />
         </div>

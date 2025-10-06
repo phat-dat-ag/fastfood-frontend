@@ -40,20 +40,18 @@ async function handleUpdateAvatar() {
             const res = await updateAvatar(avatarFile);
             const dataRes: ApiResponse<User> = res.data;
             if (!dataRes.data) {
-                notifyError("Lỗi", "Không có dữ liệu trả về khi đổi ảnh đại diện");
+                notifyError("Không có dữ liệu trả về khi đổi ảnh đại diện");
                 return;
             }
             userStore.setUser(dataRes.data);
             avatarFile = null;
             if (fileInputRef.value)
                 fileInputRef.value.value = '';
-            notifySuccess("Hoàn tất", "Cập nhật ảnh đại diện thành công");
+            notifySuccess("Cập nhật ảnh đại diện thành công");
         }
     } catch (e) {
         const err = e as AxiosError<any>;
-        console.log("Status:", err.response?.status);
-        console.log("Data:", err.response?.data);
-        notifyError("Lỗi", "Xảy ra lỗi khi cập nhật ảnh đại diện");
+        notifyError(err.response?.data.message || "Xảy ra lỗi khi cập nhật ảnh đại diện");
     } finally {
         closeLoading(loading);
 
@@ -69,7 +67,7 @@ function goToEditProfilePage() {
             router.push({ name: ROUTE_NAMES.STAFF.EDIT_PROFILE });
             break;
         default:
-            notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
+            notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
     }
 }
 
@@ -82,7 +80,7 @@ function goToChangePasswordPage() {
             router.push({ name: ROUTE_NAMES.STAFF.CHANGE_PASSWORD });
             break;
         default:
-            notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
+            notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
     }
 }
 

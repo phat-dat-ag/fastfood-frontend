@@ -1,22 +1,24 @@
 import { ElNotification } from "element-plus";
 
-export const notifyError = (title: string = "Thất bại", message: string) => {
+const NOTIFICATION_DURATION = 3000;
+
+export const notifyError = (message: string, title: string = "Thất bại") => {
   ElNotification({
     type: "error",
     title,
     message,
-    duration: 3000,
+    duration: NOTIFICATION_DURATION,
   });
 };
 
 export const notifySuccess = (
-  title: string = "Thành công",
-  message: string
+  message: string,
+  title: string = "Thành công"
 ) => {
   ElNotification({
     type: "success",
     title,
     message,
-    duration: 3000,
+    duration: NOTIFICATION_DURATION,
   });
 };

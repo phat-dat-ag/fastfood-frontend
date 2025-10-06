@@ -39,7 +39,7 @@ const onSubmit = async (value: any) => {
         const res = await signIn(signInData);
         const dataRes: ApiResponse<SignInResponse> = res.data;
         if (!dataRes.data) {
-            notifyError("Lỗi", "Không thấy dữ liệu trả về sau khi đăng nhập");
+            notifyError("Không thấy dữ liệu trả về sau khi đăng nhập");
             return;
         }
         userStore.setUser(dataRes.data.user);
@@ -56,9 +56,7 @@ const onSubmit = async (value: any) => {
         }
     } catch (e) {
         const err = e as AxiosError<any>;
-        console.log("Status: ", err.response?.status);
-        console.log("Data: ", err.response?.data);
-        signInError.value = err.response?.data.message || "Số điện thoại hoặc mật khẩu sai";
+        signInError.value = err.response?.data.message || "Xảy ra lỗi đăng nhập, hãy thử lại";
     } finally {
         closeLoading(loading);
     }
@@ -69,7 +67,6 @@ const onSubmit = async (value: any) => {
         <div class="w-full max-w-md p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6">Đăng nhập</h2>
             <Form :validation-schema="schema" @submit="onSubmit" class="space-y-4">
-                <!-- phone -->
                 <div>
                     <label for="phone" class="block text-gray-700 font-medium mb-1">Số điện thoại</label>
                     <Field id="phone" name="phone" type="text"
@@ -77,7 +74,7 @@ const onSubmit = async (value: any) => {
                         placeholder="Nhập số điện thoại" />
                     <ErrorMessage name="phone" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- password -->
+
                 <div>
                     <label for="password" class="block text-gray-700 font-medium mb-1">Mật khẩu</label>
                     <Field id="password" name="password" type="password"

@@ -53,16 +53,14 @@ async function onSubmit(values: any) {
         const res = await changePassword(data);
         const dataRes: ApiResponse<User> = res.data;
         if (!dataRes.data) {
-            notifyError("Lỗi", "Không thấy dữ liệu trả về sau khi đổi mật khẩu");
+            notifyError("Không thấy dữ liệu trả về sau khi đổi mật khẩu");
             return;
         }
         userStore.setUser(dataRes.data);
-        notifySuccess("Thành công", "Bạn đã đổi mật khẩu");
+        notifySuccess("Bạn đã đổi mật khẩu");
         router.back();
     } catch (e) {
         const err = e as AxiosError<any>;
-        console.log("Status :", err.response?.status);
-        console.log("Data: ", err.response?.data);
         changePasswordError.value = err.response?.data.message || "Lỗi xảy ra khi đổi mật khẩu";
     } finally {
         closeLoading(loading);
@@ -99,8 +97,9 @@ async function onSubmit(values: any) {
                     <ErrorMessage name="confirmNewPassword" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <p v-if="changePasswordError" class="text-center text-red-500 text-sm mt-1 block">{{ changePasswordError
-                    }}</p>
+                <p v-if="changePasswordError" class="text-center text-red-500 text-sm mt-1 block">
+                    {{ changePasswordError }}
+                </p>
 
                 <div class="flex gap-4">
                     <button type="button"

@@ -30,17 +30,15 @@ async function onSubmit(values: any) {
         const res = await updateUserInformation(infor);
         const dataRes: ApiResponse<User> = res.data;
         if (!dataRes.data) {
-            notifyError("Lỗi", "Không thấy dữ liệu trả về sau khi cập nhật");
+            notifyError("Không thấy dữ liệu trả về sau khi cập nhật");
             return;
         }
         userStore.setUser(dataRes.data);
-        notifySuccess("Thành công", "Thông tin của bạn đã được cập nhật");
+        notifySuccess("Thông tin của bạn đã được cập nhật");
         router.back();
     } catch (e) {
         const err = e as AxiosError<any>;
-        console.log("Status :", err.response?.status);
-        console.log("Data :", err.response?.data);
-        notifyError("Lỗi xảy ra", err.response?.data.message || "Hãy thử lại sau");
+        notifyError(err.response?.data.message || "Lỗi khi cập nhật thông tin hãy thử lại sau");
     } finally {
         closeLoading(loading);
     }

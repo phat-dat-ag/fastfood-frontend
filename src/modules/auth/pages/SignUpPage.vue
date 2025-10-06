@@ -80,7 +80,7 @@ onUnmounted(() => {
 async function signUpHandle() {
     const signUpData: SignUpRequest | null = authStore.signUpData;
     if (!signUpData) {
-        notifyError("Lỗi", "Không có dữ liệu để đăng ký");
+        notifyError("Không có dữ liệu để đăng ký");
         return;
     }
     const loading: any = openLoading("Đang xử lý...");
@@ -88,7 +88,7 @@ async function signUpHandle() {
         const res = await signUp(signUpData);
         const dataRes: ApiResponse<OTPResponseType> = res.data;
         if (!dataRes.data) {
-            notifyError("Lỗi", "Không tìm thấy dữ liệu trả về");
+            notifyError("Không tìm thấy dữ liệu trả về khi đăng ký");
             return;
         }
 
@@ -100,9 +100,7 @@ async function signUpHandle() {
         toggleOTPModal.value = true;
     } catch (e) {
         const err = e as AxiosError<any>;
-        // console.log("Status:", err.response?.status);
-        // console.log("Data:", err.response?.data);
-        notifyError("Đăng ký thất bại!", err.response?.data.message || "Hãy thử lại");
+        notifyError(err.response?.data.message || "Đăng ký thất bại, hãy thử lại");
     } finally {
         closeLoading(loading);
     }
@@ -123,20 +121,18 @@ const onSubmit = async (values: any) => {
 const checkOTP = async (otp: string): Promise<string> => {
     const signUpData: SignUpRequest | null = authStore.signUpData;
     if (!signUpData) {
-        notifyError("Lỗi", "Không có dữ liệu để đăng ký");
+        notifyError("Không có dữ liệu để đăng ký");
         return "Không có dữ liệu để đăng ký";
     }
     const loading: any = openLoading("Đang xác thực...");
     try {
         await verifySignUp({ phone: signUpData.phone, otp });
         toggleOTPModal.value = false;
-        notifySuccess("Đã tạo tài khoản", "Hãy đăng nhập");
+        notifySuccess("Đã tạo tài khoản, hãy đăng nhập");
         router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN });
         return ""
     } catch (e) {
         const err = e as AxiosError<any>;
-        // console.log("Status:", err.response?.status);
-        // console.log("Data:", err.response?.data);
         return err.response?.data.message || "OTP sai bét nha cưng";
     } finally {
         closeLoading(loading);
@@ -148,9 +144,7 @@ const checkOTP = async (otp: string): Promise<string> => {
     <div class="flex justify-center items-center">
         <div class="w-full max-w-md p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6">Đăng ký</h2>
-            <!-- Form -->
             <Form :validation-schema="schema" @submit="onSubmit" class="space-y-4">
-                <!-- name -->
                 <div>
                     <label for="name" class="block text-gray-700 font-medium mb-1">Họ và tên</label>
                     <Field id="name" name="name" type="text"
@@ -158,7 +152,7 @@ const checkOTP = async (otp: string): Promise<string> => {
                         placeholder="Họ và tên của bạn" />
                     <ErrorMessage name="name" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- phone -->
+
                 <div>
                     <label for="phone" class="block text-gray-700 font-medium mb-1">Số điện thoại</label>
                     <Field id="phone" name="phone" type="text"
@@ -166,7 +160,7 @@ const checkOTP = async (otp: string): Promise<string> => {
                         placeholder="Nhập số điện thoại" />
                     <ErrorMessage name="phone" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- email -->
+
                 <div>
                     <label for="email" class="block text-gray-700 font-medium mb-1">Địa chỉ email</label>
                     <Field id="email" name="email" type="email"
@@ -174,14 +168,14 @@ const checkOTP = async (otp: string): Promise<string> => {
                         placeholder="Nhập đia chỉ email" />
                     <ErrorMessage name="email" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- birthday -->
+
                 <div>
                     <label for="birthdayString" class="block text-gray-700 font-medium mb-1">Sinh nhật</label>
                     <Field id="birthdayString" name="birthdayString" type="date"
                         class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                     <ErrorMessage name="birthdayString" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- password -->
+
                 <div>
                     <label for="password" class="block text-gray-700 font-medium mb-1">Mật khẩu</label>
                     <Field id="password" name="password" type="password"
@@ -189,7 +183,7 @@ const checkOTP = async (otp: string): Promise<string> => {
                         placeholder="Nhập mật khẩu" />
                     <ErrorMessage name="password" class="text-red-500 text-sm mt-1 block" />
                 </div>
-                <!-- confirm password -->
+
                 <div>
                     <label for="confirmPassword" class="block text-gray-700 font-medium mb-1">Xác nhận mật khẩu</label>
                     <Field id="confirmPassword" name="confirmPassword" type="password"
@@ -220,7 +214,7 @@ const checkOTP = async (otp: string): Promise<string> => {
                     </p>
                 </div>
             </Form>
-            <!-- Modal -->
+
             <OTPModal v-model:toggleOTPModal="toggleOTPModal" :remainingTime="remainingTime" :checkOTP="checkOTP"
                 :resendOTP="signUpHandle" />
         </div>

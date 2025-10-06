@@ -31,7 +31,6 @@ const onClickMenuItem = (id: string) => {
     selectedDiv.value = id;
 }
 
-// GUEST
 const onClickSignUpButton = () => {
     router.push({ name: ROUTE_NAMES.AUTH.SIGN_UP });
 }
@@ -46,8 +45,6 @@ function signOut() {
     router.push({ name: ROUTE_NAMES.GUEST.HOME });
 }
 
-// USER AND STAFF
-
 function goToAccountPage() {
     switch (userStore.user?.role) {
         case USER_ROLES.USER:
@@ -57,19 +54,19 @@ function goToAccountPage() {
             router.push({ name: ROUTE_NAMES.STAFF.PROFILE });
             break;
         default:
-            notifyError("Lỗi", "Tài khoản của bạn không đủ quyền để thực hiện");
+            notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
     }
 }
 </script>
 <template>
     <header class="w-[80%] mx-auto flex gap-4 border-b border-red-300">
-        <!-- Logo -->
+
         <div class="w-[10%] flex items-center justify-center">
             <div class="w-[80%]">
                 <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo cửa hàng">
             </div>
         </div>
-        <!-- Menu -->
+
         <div class="h-[100px] w-[70%] flex gap-4 items-center text-xl">
             <div v-for="item in menuItems" :key="item.id" :id="item.id"
                 :class="['cursor-pointer', selectedDiv === item.id ? 'border-b-4 border-orange-500 text-orange-500' : 'text-gray-700']"
@@ -77,7 +74,7 @@ function goToAccountPage() {
                 {{ item.label }}
             </div>
         </div>
-        <!-- Avatar or Sign up, Sign in -->
+
         <div v-if="props.role === USER_ROLES.USER" class="w-[20%] flex items-center justify-end gap-8">
             <ElBadge :value="30" :max="10">
                 <ElTooltip class="box-item" effect="dark" content="Giỏ hàng của tôi" placement="left-start">
