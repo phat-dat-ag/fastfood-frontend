@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../../../store/useUserStore';
+import { useUserStore } from '../../../store/useUserStore.store';
 import * as yup from "yup";
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import type { ChangePasswordRequest, User } from '../../../types/user.types';

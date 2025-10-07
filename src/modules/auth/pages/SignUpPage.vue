@@ -6,7 +6,7 @@ import type { OTPResponseType } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
 import { signUp, verifySignUp } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../../store/useAuthStore';
+import { useAuthStore } from '../../../store/useAuthStore.store';
 import type { ApiResponse } from '../../../types/api.types';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useOtpHandler } from '../../../composables/useOtpHandler';

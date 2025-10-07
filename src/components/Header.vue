@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElBadge, ElTooltip } from 'element-plus';
-import { useUserStore } from '../store/useUserStore';
+import { useUserStore } from '../store/useUserStore.store';
 import { Box, ShoppingCartFull } from "@element-plus/icons-vue"
 import { notifyError } from '../utils/notification.utils';
 import { ROUTE_NAMES } from '../constants/route-names';

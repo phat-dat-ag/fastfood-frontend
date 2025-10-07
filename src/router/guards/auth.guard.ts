@@ -1,5 +1,5 @@
 import type { Router } from "vue-router";
-import { useUserStore } from "../../store/useUserStore";
+import { useUserStore } from "../../store/useUserStore.store";
 import { ROUTE_NAMES } from "../../constants/route-names";
 import { USER_ROLES } from "../../constants/user-roles";
 

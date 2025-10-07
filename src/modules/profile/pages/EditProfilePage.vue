@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as yup from "yup";
-import { useUserStore } from '../../../store/useUserStore';
+import { useUserStore } from '../../../store/useUserStore.store';
 import { Form, Field, ErrorMessage } from "vee-validate";
 import type { EidtUserRequest, User } from "../../../types/user.types";
 import { closeLoading, openLoading } from "../../../utils/loading.utils";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useUserStore } from '../../../store/useUserStore';
+import { useUserStore } from '../../../store/useUserStore.store';
 import { formatDateString } from '../../../utils/time.utils';
 import { ElAvatar } from 'element-plus';
 import { updateAvatar } from '../../../service/user.service';

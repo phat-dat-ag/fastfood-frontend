@@ -1,6 +1,6 @@
 import type { Router } from "vue-router";
 import { verify } from "../service/auth.service";
-import { useUserStore } from "../store/useUserStore";
+import { useUserStore } from "../store/useUserStore.store";
 import type { ApiResponse } from "../types/api.types";
 import type { SignInResponse } from "../types/auth.types";
 import type { AxiosError } from "axios";

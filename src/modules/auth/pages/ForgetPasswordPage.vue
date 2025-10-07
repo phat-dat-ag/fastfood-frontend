@@ -3,7 +3,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import type { OTPResponseType } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
-import { useAuthStore } from '../../../store/useAuthStore';
+import { useAuthStore } from '../../../store/useAuthStore.store';
 import { forgetPassword, verifyForgetPassword } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
 import type { ApiResponse } from '../../../types/api.types';

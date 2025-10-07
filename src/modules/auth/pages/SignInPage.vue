@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import type { SignInResponse, SignInRequest } from '../../../types/auth.types';
 import { useRouter } from 'vue-router';
 import { signIn } from '../../../service/auth.service';
-import { useUserStore } from '../../../store/useUserStore';
+import { useUserStore } from '../../../store/useUserStore.store';
 import { notifyError } from '../../../utils/notification.utils';
 import type { AxiosError } from 'axios';
 import { closeLoading, openLoading } from '../../../utils/loading.utils';
