@@ -21,5 +21,6 @@ export const ROUTE_NAMES = {
   },
   ADMIN: {
     HOME: "AdminHome",
+    CATEGORY_MANAGEMENT: "CategoryManagement",
   },
 } as const;

@@ -22,11 +22,14 @@ function signOut() {
                     <el-menu-item index="1-1">Khách hàng</el-menu-item>
                     <el-menu-item index="1-2">Nhân viên</el-menu-item>
                 </el-sub-menu>
-                <el-menu-item index="2">Quản lý sản phẩm</el-menu-item>
-                <el-menu-item index="3">Quản lý mã khuyến mãi</el-menu-item>
-                <el-menu-item index="4">Quản lý trò chơi</el-menu-item>
-                <el-menu-item index="5">Quản lý đơn hàng</el-menu-item>
-                <el-menu-item index="6">Xem phản ánh khách hàng</el-menu-item>
+                <el-menu-item index="2" @click="router.push({ name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT })">
+                    Quản lý danh mục sản phẩm
+                </el-menu-item>
+                <el-menu-item index="3">Quản lý sản phẩm</el-menu-item>
+                <el-menu-item index="4">Quản lý mã khuyến mãi</el-menu-item>
+                <el-menu-item index="5">Quản lý trò chơi</el-menu-item>
+                <el-menu-item index="6">Quản lý đơn hàng</el-menu-item>
+                <el-menu-item index="7">Xem phản ánh khách hàng</el-menu-item>
             </el-menu>
             <div>
                 <button
