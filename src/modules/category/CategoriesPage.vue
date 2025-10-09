@@ -9,8 +9,9 @@ import { notifyError, notifySuccess } from '../../utils/notification.utils'
 import { useCategoryStore } from '../../store/useCategoryStore.store'
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils'
 import CategoryTable from './components/CategoryTable.vue'
-import CategoryHeader from './components/CategoryHeader.vue'
 import type { AxiosError } from 'axios'
+import AdminFilterHeader from '../../components/AdminFilterHeader.vue'
+import type { Filter } from '../../types/filter.types'
 
 
 const isCategoryModalVisible = ref(false);
@@ -35,11 +36,6 @@ async function loadCategories() {
 
 onMounted(loadCategories);
 
-interface Filter {
-  label: string;
-  value: string;
-}
-
 const filterOptions: Filter[] = [
   { label: 'Doanh thu cao', value: 'revenue_high' },
   { label: 'Sản phẩm nhiều', value: 'product_rich' },
@@ -52,6 +48,13 @@ const activeFilters = ref<any[]>([]);
 function handleFilterChange(filters: any[]) {
   activeFilters.value = filters;
   console.log(activeFilters.value);
+}
+
+const search = ref<string>("");
+
+function handleSearchChange(searchText: string) {
+  search.value = searchText;
+  console.log(search.value);
 }
 
 const openCreateCategoryModal = () => {
@@ -118,7 +121,8 @@ const handleDeleteCategory = async (id: number) => {
       Quản lý danh mục sản phẩm
     </h2>
 
-    <CategoryHeader :filterOptions="filterOptions" @update:filter="(filters) => handleFilterChange(filters)" />
+    <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+      @update:filter="handleFilterChange" />
 
     <CategoryTable :categories="categories" :openCreateCategoryModal="openCreateCategoryModal"
       :openUpdateCategoryModal="openUpdateCategoryModal" :handleDeleteCategory="handleDeleteCategory" />
