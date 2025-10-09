@@ -21,14 +21,18 @@ const props = defineProps<CategoryTableProps>();
         </div>
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-orange-100">
             <ElTable :data="props.categories" border class="w-full">
-                <ElTableColumn label="ID" prop="id"></ElTableColumn>
-                <ElTableColumn label="Ảnh">
+                <ElTableColumn width="100" label="Ảnh">
                     <template #default="scope">
                         <img :src="scope.row.categoryImageUrl" alt="Ảnh danh mục"
                             class="w-12 h-12 object-cover rounded-md" />
                     </template>
                 </ElTableColumn>
                 <ElTableColumn label="Tên danh mục" prop="name" />
+                <ElTableColumn width="120" label="Số sản phẩm">
+                    <template #default="scope">
+                        {{ scope.row.products.length }}
+                    </template>
+                </ElTableColumn>
                 <ElTableColumn label="Ra mắt">
                     <template #default="scope">
                         {{ formatDateTimeString(scope.row.createdAt) }}
@@ -39,18 +43,8 @@ const props = defineProps<CategoryTableProps>();
                         {{ formatDateTimeString(scope.row.updatedAt) }}
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="Trạng thái" prop="deleted">
-                    <template #default="scope">
-                        <span v-if="scope.row.deleted" class="text-red-500 font-medium">
-                            Đã xóa
-                        </span>
-                        <span v-else class="text-green-500 font-medium">
-                            Hoạt động
-                        </span>
-                    </template>
-                </ElTableColumn>
 
-                <ElTableColumn align="right">
+                <ElTableColumn label="Thao tác">
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
                             <EditButton :onClick="() => openUpdateCategoryModal(scope.row)" label="Cập nhật" />

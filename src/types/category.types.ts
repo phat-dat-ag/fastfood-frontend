@@ -1,3 +1,5 @@
+import type { Product } from "./product.types";
+
 export interface CategoryCreateRequest {
   name: string;
   description: string;
@@ -20,4 +22,5 @@ export interface Category {
   deleted: boolean;
   createdAt: string;
   updatedAt: string;
+  products: Product[];
 }

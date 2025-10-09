@@ -27,7 +27,8 @@ const props = defineProps<CategoryTableProps>();
                     </template>
                 </ElTableColumn>
                 <ElTableColumn label="Tên sản phẩm" prop="name" />
-                <ElTableColumn label="Giá">
+                <ElTableColumn label="Danh mục" prop="categoryName" />
+                <ElTableColumn width="100" label="Giá">
                     <template #default="scope">
                         {{ formatCurrencyVND(scope.row.price) }}
                     </template>
@@ -48,12 +49,12 @@ const props = defineProps<CategoryTableProps>();
                             Hoạt động
                         </span>
                         <span v-else class="text-red-500 font-medium">
-                            Đã xóa
+                            Đã ẩn
                         </span>
                     </template>
                 </ElTableColumn>
 
-                <ElTableColumn align="right">
+                <ElTableColumn label="Thao tác">
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
                             <EditButton :onClick="() => { }" label="Cập nhật" />

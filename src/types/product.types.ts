@@ -8,6 +8,8 @@ export interface ProductCreateRequest {
 }
 
 export interface Product {
+  categoryId: number;
+  categoryName: string;
   id: number;
   name: string;
   slug: string;
