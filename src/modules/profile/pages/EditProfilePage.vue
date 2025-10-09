@@ -9,6 +9,8 @@ import type { ApiResponse } from "../../../types/api.types";
 import { notifyError, notifySuccess } from "../../../utils/notification.utils";
 import type { AxiosError } from "axios";
 import router from "../../../router";
+import SecondaryButton from "../../../components/buttons/SecondaryButton.vue";
+import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 
 const userStore = useUserStore();
 
@@ -87,15 +89,8 @@ async function onSubmit(values: any) {
                 </div>
 
                 <div class="flex gap-4">
-                    <button type="button"
-                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
-                        @click="() => router.back()">
-                        Quay lại
-                    </button>
-                    <button
-                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                        Cập nhật
-                    </button>
+                    <SecondaryButton :onClick="() => router.back()" label="Quay lại" />
+                    <PrimaryButton label="Cập nhật" />
                 </div>
             </Form>
         </div>

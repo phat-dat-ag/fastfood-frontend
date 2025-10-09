@@ -9,6 +9,8 @@ import { useRouter } from 'vue-router';
 import type { ApiResponse } from '../../../types/api.types';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useOtpHandler } from '../../../composables/useOtpHandler';
+import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
+import SecondaryButton from '../../../components/buttons/SecondaryButton.vue';
 
 const schema = yup.object({
     phone: yup
@@ -94,15 +96,8 @@ const onSubmit = async (values: any) => {
                 </div>
 
                 <div class="flex gap-4">
-                    <button type="button"
-                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
-                        @click="() => router.back()">
-                        Quay lại
-                    </button>
-                    <button
-                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                        Xác nhận
-                    </button>
+                    <SecondaryButton :onClick="() => router.back()" label="Quay lại" />
+                    <PrimaryButton label="Xác nhận" />
                 </div>
             </Form>
 

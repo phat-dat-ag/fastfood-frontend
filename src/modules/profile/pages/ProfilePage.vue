@@ -12,6 +12,7 @@ import type { User } from '../../../types/user.types';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { USER_ROLES } from '../../../constants/user-roles';
+import TextButton from '../../../components/buttons/TextButton.vue';
 
 const router = useRouter();
 
@@ -115,8 +116,8 @@ function goToChangePasswordPage() {
                     <h2>{{ formatDateString(userStore.user?.birthday) || "Không xác định" }}</h2>
                 </div>
                 <div class="grow flex flex-col items-start">
-                    <button class="underline text-blue-500" @click="goToEditProfilePage">Chỉnh sửa thông tin</button>
-                    <button class="underline text-blue-500" @click="goToChangePasswordPage">Đổi mật khẩu</button>
+                    <TextButton :onClick="goToEditProfilePage" label="Chỉnh sửa thông tin" />
+                    <TextButton :onClick="goToChangePasswordPage" label="Đổi mật khẩu" />
                 </div>
             </div>
         </div>
@@ -129,9 +130,7 @@ function goToChangePasswordPage() {
                     <h1>Đại học Cần Thơ, đường 3/2, Xuân Khánh, Ninh Kiều, Cần Thơ</h1>
                 </div>
                 <div class="grow">
-                    <button class="underline text-blue-500">
-                        Thêm địa chỉ mới
-                    </button>
+                    <TextButton :onClick="() => { }" label="Thêm địa chỉ mới" />
                 </div>
             </div>
         </div>

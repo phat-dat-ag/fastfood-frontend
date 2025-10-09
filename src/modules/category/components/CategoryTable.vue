@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ElButton, ElTable, ElTableColumn } from 'element-plus';
+import { ElTable, ElTableColumn } from 'element-plus';
 import type { Category } from '../../../types/category.types';
 import { formatDateTimeString } from '../../../utils/time.utils';
+import AddButton from '../../../components/buttons/AddButton.vue';
+import EditButton from '../../../components/buttons/EditButton.vue';
+import DeleteButton from '../../../components/buttons/DeleteButton.vue';
 
 interface CategoryTableProps {
     categories: Array<Category>;
@@ -14,11 +17,7 @@ const props = defineProps<CategoryTableProps>();
 <template>
     <div>
         <div class="py-2 flex justify-end">
-            <ElButton type="warning" plain
-                class="!bg-orange-500 hover:!bg-orange-600 !text-white !border-none !font-medium"
-                @click="openCreateCategoryModal">
-                + Thêm danh mục
-            </ElButton>
+            <AddButton :onClick="openCreateCategoryModal" label="+ Thêm danh mục" />
         </div>
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-orange-100">
             <ElTable :data="props.categories" border class="w-full">
@@ -53,13 +52,10 @@ const props = defineProps<CategoryTableProps>();
 
                 <ElTableColumn align="right">
                     <template #default="scope">
-                        <ElButton size="small" type="warning" plain class="!text-orange-600 !border-orange-300"
-                            @click="openUpdateCategoryModal(scope.row)">
-                            Cập nhật
-                        </ElButton>
-                        <ElButton size="small" type="danger" plain @click="handleDeleteCategory(scope.row.id)">
-                            Xóa
-                        </ElButton>
+                        <div class="flex gap-2 justify-evenly">
+                            <EditButton :onClick="() => openUpdateCategoryModal(scope.row)" label="Cập nhật" />
+                            <DeleteButton :onClick="() => handleDeleteCategory(scope.row.id)" label="Xóa" />
+                        </div>
                     </template>
                 </ElTableColumn>
             </ElTable>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import * as yup from 'yup';
 import { Form, ErrorMessage, Field, type FormContext } from 'vee-validate';
+import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
+import TextButton from '../../../components/buttons/TextButton.vue';
 
 interface OTPModalProps {
     toggleOTPModal: boolean;
@@ -46,9 +48,7 @@ async function onSubmit(values: any, formContex: any) {
                     <ErrorMessage name="otp" class="text-center text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <button
-                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">Xác
-                    nhận</button>
+                <PrimaryButton label="Xác nhận" />
             </Form>
         </div>
         <template #footer>
@@ -56,7 +56,7 @@ async function onSubmit(values: any, formContex: any) {
                 Gửi mã lại sau {{ Math.floor(remainingTime / 60) }}:
                 {{ remainingTime % 60 >= 10 ? remainingTime % 60 : `0${remainingTime % 60}` }}
             </p>
-            <p v-else class="hover:underline hover:text-blue-500" @click="resendOTP">Gửi lại mã</p>
+            <TextButton v-else :onClick="resendOTP" label="Gửi lại mã" />
         </template>
     </el-dialog>
 </template>

@@ -6,6 +6,8 @@ import * as yup from "yup"
 import type { CategoryCreateRequest, CategoryUpdateRequest } from '../../../types/category.types'
 import { useCategoryStore } from '../../../store/useCategoryStore.store'
 import { notifyError } from '../../../utils/notification.utils'
+import SecondaryButton from '../../../components/buttons/SecondaryButton.vue'
+import PrimaryButton from '../../../components/buttons/PrimaryButton.vue'
 
 
 interface CategoryModalProps {
@@ -101,8 +103,8 @@ const handleSubmit = (formValues: any) => {
             </div>
 
             <div class="flex justify-end space-x-2">
-                <button type="button" @click="emit('close')">Hủy</button>
-                <button>Lưu</button>
+                <SecondaryButton :onClick="() => emit('close')" label="Hủy" />
+                <PrimaryButton label="Lưu" />
             </div>
         </Form>
     </ElDialog>

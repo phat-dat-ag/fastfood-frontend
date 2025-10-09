@@ -12,6 +12,9 @@ import type { ApiResponse } from '../../../types/api.types';
 import { ref } from 'vue';
 import { USER_ROLES } from '../../../constants/user-roles';
 import { ROUTE_NAMES } from '../../../constants/route-names';
+import SecondaryButton from '../../../components/buttons/SecondaryButton.vue';
+import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
+import TextButton from '../../../components/buttons/TextButton.vue';
 
 const router = useRouter();
 
@@ -85,31 +88,19 @@ const onSubmit = async (value: any) => {
 
                 <p class="text-center text-red-500 text-sm mt-1 block">{{ signInError }}</p>
 
-                <button type="button" class="hover:underline hover:text-blue-500"
-                    @click="router.push('/forget-password')">
-                    Quên mật khẩu?
-                </button>
+                <TextButton :onClick="() => router.push({ name: ROUTE_NAMES.AUTH.FORGET_PASSWORD })"
+                    label="Quên mật khẩu" />
 
                 <div class="flex gap-4">
-                    <button type="button"
-                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
-                        @click="() => router.back()">
-                        Quay lại
-                    </button>
-                    <button
-                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                        Đăng nhập
-                    </button>
+                    <SecondaryButton :onClick="() => router.back()" label="Quay lại" />
+                    <PrimaryButton label="Đăng nhập" />
                 </div>
 
-                <div>
-                    <p class="text-center">
-                        Bạn chưa có tài khoản?
-                        <button type="button" class="hover:underline hover:text-blue-500"
-                            @click="router.push({ name: ROUTE_NAMES.AUTH.SIGN_UP })">Đăng ký tại đây
-                        </button>
-                    </p>
-                </div>
+                <p class="text-center">
+                    Bạn chưa có tài khoản?
+                    <TextButton :onClick="() => router.push({ name: ROUTE_NAMES.AUTH.SIGN_UP })"
+                        label="Đăng ký tại đây" />
+                </p>
             </Form>
         </div>
     </div>

@@ -10,6 +10,9 @@ import { useAuthStore } from '../../../store/useAuthStore.store';
 import type { ApiResponse } from '../../../types/api.types';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useOtpHandler } from '../../../composables/useOtpHandler';
+import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
+import SecondaryButton from '../../../components/buttons/SecondaryButton.vue';
+import TextButton from '../../../components/buttons/TextButton.vue';
 
 const schema = yup.object({
     name: yup
@@ -135,26 +138,15 @@ const onSubmit = async (values: any) => {
                 </div>
 
                 <div class="flex gap-4">
-                    <button type="button"
-                        class="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200 font-semibold"
-                        @click="() => router.back()">
-                        Quay lại
-                    </button>
-                    <button
-                        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold">
-                        Đăng ký
-                    </button>
+                    <SecondaryButton :onClick="() => router.back()" label="Quay lại" />
+                    <PrimaryButton label="Đăng ký" />
                 </div>
 
-                <div>
-                    <p class="text-center">
-                        Bạn đã có tài khoản?
-                        <button type="button" class="hover:underline hover:text-blue-500"
-                            @click="router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })">
-                            Đăng nhập tại đây
-                        </button>
-                    </p>
-                </div>
+                <p class="text-center">
+                    Bạn đã có tài khoản?
+                    <TextButton :onClick="() => router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })"
+                        label="Đăng nhập tại đây" />
+                </p>
             </Form>
 
             <OTPModal v-model:toggleOTPModal="isOTPModalVisible" :remainingTime="remainingTime" :checkOTP="verifyOTP"
