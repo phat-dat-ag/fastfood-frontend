@@ -3,6 +3,7 @@ import { USER_ROLES } from "../../constants/user-roles";
 import AdminLayout from "../../layouts/AdminLayout.vue";
 import CategoriesPage from "../../modules/category/CategoriesPage.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
+import ProductManagementPage from "../../modules/products/ProductManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -14,6 +15,11 @@ export const adminRoutes = {
       path: "/manage-category",
       name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT,
       component: CategoriesPage,
+    },
+    {
+      path: "/manage-product",
+      name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT,
+      component: ProductManagementPage,
     },
   ],
 };
