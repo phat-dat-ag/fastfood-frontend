@@ -4,7 +4,7 @@ export interface ProductCreateRequest {
   description: string;
   price: string;
   activated: boolean;
-  productImageUrl: File | null;
+  imageUrl: File | null;
 }
 
 export interface ProductUpdateRequest {
@@ -23,7 +23,7 @@ export interface Product {
   slug: string;
   price: string;
   description: string;
-  productImageUrl: string;
+  imageUrl: string;
   activated: boolean;
   deleted: boolean;
   createdAt: string;

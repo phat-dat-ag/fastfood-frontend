@@ -14,8 +14,8 @@ function buildCategoryFormData(
   formData.append("name", data.name);
   formData.append("description", data.description);
 
-  if (data.categoryImageUrl) {
-    formData.append("categoryImageUrl", data.categoryImageUrl);
+  if (data.imageUrl) {
+    formData.append("imageUrl", data.imageUrl);
   }
 
   return formData;

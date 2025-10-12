@@ -11,8 +11,7 @@ export const createProduct = (data: ProductCreateRequest) => {
   formData.append("description", data.description);
   formData.append("price", data.price);
   formData.append("activated", data.activated ? "true" : "false");
-  if (data.productImageUrl)
-    formData.append("productImageUrl", data.productImageUrl);
+  if (data.imageUrl) formData.append("imageUrl", data.imageUrl);
   return api.post("/admin/product", formData, {
     headers: {
       "Content-Type": "multipart/form-data",

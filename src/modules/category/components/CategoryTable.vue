@@ -23,8 +23,7 @@ const props = defineProps<CategoryTableProps>();
             <ElTable :data="props.categories" border class="w-full">
                 <ElTableColumn width="100" label="Ảnh">
                     <template #default="scope">
-                        <img :src="scope.row.categoryImageUrl" alt="Ảnh danh mục"
-                            class="w-12 h-12 object-cover rounded-md" />
+                        <img :src="scope.row.imageUrl" alt="Ảnh danh mục" class="w-12 h-12 object-cover rounded-md" />
                     </template>
                 </ElTableColumn>
                 <ElTableColumn label="Tên danh mục" prop="name" />

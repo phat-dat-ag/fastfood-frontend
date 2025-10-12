@@ -46,7 +46,7 @@ const handleSubmit = (formValues: any) => {
     if (props.isCreatingCategory) {
         const formData: CategoryCreateRequest = {
             name: formValues.name,
-            categoryImageUrl: selectedFile.value,
+            imageUrl: selectedFile.value,
             description: formValues.description,
         }
         emit('create-category', formData);
@@ -59,7 +59,7 @@ const handleSubmit = (formValues: any) => {
         const formData: CategoryUpdateRequest = {
             id: categoryStore.category.id,
             name: formValues.name,
-            categoryImageUrl: selectedFile.value,
+            imageUrl: selectedFile.value,
             description: formValues.description,
         }
         emit('update-category', formData);

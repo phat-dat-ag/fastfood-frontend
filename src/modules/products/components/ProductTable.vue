@@ -24,8 +24,7 @@ const props = defineProps<CategoryTableProps>();
             <ElTable :data="props.products" border class="w-full">
                 <ElTableColumn width="100" label="Ảnh">
                     <template #default="scope">
-                        <img :src="scope.row.productImageUrl" alt="Ảnh sản phẩm"
-                            class="w-12 h-12 object-cover rounded-md" />
+                        <img :src="scope.row.imageUrl" alt="Ảnh sản phẩm" class="w-12 h-12 object-cover rounded-md" />
                     </template>
                 </ElTableColumn>
                 <ElTableColumn label="Tên sản phẩm" prop="name" />

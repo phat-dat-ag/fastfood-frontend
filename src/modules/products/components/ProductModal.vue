@@ -55,7 +55,7 @@ const handleSubmit = (formValues: any) => {
             description: formValues.description,
             price: formValues.price,
             activated: formValues.activated,
-            productImageUrl: selectedFile.value,
+            imageUrl: selectedFile.value,
         }
         emit('create-product', formData);
     } else {
