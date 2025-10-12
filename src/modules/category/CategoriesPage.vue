@@ -3,15 +3,13 @@ import { onMounted, ref } from 'vue'
 import CategoryModal from './components/CategoryModal.vue'
 import { createCategory, deleteCategory, getCategories, updateCategory } from '../../service/category.service'
 import type { Category, CategoryCreateRequest, CategoryUpdateRequest } from '../../types/category.types'
-import { closeLoading, openLoading } from '../../utils/loading.utils'
-import type { ApiResponse } from '../../types/api.types'
-import { notifyError, notifySuccess } from '../../utils/notification.utils'
 import { useCategoryStore } from '../../store/useCategoryStore.store'
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils'
 import CategoryTable from './components/CategoryTable.vue'
-import type { AxiosError } from 'axios'
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue'
 import type { Filter } from '../../types/filter.types'
+import { useApiHandler } from '../../composables/useApiHandler'
+import { CATEGORY_MESSAGES } from '../../constants/messages'
 
 
 const isCategoryModalVisible = ref(false);
@@ -20,18 +18,14 @@ const isCreatingCategory = ref(true);
 const categories = ref<Category[]>([]);
 
 async function loadCategories() {
-  const loading = openLoading("Đang lấy dữ liệu danh mục...");
-  try {
-    const response = await getCategories();
-    const dataResponse: ApiResponse<Category[]> = response.data;
-    if (dataResponse.data)
-      categories.value = dataResponse.data;
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Lỗi khi lấy dữ liệu danh mục, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  await useApiHandler<Category[]>(
+    getCategories,
+    {
+      loading: CATEGORY_MESSAGES.get,
+      error: CATEGORY_MESSAGES.getError,
+    },
+    (data: Category[]) => categories.value = data,
+  )
 }
 
 onMounted(loadCategories);
@@ -63,17 +57,16 @@ const openCreateCategoryModal = () => {
 }
 
 const handleCreateCategory = async (newCategory: CategoryCreateRequest) => {
-  const loading = openLoading("Đang thêm danh mục...");
-  try {
-    await createCategory(newCategory);
-    await loadCategories();
-    notifySuccess("Đã thêm danh mục");
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Có lỗi khi thêm danh mục, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  await useApiHandler(
+    () => createCategory(newCategory),
+    {
+      loading: CATEGORY_MESSAGES.create,
+      success: CATEGORY_MESSAGES.createSuccess,
+      error: CATEGORY_MESSAGES.createError,
+    },
+    () => { },
+    loadCategories,
+  )
 }
 
 const categoryStore = useCategoryStore();
@@ -85,33 +78,31 @@ const openUpdateCategoryModal = (category: Category) => {
 }
 
 const handleUpdateCategory = async (categoryInformation: CategoryUpdateRequest) => {
-  const loading = openLoading("Đang cập nhật danh mục...");
-  try {
-    await updateCategory(categoryInformation);
-    await loadCategories();
-    notifySuccess("Đã cập nhật danh mục");
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Có lỗi khi cập nhật danh mục, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  await useApiHandler(
+    () => updateCategory(categoryInformation),
+    {
+      loading: CATEGORY_MESSAGES.update,
+      success: CATEGORY_MESSAGES.updateSuccess,
+      error: CATEGORY_MESSAGES.updateError,
+    },
+    () => { },
+    loadCategories,
+  )
 }
 
 const handleDeleteCategory = async (id: number) => {
-  const loading = openLoading("Đang xóa danh mục");
-  try {
-    const confirmed: boolean = await openConfirmDeleteMessage("Bạn thực sự muốn xóa danh mục này?");
-    if (!confirmed) return;
-    await deleteCategory(id);
-    notifySuccess(`Đã xóa danh mục #${id}`);
-    await loadCategories();
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Có lỗi khi xóa danh mục, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  const confirmed: boolean = await openConfirmDeleteMessage("Bạn thực sự muốn xóa danh mục này?");
+  if (!confirmed) return;
+  await useApiHandler(
+    () => deleteCategory(id),
+    {
+      loading: CATEGORY_MESSAGES.delete,
+      success: CATEGORY_MESSAGES.deleteSuccess,
+      error: CATEGORY_MESSAGES.deleteError,
+    },
+    () => { },
+    loadCategories
+  )
 }
 </script>
 

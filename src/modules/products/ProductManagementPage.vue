@@ -6,45 +6,35 @@ import ProductTable from './components/ProductTable.vue';
 import ProductModal from './components/ProductModal.vue';
 import type { Product, ProductCreateRequest } from '../../types/product.types';
 import type { Category } from '../../types/category.types';
-import { closeLoading, openLoading } from '../../utils/loading.utils';
 import { getCategories } from '../../service/category.service';
-import type { ApiResponse } from '../../types/api.types';
-import type { AxiosError } from 'axios';
-import { notifyError, notifySuccess } from '../../utils/notification.utils';
 import { createProduct, getProducts } from '../../service/product.service';
+import { useApiHandler } from '../../composables/useApiHandler';
+import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 
 const categories = ref<Category[]>([]);
 
 async function loadCategories() {
-  const loading = openLoading("Đang lấy dữ liệu danh mục...");
-  try {
-    const response = await getCategories();
-    const dataResponse: ApiResponse<Category[]> = response.data;
-    if (dataResponse.data)
-      categories.value = dataResponse.data;
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Lỗi khi lấy dữ liệu danh mục, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  await useApiHandler<Category[]>(
+    getCategories,
+    {
+      loading: CATEGORY_MESSAGES.get,
+      error: CATEGORY_MESSAGES.getError,
+    },
+    (data: Category[]) => categories.value = data,
+  )
 }
 
 const products = ref<Product[]>([]);
 
 async function loadProducts() {
-  const loading = openLoading("Đang lấy dữ liệu sản phẩm...");
-  try {
-    const response = await getProducts();
-    const dataResponse: ApiResponse<Product[]> = response.data;
-    if (dataResponse.data)
-      products.value = dataResponse.data;
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Lỗi khi lấy dữ liệu sản phẩm, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  await useApiHandler<Product[]>(
+    getProducts,
+    {
+      loading: PRODUCT_MESSAGES.get,
+      error: PRODUCT_MESSAGES.getError,
+    },
+    (data: Product[]) => products.value = data,
+  )
 }
 
 onMounted(loadCategories);
@@ -80,17 +70,16 @@ const openCreateProductModal = () => {
 }
 
 const handleCreateProduct = async (newProduct: ProductCreateRequest) => {
-  const loading = openLoading("Đang thêm sản phẩm...");
-  try {
-    await createProduct(newProduct);
-    await loadProducts();
-    notifySuccess("Đã thêm sản phẩm");
-  } catch (e) {
-    const err = e as AxiosError<any>;
-    notifyError(err.response?.data.message || "Có lỗi khi thêm sản phẩm, hãy thử lại");
-  } finally {
-    closeLoading(loading);
-  }
+  await useApiHandler(
+    () => createProduct(newProduct),
+    {
+      loading: PRODUCT_MESSAGES.create,
+      success: PRODUCT_MESSAGES.createSuccess,
+      error: PRODUCT_MESSAGES.createError,
+    },
+    () => { },
+    loadProducts,
+  )
 }
 </script>
 
