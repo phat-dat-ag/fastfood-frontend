@@ -7,9 +7,10 @@ import ProductModal from './components/ProductModal.vue';
 import type { Product, ProductCreateRequest } from '../../types/product.types';
 import type { Category } from '../../types/category.types';
 import { getCategories } from '../../service/category.service';
-import { createProduct, getProducts } from '../../service/product.service';
+import { createProduct, deleteProduct, getProducts } from '../../service/product.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
+import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 
 const categories = ref<Category[]>([]);
 
@@ -81,6 +82,21 @@ const handleCreateProduct = async (newProduct: ProductCreateRequest) => {
     loadProducts,
   )
 }
+
+const handleDeleteProduct = async (id: number) => {
+  const confirmed: boolean = await openConfirmDeleteMessage("Bạn thực sự muốn xóa sản phẩm này?");
+  if (!confirmed) return;
+  await useApiHandler(
+    () => deleteProduct(id),
+    {
+      loading: PRODUCT_MESSAGES.delete,
+      success: PRODUCT_MESSAGES.deleteSuccess,
+      error: PRODUCT_MESSAGES.deleteError,
+    },
+    () => { },
+    loadProducts,
+  )
+}
 </script>
 
 <template>
@@ -91,7 +107,8 @@ const handleCreateProduct = async (newProduct: ProductCreateRequest) => {
     <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
       @update:filter="handleFilterChange" />
 
-    <ProductTable :products="products" :openCreateProductModal="openCreateProductModal" />
+    <ProductTable :products="products" :openCreateProductModal="openCreateProductModal"
+      :handleDeleteProduct="handleDeleteProduct" />
 
     <ProductModal v-if="isProductModalVisible" :isCreatingProduct="isCreatingProduct" :categories="categories"
       @close="isProductModalVisible = false" @create-product="handleCreateProduct" />

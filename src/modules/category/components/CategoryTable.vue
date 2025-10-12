@@ -10,7 +10,7 @@ interface CategoryTableProps {
     categories: Array<Category>;
     openCreateCategoryModal: () => void;
     openUpdateCategoryModal: (category: Category) => void;
-    handleDeleteCategory: (id: number) => void;
+    handleDeleteCategory: (id: number) => Promise<void>;
 }
 const props = defineProps<CategoryTableProps>();
 </script>

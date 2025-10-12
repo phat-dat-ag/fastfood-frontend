@@ -20,3 +20,7 @@ export const createProduct = (data: ProductCreateRequest) => {
 export const getProducts = () => {
   return api.get("/admin/product");
 };
+
+export const deleteProduct = (id: number) => {
+  return api.delete("/admin/product", { params: { id } });
+};

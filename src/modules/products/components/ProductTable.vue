@@ -10,6 +10,7 @@ import { formatCurrencyVND } from '../../../utils/currency.utils';
 interface CategoryTableProps {
     products: Array<Product>;
     openCreateProductModal: () => void;
+    handleDeleteProduct: (id: number) => Promise<void>;
 }
 const props = defineProps<CategoryTableProps>();
 </script>
@@ -58,7 +59,7 @@ const props = defineProps<CategoryTableProps>();
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
                             <EditButton :onClick="() => { }" label="Cập nhật" />
-                            <DeleteButton :onClick="() => { }" label="Xóa" />
+                            <DeleteButton :onClick="() => handleDeleteProduct(scope.row.id)" label="Xóa" />
                         </div>
                     </template>
                 </ElTableColumn>
