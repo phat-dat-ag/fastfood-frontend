@@ -1,8 +1,12 @@
 import api from "../api/axios";
 import type {
   ChangePasswordRequest,
-  EidtUserRequest ,
+  EidtUserRequest,
 } from "../types/user.types";
+
+export const getAccounts = () => {
+  return api.get("/user");
+};
 
 export const updateAvatar = (file: File) => {
   const formData = new FormData();
@@ -13,7 +17,7 @@ export const updateAvatar = (file: File) => {
   });
 };
 
-export const updateUserInformation = (data: EidtUserRequest ) => {
+export const updateUserInformation = (data: EidtUserRequest) => {
   return api.post("/user/update-information", data);
 };
 

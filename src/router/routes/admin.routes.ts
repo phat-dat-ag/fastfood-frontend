@@ -4,6 +4,7 @@ import AdminLayout from "../../layouts/AdminLayout.vue";
 import CategoriesPage from "../../modules/category/CategoriesPage.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
 import ProductManagementPage from "../../modules/products/ProductManagementPage.vue";
+import AccountManagementPage from "../../modules/account/AccountManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -11,6 +12,16 @@ export const adminRoutes = {
   meta: { requireAuth: true, roles: [USER_ROLES.ADMIN] },
   children: [
     { path: "", name: ROUTE_NAMES.ADMIN.HOME, component: ProductsPage },
+    {
+      path: "/manage-customer",
+      name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT,
+      component: AccountManagementPage,
+    },
+    {
+      path: "/manage-staff",
+      name: ROUTE_NAMES.ADMIN.STAFF_MANAGEMENT,
+      component: AccountManagementPage,
+    },
     {
       path: "/manage-category",
       name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT,

@@ -19,8 +19,12 @@ function signOut() {
                 <el-menu-item index="0">Xem thống kê</el-menu-item>
                 <el-sub-menu index="1">
                     <template #title>Quản lý tài khoản</template>
-                    <el-menu-item index="1-1">Khách hàng</el-menu-item>
-                    <el-menu-item index="1-2">Nhân viên</el-menu-item>
+                    <el-menu-item index="1-1" @click="router.push({ name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT })">
+                        Khách hàng
+                    </el-menu-item>
+                    <el-menu-item index="1-2" @click="router.push({ name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT })">
+                        Nhân viên
+                    </el-menu-item>
                 </el-sub-menu>
                 <el-menu-item index="2" @click="router.push({ name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT })">
                     Quản lý danh mục sản phẩm
