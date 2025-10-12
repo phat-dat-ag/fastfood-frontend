@@ -5,8 +5,10 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from "yup"
 import SecondaryButton from '../../../components/buttons/SecondaryButton.vue'
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue'
-import type { ProductCreateRequest } from '../../../types/product.types'
+import type { ProductCreateRequest, ProductUpdateRequest } from '../../../types/product.types'
 import type { Category } from '../../../types/category.types'
+import { useProductStore } from '../../../store/useProductStore.store'
+import { notifyError } from '../../../utils/notification.utils'
 
 
 interface ProductModalProps {
@@ -15,7 +17,9 @@ interface ProductModalProps {
 }
 
 const props = defineProps<ProductModalProps>();
-const emit = defineEmits(['close', 'create-product',]);
+const emit = defineEmits(['close', 'create-product', 'update-product']);
+
+const productStore = useProductStore();
 
 const isVisible = ref(true);
 
@@ -54,6 +58,19 @@ const handleSubmit = (formValues: any) => {
             productImageUrl: selectedFile.value,
         }
         emit('create-product', formData);
+    } else {
+        if (!productStore.product) {
+            notifyError("Không tìm thấy thông tin sản phẩm");
+            return;
+        }
+        const formData: ProductUpdateRequest = {
+            id: productStore.product.id,
+            name: formValues.name,
+            description: formValues.description,
+            activated: formValues.activated,
+            imageUrl: selectedFile.value,
+        }
+        emit('update-product', formData);
     }
     emit('close');
 }
@@ -63,11 +80,15 @@ const handleSubmit = (formValues: any) => {
     <ElDialog v-model="isVisible" :title="props.isCreatingProduct ? 'Thêm mới' : 'Cập nhật nè'" width="450px"
         @close="emit('close')">
         <Form :validation-schema="schema" @submit="handleSubmit" :initial-values="{
-            activated: true,
+            category_id: isCreatingProduct ? '' : (String(productStore.product?.categoryId) || ''),
+            name: isCreatingProduct ? '' : (productStore.product?.name || 'Không xác định'),
+            description: isCreatingProduct ? '' : (productStore.product?.description || 'Không xác định'),
+            price: isCreatingProduct ? null : (productStore.product?.price || null),
+            activated: isCreatingProduct ? true : (productStore.product?.activated || 'Không xác định'),
         }" class="space-y-4">
             <div v-if="categories && categories.length">
                 <label for="category_id" class="block text-gray-700 font-medium mb-1">Danh mục sản phẩm</label>
-                <Field id="category_id" name="category_id" as="select"
+                <Field id="category_id" name="category_id" as="select" :disabled="!isCreatingProduct"
                     class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option value="">-- Chọn danh mục --</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
@@ -96,7 +117,7 @@ const handleSubmit = (formValues: any) => {
 
             <div>
                 <label for="price" class="block text-gray-700 font-medium mb-1">Giá sản phẩm</label>
-                <Field id="price" name="price" type="number"
+                <Field id="price" name="price" type="number" :readonly="!isCreatingProduct"
                     class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 </Field>
                 <ErrorMessage name="price" class="text-red-500 text-sm mt-1 block"></ErrorMessage>

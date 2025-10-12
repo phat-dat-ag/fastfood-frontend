@@ -4,13 +4,14 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import ProductTable from './components/ProductTable.vue';
 import ProductModal from './components/ProductModal.vue';
-import type { Product, ProductCreateRequest } from '../../types/product.types';
+import type { Product, ProductCreateRequest, ProductUpdateRequest } from '../../types/product.types';
 import type { Category } from '../../types/category.types';
 import { getCategories } from '../../service/category.service';
-import { createProduct, deleteProduct, getProducts } from '../../service/product.service';
+import { createProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
+import { useProductStore } from '../../store/useProductStore.store';
 
 const categories = ref<Category[]>([]);
 
@@ -83,6 +84,27 @@ const handleCreateProduct = async (newProduct: ProductCreateRequest) => {
   )
 }
 
+const productStore = useProductStore();
+
+const openUpdateProductModal = (product: Product) => {
+  isProductModalVisible.value = true;
+  isCreatingProduct.value = false;
+  productStore.setProduct(product);
+}
+
+const handleUpdateProduct = async (productInformation: ProductUpdateRequest) => {
+  await useApiHandler(
+    () => updateProduct(productInformation),
+    {
+      loading: PRODUCT_MESSAGES.update,
+      success: PRODUCT_MESSAGES.updateSuccess,
+      error: PRODUCT_MESSAGES.updateError,
+    },
+    () => { },
+    loadProducts,
+  )
+}
+
 const handleDeleteProduct = async (id: number) => {
   const confirmed: boolean = await openConfirmDeleteMessage("Bạn thực sự muốn xóa sản phẩm này?");
   if (!confirmed) return;
@@ -108,9 +130,10 @@ const handleDeleteProduct = async (id: number) => {
       @update:filter="handleFilterChange" />
 
     <ProductTable :products="products" :openCreateProductModal="openCreateProductModal"
-      :handleDeleteProduct="handleDeleteProduct" />
+      :openUpdateProductModal="openUpdateProductModal" :handleDeleteProduct="handleDeleteProduct" />
 
     <ProductModal v-if="isProductModalVisible" :isCreatingProduct="isCreatingProduct" :categories="categories"
-      @close="isProductModalVisible = false" @create-product="handleCreateProduct" />
+      @close="isProductModalVisible = false" @create-product="handleCreateProduct"
+      @update-product="handleUpdateProduct" />
   </div>
 </template>

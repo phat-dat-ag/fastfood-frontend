@@ -7,6 +7,14 @@ export interface ProductCreateRequest {
   productImageUrl: File | null;
 }
 
+export interface ProductUpdateRequest {
+  id: number;
+  name: string;
+  description: string;
+  activated: boolean;
+  imageUrl: File | null;
+}
+
 export interface Product {
   categoryId: number;
   categoryName: string;
