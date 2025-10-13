@@ -3,10 +3,13 @@ import { onMounted, ref } from 'vue';
 import type { Category } from '../../types/category.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getCategories } from '../../service/category.service';
-import { CATEGORY_MESSAGES } from '../../constants/messages';
+import { CART_MESSAGE, CATEGORY_MESSAGES } from '../../constants/messages';
 import ProductSegment from './components/ProductSegment.vue';
 import type { Product } from '../../types/product.types';
 import ProductList from './components/ProductList.vue';
+import { addProductToCart } from '../../service/cart.service';
+import { useUserStore } from '../../store/useUserStore.store';
+import { notifyError } from '../../utils/notification.utils';
 
 const categories = ref<Category[]>([]);
 async function loadCategories() {
@@ -26,8 +29,23 @@ function handleSelect(category: Category) {
   selectedCategory.value = category;
 }
 
-function handleAddToCart(product: Product) {
-  console.log("Đã thêm vào giỏ hàng:", product.name);
+const userStore = useUserStore();
+
+async function handleAddToCart(data: { product: Product; quantity: number }) {
+  if (!userStore.isSignedIn()) {
+    notifyError("Hãy đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
+    return;
+  }
+  if (data.quantity < 1) return;
+  await useApiHandler(
+    () => addProductToCart({ productId: data.product.id, quantity: data.quantity }),
+    {
+      loading: CART_MESSAGE.create,
+      success: CART_MESSAGE.createSuccess,
+      error: CART_MESSAGE.createError,
+    },
+    () => { },
+  )
 }
 </script>
 <template>

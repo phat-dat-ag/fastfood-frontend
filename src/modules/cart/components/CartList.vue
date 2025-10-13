@@ -1,0 +1,23 @@
+<script setup lang="ts">
+import type { Cart } from "../../../types/cart.types";
+import CartItem from "./CartItem.vue";
+
+const props = defineProps<{ carts: Cart[] }>();
+const emit = defineEmits(["delete-product"]);
+
+function handleDeleteProduct(productId: number) {
+  emit("delete-product", productId);
+}
+</script>
+<template>
+  <div class="p-6 bg-gray-50 rounded-2xl shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4"> Giỏ hàng của bạn</h2>
+    <div v-if="props.carts.length > 0" class="space-y-4">
+      <CartItem v-for="cart in props.carts" :key="cart.product.id" :cart="cart"
+        @delete-product-from-cart="handleDeleteProduct" />
+    </div>
+    <div v-else class="text-gray-500 text-center py-6">
+      Giỏ hàng trống, hãy mua sắm đi nào!
+    </div>
+  </div>
+</template>

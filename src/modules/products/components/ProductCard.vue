@@ -3,12 +3,25 @@ import { ElCard } from "element-plus";
 import type { Product } from "../../../types/product.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
+import NumberInput from "../../../components/inputs/NumberInput.vue";
+import { ref } from "vue";
 
 interface ProductCardProps {
     product: Product;
 }
 const props = defineProps<ProductCardProps>();
 const emit = defineEmits(["add-to-cart"]);
+
+const quantity = ref<number>(0);
+
+function onQuantityChange(newQuantity: number) {
+    quantity.value = newQuantity;
+}
+
+function onClickAddButton() {
+    emit('add-to-cart', { product: props.product, quantity: quantity.value })
+}
+
 </script>
 <template>
     <ElCard shadow="hover" class="w-full h-full flex flex-col justify-between transition-transform hover:scale-[1.02]">
@@ -22,7 +35,8 @@ const emit = defineEmits(["add-to-cart"]);
                     {{ formatCurrencyVND(props.product.price) }}
                 </span>
             </div>
-            <PrimaryButton label="Thêm vào giỏ hàng" :onClick="() => emit('add-to-cart', product)" />
+            <NumberInput :min="0" :max="100" :step="1" @quantity-change="onQuantityChange" />
+            <PrimaryButton label="Thêm vào giỏ hàng" :onClick="onClickAddButton" />
         </div>
     </ElCard>
 </template>
