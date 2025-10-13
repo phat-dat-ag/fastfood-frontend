@@ -1,10 +1,14 @@
 import { ROUTE_NAMES } from "../../constants/route-names";
 import { USER_ROLES } from "../../constants/user-roles";
 import UserLayout from "../../layouts/UserLayout.vue";
+import CartPage from "../../modules/cart/CartPage.vue";
+import ChallengePage from "../../modules/challenge/ChallengePage.vue";
+import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
 import ChangePasswordPage from "../../modules/profile/pages/ChangePasswordPage.vue";
 import EditProfilePage from "../../modules/profile/pages/EditProfilePage.vue";
 import ProfilePage from "../../modules/profile/pages/ProfilePage.vue";
+import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 
 export const userRoutes = {
   path: "/user",
@@ -12,6 +16,21 @@ export const userRoutes = {
   meta: { requireAuth: true, roles: [USER_ROLES.USER] },
   children: [
     { path: "", name: ROUTE_NAMES.USER.HOME, component: ProductsPage },
+    {
+      path: "/promotion",
+      name: ROUTE_NAMES.USER.PROMOTION,
+      component: PromotionPage,
+    },
+    {
+      path: "/challenge",
+      name: ROUTE_NAMES.USER.CHALLENGE,
+      component: ChallengePage,
+    },
+    {
+      path: "/about",
+      name: ROUTE_NAMES.USER.ABOUT,
+      component: AboutUsPage,
+    },
     {
       path: "profile",
       name: ROUTE_NAMES.USER.PROFILE,
@@ -26,6 +45,11 @@ export const userRoutes = {
       path: "change-password",
       name: ROUTE_NAMES.USER.CHANGE_PASSWORD,
       component: ChangePasswordPage,
+    },
+    {
+      path: "/cart",
+      name: ROUTE_NAMES.USER.CART,
+      component: CartPage,
     },
   ],
 };

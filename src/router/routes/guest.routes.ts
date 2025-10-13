@@ -3,13 +3,31 @@ import GuestLayout from "../../layouts/GuestLayout.vue";
 import ForgetPasswordPage from "../../modules/auth/pages/ForgetPasswordPage.vue";
 import SignInPage from "../../modules/auth/pages/SignInPage.vue";
 import SignUpPage from "../../modules/auth/pages/SignUpPage.vue";
+import ChallengeIntroductionPage from "../../modules/challenge/ChallengeIntroductionPage.vue";
+import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
+import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 
 export const guestRoutes = {
   path: "/",
   component: GuestLayout,
   children: [
     { path: "", name: ROUTE_NAMES.GUEST.HOME, component: ProductsPage },
+    {
+      path: "/promotion",
+      name: ROUTE_NAMES.GUEST.PROMOTION,
+      component: PromotionPage,
+    },
+    {
+      path: "/challenge",
+      name: ROUTE_NAMES.GUEST.CHALLENGE,
+      component: ChallengeIntroductionPage,
+    },
+    {
+      path: "/about",
+      name: ROUTE_NAMES.GUEST.ABOUT,
+      component: AboutUsPage,
+    },
     {
       path: "sign-up",
       name: ROUTE_NAMES.AUTH.SIGN_UP,
