@@ -30,16 +30,17 @@ const handleImageChange = (file: any) => {
 }
 
 const schema = yup.object({
-    name: yup.string().required("Vui lòng nhập tên danh mục").test("check-category-name", "Tên danh mục từ 2 đến 15 ký tự", function (value) {
+    name: yup.string().required("Vui lòng nhập tên danh mục").test("check-category-name", "Tên danh mục từ 2 đến 80 ký tự", function (value) {
         if (!value) return true;
         const categoryName = value.trim();
-        return categoryName.length > 2 && categoryName.length <= 15;
+        return categoryName.length > 2 && categoryName.length <= 80;
     }),
     description: yup.string().required("Vui lòng nhập mô tả danh mục").test("check-category-description", "Mô tả danh mục nên ít hơn 100 ký tự", function (value) {
         if (!value) return true;
         const categoryName = value.trim();
         return categoryName.length <= 100;
-    })
+    }),
+    activated: yup.boolean(),
 })
 
 const handleSubmit = (formValues: any) => {
@@ -48,6 +49,7 @@ const handleSubmit = (formValues: any) => {
             name: formValues.name,
             imageUrl: selectedFile.value,
             description: formValues.description,
+            activated: formValues.activated,
         }
         emit('create-category', formData);
     }
@@ -61,6 +63,7 @@ const handleSubmit = (formValues: any) => {
             name: formValues.name,
             imageUrl: selectedFile.value,
             description: formValues.description,
+            activated: formValues.activated,
         }
         emit('update-category', formData);
     }
@@ -74,6 +77,7 @@ const handleSubmit = (formValues: any) => {
         <Form :validation-schema="schema" @submit="handleSubmit" :initial-values="{
             name: props.isCreatingCategory ? '' : (categoryStore.category?.name || 'Không xác định'),
             description: props.isCreatingCategory ? '' : (categoryStore.category?.description || 'Không xác định'),
+            activated: props.isCreatingCategory ? true : (categoryStore.category?.activated || 'Không xác định'),
         }" class="space-y-4">
             <div>
                 <label for="name" class="block text-gray-700 font-medium mb-1">Tên danh mục</label>
@@ -91,6 +95,14 @@ const handleSubmit = (formValues: any) => {
                     placeholder="Mô tả danh mục">
                 </Field>
                 <ErrorMessage name="description" class="text-red-500 text-sm mt-1 block"></ErrorMessage>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Kích hoạt danh mục</label>
+                <Field name="activated" v-slot="{ field }">
+                    <ElSwitch :model-value="field.value" @update:model-value="field.onChange" />
+                </Field>
+                <ErrorMessage name="activated" class="text-red-500 text-sm mt-1 block" />
             </div>
 
             <div class="mt-3">

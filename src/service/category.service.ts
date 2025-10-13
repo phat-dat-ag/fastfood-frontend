@@ -13,6 +13,7 @@ function buildCategoryFormData(
   }
   formData.append("name", data.name);
   formData.append("description", data.description);
+  formData.append("activated", data.activated ? "true" : "false");
 
   if (data.imageUrl) {
     formData.append("imageUrl", data.imageUrl);

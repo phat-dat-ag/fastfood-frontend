@@ -12,6 +12,7 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useProductStore } from '../../store/useProductStore.store';
+import { notifyError } from '../../utils/notification.utils';
 
 const categories = ref<Category[]>([]);
 
@@ -67,6 +68,10 @@ const isProductModalVisible = ref<boolean>(false);
 const isCreatingProduct = ref<boolean>(true);
 
 const openCreateProductModal = () => {
+  if(categories.value.length ===0){
+    notifyError("Hãy bổ sung danh mục trước khi thêm sản phẩm");
+    return;
+  }
   isProductModalVisible.value = true;
   isCreatingProduct.value = true;
 }

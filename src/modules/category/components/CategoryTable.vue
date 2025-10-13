@@ -42,6 +42,16 @@ const props = defineProps<CategoryTableProps>();
                         {{ formatDateTimeString(scope.row.updatedAt) }}
                     </template>
                 </ElTableColumn>
+                <ElTableColumn width="100" label="Trạng thái" prop="activated">
+                    <template #default="scope">
+                        <span v-if="scope.row.activated" class="text-green-500 font-medium">
+                            Hoạt động
+                        </span>
+                        <span v-else class="text-red-500 font-medium">
+                            Đã ẩn
+                        </span>
+                    </template>
+                </ElTableColumn>
 
                 <ElTableColumn label="Thao tác">
                     <template #default="scope">

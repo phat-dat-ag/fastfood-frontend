@@ -33,10 +33,10 @@ const handleImageChange = (file: any) => {
 
 const schema = yup.object({
     category_id: yup.number().required("Vui lòng chọn danh mục"),
-    name: yup.string().required("Vui lòng nhập tên sản phẩm").test("check-category-name", "Tên sản phẩm từ 2 đến 15 ký tự", function (value) {
+    name: yup.string().required("Vui lòng nhập tên sản phẩm").test("check-category-name", "Tên sản phẩm từ 2 đến 80 ký tự", function (value) {
         if (!value) return true;
         const productName = value.trim();
-        return productName.length > 2 && productName.length <= 15;
+        return productName.length > 2 && productName.length <= 80;
     }),
     description: yup.string().required("Vui lòng nhập mô tả sản phẩm").test("check-category-description", "Mô tả sản phẩm nên ít hơn 100 ký tự", function (value) {
         if (!value) return true;
