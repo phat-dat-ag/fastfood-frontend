@@ -6,6 +6,7 @@ import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/
 import { CART_MESSAGE } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
+import CheckoutSummary from './components/CheckoutSummary.vue';
 
 const carts = ref<Cart[]>([]);
 async function loadCarts() {
@@ -56,7 +57,8 @@ async function handleDeleteProduct(productId: number): Promise<boolean> {
 }
 </script>
 <template>
-    <div>
+    <div class="grid grid-cols-[6fr_4fr] gap-4">
         <CartList :carts="carts" @delete-product="handleDeleteProduct" @quantity-change="handleQuantityChange" />
+        <CheckoutSummary :carts="carts"/>
     </div>
 </template>
