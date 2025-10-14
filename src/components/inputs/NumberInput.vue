@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ElInputNumber } from 'element-plus';
-import { ref } from 'vue';
 interface NumberInputProps {
-    initialValue?: number;
+    value: number;
     min: number;
     max: number;
     step: number;
@@ -10,16 +9,15 @@ interface NumberInputProps {
 const props = defineProps<NumberInputProps>();
 const emit = defineEmits(["quantity-change"]);
 
-const num = ref<number>(props.initialValue ? props.initialValue : 0);
-
-function onChange(value: number | undefined) {
-    if (value)
+function onChange(value?: number) {
+    if (value != null)
         emit("quantity-change", value);
 }
 </script>
 
 <template>
     <div class="py-2 flex justify-center">
-        <ElInputNumber v-model="num" :min="props.min" :max="props.max" :step="props.step" @change="onChange" />
+        <ElInputNumber :model-value="props.value" :min="props.min" :max="props.max" :step="props.step"
+            @update:model-value="onChange" />
     </div>
 </template>

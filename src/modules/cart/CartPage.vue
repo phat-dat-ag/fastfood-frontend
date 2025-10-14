@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { Cart, CartResponse } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { deleteProductFromCart, getCartDetail } from '../../service/cart.service';
+import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
 import { CART_MESSAGE } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -20,9 +20,28 @@ async function loadCarts() {
 }
 onMounted(loadCarts);
 
-async function handleDeleteProduct(productId: number) {
+async function handleQuantityChange({ newQuantity, productId }: { newQuantity: number, productId: number }) {
+    if (newQuantity == 0) {
+        const isDeleted: boolean = await handleDeleteProduct(productId);
+        if (!isDeleted)
+            await loadCarts();
+        return;
+    }
+    await useApiHandler(
+        () => updateCart({ productId, quantity: newQuantity }),
+        {
+            loading: CART_MESSAGE.update,
+            success: CART_MESSAGE.updateSuccess,
+            error: CART_MESSAGE.updateError,
+        },
+        () => { },
+        loadCarts,
+    )
+}
+
+async function handleDeleteProduct(productId: number): Promise<boolean> {
     const confirmed: boolean = await openConfirmDeleteMessage("Xác nhận xóa sản phẩm này khỏi giỏ hàng?");
-    if (!confirmed) return;
+    if (!confirmed) return false;
     await useApiHandler(
         () => deleteProductFromCart(productId),
         {
@@ -33,10 +52,11 @@ async function handleDeleteProduct(productId: number) {
         () => { },
         loadCarts,
     )
+    return true;
 }
 </script>
 <template>
     <div>
-        <CartList :carts="carts" @delete-product="handleDeleteProduct" />
+        <CartList :carts="carts" @delete-product="handleDeleteProduct" @quantity-change="handleQuantityChange" />
     </div>
 </template>

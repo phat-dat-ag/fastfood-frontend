@@ -5,10 +5,10 @@ import { formatCurrencyVND } from "../../../utils/currency.utils";
 import DeleteButton from "../../../components/buttons/DeleteButton.vue";
 
 const props = defineProps<{ cart: Cart }>();
-const emit = defineEmits(["delete-product-from-cart"]);
+const emit = defineEmits(["delete-product-from-cart", "quantity-change-from-cart"]);
 
-function onQuantityChange(value: number) {
-    console.log("Cập nhật số lượng: ", value);
+function onQuantityChange(newQuantity: number) {
+    emit("quantity-change-from-cart", { newQuantity, productId: props.cart.product.id })
 }
 </script>
 <template>
@@ -25,7 +25,7 @@ function onQuantityChange(value: number) {
         </div>
 
         <div class="flex items-center">
-            <NumberInput :initialValue="props.cart.quantity" :min="0" :max="100" :step="1"
+            <NumberInput :value="props.cart.quantity" :min="0" :max="100" :step="1"
                 @quantity-change="onQuantityChange" />
         </div>
 

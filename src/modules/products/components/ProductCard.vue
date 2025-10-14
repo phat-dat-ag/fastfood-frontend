@@ -35,7 +35,7 @@ function onClickAddButton() {
                     {{ formatCurrencyVND(props.product.price) }}
                 </span>
             </div>
-            <NumberInput :min="0" :max="100" :step="1" @quantity-change="onQuantityChange" />
+            <NumberInput :value="quantity" :min="0" :max="100" :step="1" @quantity-change="onQuantityChange" />
             <PrimaryButton label="Thêm vào giỏ hàng" :onClick="onClickAddButton" />
         </div>
     </ElCard>
