@@ -34,3 +34,9 @@ export const ACCOUNT_MESSAGES = createEntityMessages(
 export const CATEGORY_MESSAGES = createEntityMessages("danh mục");
 export const PRODUCT_MESSAGES = createEntityMessages("sản phẩm");
 export const CART_MESSAGE = createEntityMessages("giỏ hàng");
+export const PROMOTION_CATEGORY_MESSAGE = createEntityMessages(
+  "mã khuyến mãi theo danh mục"
+);
+export const PROMOTION_PRODUCT_MESSAGE = createEntityMessages(
+  "mã khuyến mãi theo sản phẩm"
+);

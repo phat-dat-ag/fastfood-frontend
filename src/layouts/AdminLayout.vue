@@ -32,7 +32,17 @@ function signOut() {
                 <el-menu-item index="3" @click="router.push({ name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT })">
                     Quản lý sản phẩm
                 </el-menu-item>
-                <el-menu-item index="4">Quản lý mã khuyến mãi</el-menu-item>
+                <el-sub-menu index="4">
+                    <template #title>Quản lý mã khuyến mãi</template>
+                    <el-menu-item index="4-1"
+                        @click="router.push({ name: ROUTE_NAMES.ADMIN.PROMOTION_CATEGORY_MANAGEMENT })">
+                        Theo danh mục
+                    </el-menu-item>
+                    <el-menu-item index="4-2"
+                        @click="router.push({ name: ROUTE_NAMES.ADMIN.PROMOTION_PRODUCT_MANAGEMENT })">
+                        Theo sản phẩm
+                    </el-menu-item>
+                </el-sub-menu>
                 <el-menu-item index="5">Quản lý trò chơi</el-menu-item>
                 <el-menu-item index="6">Quản lý đơn hàng</el-menu-item>
                 <el-menu-item index="7">Xem phản ánh khách hàng</el-menu-item>

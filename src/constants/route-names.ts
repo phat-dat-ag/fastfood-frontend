@@ -37,5 +37,7 @@ export const ROUTE_NAMES = {
     STAFF_MANAGEMENT: "StaffManagement",
     CATEGORY_MANAGEMENT: "CategoryManagement",
     PRODUCT_MANAGEMENT: "ProductManagement",
+    PROMOTION_CATEGORY_MANAGEMENT: "PromotionByCategoryManagement",
+    PROMOTION_PRODUCT_MANAGEMENT: "PromotionByProductManagement",
   },
 } as const;

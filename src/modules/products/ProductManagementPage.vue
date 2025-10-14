@@ -68,7 +68,7 @@ const isProductModalVisible = ref<boolean>(false);
 const isCreatingProduct = ref<boolean>(true);
 
 const openCreateProductModal = () => {
-  if(categories.value.length ===0){
+  if (categories.value.length === 0) {
     notifyError("Hãy bổ sung danh mục trước khi thêm sản phẩm");
     return;
   }
