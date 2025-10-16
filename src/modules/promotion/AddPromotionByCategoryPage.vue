@@ -27,6 +27,7 @@ onMounted(loadCategories);
         <h2 class="text-2xl font-semibold text-orange-500">
             Thêm mã khuyến mãi cho danh mục
         </h2>
-        <PromotionForm :categories="categories" />
+        <PromotionForm :isPromotionCategory=true selectLabel="Áp dụng cho danh mục" placeholderOption="Chọn danh mục"
+            :options="categories" />
     </div>
 </template>

@@ -8,6 +8,7 @@ import AccountManagementPage from "../../modules/account/AccountManagementPage.v
 import PromotionByCategoryPage from "../../modules/promotion/PromotionByCategoryPage.vue";
 import PromotionByProductPage from "../../modules/promotion/PromotionByProductPage.vue";
 import AddPromotionByCategoryPage from "../../modules/promotion/AddPromotionByCategoryPage.vue";
+import AddPromotionByProductPage from "../../modules/promotion/AddPromotionByProductPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -49,6 +50,11 @@ export const adminRoutes = {
       path: "/manage-promotion-by-product",
       name: ROUTE_NAMES.ADMIN.PROMOTION_PRODUCT_MANAGEMENT,
       component: PromotionByProductPage,
+    },
+    {
+      path: "/add-product-promotion",
+      name: ROUTE_NAMES.ADMIN.PROMOTION_PRODUCT_ADD,
+      component: AddPromotionByProductPage,
     },
   ],
 };

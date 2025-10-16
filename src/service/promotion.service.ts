@@ -1,4 +1,7 @@
-import type { PromotionCategoryCreateRequest } from "../types/promotion.types";
+import type {
+  PromotionCategoryCreateRequest,
+  PromotionProductCreateRequest,
+} from "../types/promotion.types";
 import api from "../api/axios";
 
 export const createPromotionCategory = (
@@ -11,6 +14,14 @@ export const getPromotionCategory = () => {
   return api.get("/admin/promotion/category");
 };
 
-export const deletePromotionCategory = (promotionId: number) => {
-  return api.delete("/admin/promotion/category", { params: { promotionId } });
+export const createPromotionProduct = (data: PromotionProductCreateRequest) => {
+  return api.post("/admin/promotion/product", data);
+};
+
+export const getPromotionProduct = () => {
+  return api.get("/admin/promotion/product");
+};
+
+export const deletePromotion = (promotionId: number) => {
+  return api.delete("/admin/promotion", { params: { promotionId } });
 };

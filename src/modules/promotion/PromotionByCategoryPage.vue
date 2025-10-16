@@ -4,7 +4,7 @@ import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionByCategoryTable from './components/PromotionByCategoryTable.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { deletePromotionCategory, getPromotionCategory } from '../../service/promotion.service';
+import { deletePromotion, getPromotionCategory } from '../../service/promotion.service';
 import type { Promotion, PromotionResponse } from '../../types/promotion.types';
 import { PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -48,7 +48,7 @@ async function handleDeletePromotionCategory(promotionId: number) {
   const confirmed: boolean = await openConfirmDeleteMessage("Bạn thực sự muốn xóa khuyến mãi cho danh mục này?");
   if (!confirmed) return;
   await useApiHandler(
-    () => deletePromotionCategory(promotionId),
+    () => deletePromotion(promotionId),
     {
       loading: PROMOTION_CATEGORY_MESSAGE.delete,
       success: PROMOTION_CATEGORY_MESSAGE.deleteSuccess,

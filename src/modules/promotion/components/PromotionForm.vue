@@ -3,17 +3,21 @@ import * as yup from 'yup';
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import type { Category } from '../../../types/category.types';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
-import type { PromotionCategoryCreateRequest } from '../../../types/promotion.types';
+import type { PromotionCategoryCreateRequest, PromotionProductCreateRequest } from '../../../types/promotion.types';
 import { useApiHandler } from '../../../composables/useApiHandler';
-import { createPromotionCategory } from '../../../service/promotion.service';
-import { PROMOTION_CATEGORY_MESSAGE } from '../../../constants/messages';
+import { createPromotionCategory, createPromotionProduct } from '../../../service/promotion.service';
+import { PROMOTION_CATEGORY_MESSAGE, PROMOTION_PRODUCT_MESSAGE } from '../../../constants/messages';
 import { useRouter } from 'vue-router';
 import { toVietnamTimezoneISOString } from '../../../utils/time.utils';
+import type { Product } from '../../../types/product.types';
 
 const router = useRouter();
 
 const props = defineProps<{
-    categories: Category[];
+    isPromotionCategory: boolean;
+    selectLabel: string;
+    placeholderOption: string;
+    options: Category[] | Product[];
 }>();
 
 const now = new Date();
@@ -21,10 +25,10 @@ const now = new Date();
 const promotionTypes = ['FIXED_AMOUNT', 'PERCENTAGE'] as const;
 
 const schema = yup.object({
-    categoryId: yup
+    id: yup
         .number()
         .required('Phải chọn đối tượng được khuyến mãi')
-        .typeError('Phải chọn danh mục hợp lệ'),
+        .typeError('Phải chọn đối tượng hợp lệ'),
     code: yup
         .string()
         .required('Phải nhập mã khuyến mãi')
@@ -99,8 +103,7 @@ async function handleSubmit(formValues: any) {
     const startAt = toVietnamTimezoneISOString(new Date(formValues.startAt), false);
     const endAt = toVietnamTimezoneISOString(new Date(formValues.endAt), true);
 
-    const data: PromotionCategoryCreateRequest = {
-        categoryId: formValues.categoryId,
+    const data = {
         type: formValues.type,
         value: formValues.value,
         startAt: startAt,
@@ -112,33 +115,54 @@ async function handleSubmit(formValues: any) {
         isActivated: formValues.isActivated,
         code: formValues.code,
     }
-    await useApiHandler(
-        () => createPromotionCategory(data),
-        {
-            loading: PROMOTION_CATEGORY_MESSAGE.create,
-            success: PROMOTION_CATEGORY_MESSAGE.createSuccess,
-            error: PROMOTION_CATEGORY_MESSAGE.createError,
-        },
-        () => { router.back() },
-    )
+
+    if (props.isPromotionCategory) {
+        const dataRequest: PromotionCategoryCreateRequest = {
+            ...data,
+            categoryId: formValues.id
+        }
+        await useApiHandler(
+            () => createPromotionCategory(dataRequest),
+            {
+                loading: PROMOTION_CATEGORY_MESSAGE.create,
+                success: PROMOTION_CATEGORY_MESSAGE.createSuccess,
+                error: PROMOTION_CATEGORY_MESSAGE.createError,
+            },
+            () => { router.back() },
+        )
+    } else {
+        const dataRequest: PromotionProductCreateRequest = {
+            ...data,
+            productId: formValues.id
+        }
+        await useApiHandler(
+            () => createPromotionProduct(dataRequest),
+            {
+                loading: PROMOTION_PRODUCT_MESSAGE.create,
+                success: PROMOTION_PRODUCT_MESSAGE.createSuccess,
+                error: PROMOTION_PRODUCT_MESSAGE.createError,
+            },
+            () => { router.back() },
+        )
+    }
 } 
 </script>
 <template>
     <Form :validation-schema="schema" @submit="handleSubmit" :initial-values="{
         isActivated: true,
     }" class="grid grid-cols-6 gap-6 bg-white shadow-md rounded-xl p-6 border border-gray-200">
-        <div v-if="props.categories?.length" class="col-span-6 md:col-span-2">
-            <label for="categoryId" class="block text-gray-700 font-medium mb-1">
-                Áp dụng cho danh mục
+        <div v-if="props.options?.length" class="col-span-6 md:col-span-2">
+            <label for="id" class="block text-gray-700 font-medium mb-1">
+                {{ props.selectLabel }}
             </label>
-            <Field id="categoryId" name="categoryId" as="select"
+            <Field id="id" name="id" as="select"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400">
-                <option value="">-- Chọn danh mục --</option>
-                <option v-for="category in props.categories" :key="category.id" :value="category.id">
-                    {{ category.name }}
+                <option value="">-- {{ props.placeholderOption }} --</option>
+                <option v-for="option in props.options" :key="option.id" :value="option.id">
+                    {{ option.name }}
                 </option>
             </Field>
-            <ErrorMessage name="categoryId" class="text-red-500 text-sm mt-1 block" />
+            <ErrorMessage name="id" class="text-red-500 text-sm mt-1 block" />
         </div>
 
         <div class="col-span-6 md:col-span-2">
