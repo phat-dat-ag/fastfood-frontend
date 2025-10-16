@@ -1,7 +1,3 @@
-import type { Category } from "./category.types";
-import type { Product } from "./product.types";
-import type { User } from "./user.types";
-
 export interface PromotionCategoryCreateRequest {
   categoryId: number;
   type: string;
@@ -45,9 +41,7 @@ export interface Promotion {
   createdAt: string;
   updatedAt: string;
   code: string;
-  user: User | null;
-  category: Category | null;
-  product: Product | null;
+  name: string;
 }
 
 export interface PromotionResponse {
