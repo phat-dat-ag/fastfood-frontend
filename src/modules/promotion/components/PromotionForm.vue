@@ -10,6 +10,7 @@ import { PROMOTION_CATEGORY_MESSAGE, PROMOTION_PRODUCT_MESSAGE } from '../../../
 import { useRouter } from 'vue-router';
 import { toVietnamTimezoneISOString } from '../../../utils/time.utils';
 import type { Product } from '../../../types/product.types';
+import SecondaryButton from '../../../components/buttons/SecondaryButton.vue';
 
 const router = useRouter();
 
@@ -228,7 +229,8 @@ async function handleSubmit(formValues: any) {
             <ErrorMessage name="isActivated" class="text-red-500 text-sm mt-1 block" />
         </div>
 
-        <div class="col-span-2 col-start-5 mt-4">
+        <div class="col-span-4 col-start-3 flex gap-4 mt-4">
+            <SecondaryButton label="Quay lại" :onClick="() => router.back()"/>
             <PrimaryButton label="Tạo mã khuyến mãi" />
         </div>
     </Form>

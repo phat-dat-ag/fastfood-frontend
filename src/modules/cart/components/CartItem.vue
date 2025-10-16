@@ -18,27 +18,48 @@ function onQuantityChange(newQuantity: number) {
             <div>
                 <p class="font-semibold text-gray-800">{{ props.cart.product.name }}</p>
                 <p class="text-sm text-gray-500">{{ props.cart.product.categoryName }}</p>
-                <p class="text-base font-medium text-emerald-600">
-                    {{ formatCurrencyVND(props.cart.product.price) }}
-                </p>
+
+                <div class="flex items-baseline gap-2 mt-1">
+                    <template v-if="props.cart.product.price !== props.cart.product.discountedPrice">
+                        <span class="text-red-600 font-bold text-base">
+                            {{ formatCurrencyVND(props.cart.product.discountedPrice) }}
+                        </span>
+                        <span class="line-through text-gray-400 text-sm">
+                            {{ formatCurrencyVND(props.cart.product.price) }}
+                        </span>
+                    </template>
+                    <template v-else>
+                        <span class="text-emerald-600 font-semibold text-base">
+                            {{ formatCurrencyVND(props.cart.product.price) }}
+                        </span>
+                    </template>
+                </div>
             </div>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center justify-center">
             <NumberInput :value="props.cart.quantity" :min="0" :max="100" :step="1"
                 @quantity-change="onQuantityChange" />
         </div>
 
         <div class="flex flex-col justify-center text-center">
-            <p class="line-through">
-                {{ formatCurrencyVND((Number(props.cart.product.price) * props.cart.quantity).toString()) }}
-            </p>
-            <p class="text-gray-700 font-semibold">
-                {{ formatCurrencyVND((Number(props.cart.product.price) * props.cart.quantity).toString()) }}
-            </p>
+            <template v-if="props.cart.product.price !== props.cart.product.discountedPrice">
+                <p class="line-through text-gray-400 text-sm">
+                    {{ formatCurrencyVND((Number(props.cart.product.price) * Number(props.cart.quantity)).toString()) }}
+                </p>
+                <p class="text-red-600 font-bold text-base">
+                    {{ formatCurrencyVND((Number(props.cart.product.discountedPrice) *
+                        Number(props.cart.quantity)).toString()) }}
+                </p>
+            </template>
+            <template v-else>
+                <p class="text-emerald-600 font-semibold text-base">
+                    {{ formatCurrencyVND((Number(props.cart.product.price) * Number(props.cart.quantity)).toString()) }}
+                </p>
+            </template>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center justify-center">
             <DeleteButton :onClick="() => emit('delete-product-from-cart', props.cart.product.id)" label="Xóa" />
         </div>
     </div>

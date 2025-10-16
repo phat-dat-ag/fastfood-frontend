@@ -1,3 +1,5 @@
+import type { Promotion } from "./promotion.types";
+
 export interface ProductCreateRequest {
   category_id: number;
   name: string;
@@ -28,4 +30,7 @@ export interface Product {
   deleted: boolean;
   createdAt: string;
   updatedAt: string;
+  promotions: Promotion[];
+  discountedPrice: string;
+  promotionId: number;
 }
