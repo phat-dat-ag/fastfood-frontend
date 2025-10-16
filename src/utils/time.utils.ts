@@ -20,3 +20,15 @@ export function formatDateTimeString(dateTimeString: string): string {
     })
     .replace(",", "");
 }
+
+export function toVietnamTimezoneISOString(date: Date, isEndOfDay = false) {
+  const result = new Date(date);
+  if (isEndOfDay) {
+    result.setHours(23, 59, 59, 999);
+  } else {
+    result.setHours(0, 0, 0, 0);
+  }
+
+  const offsetMs = result.getTimezoneOffset() * 60000;
+  return new Date(result.getTime() - offsetMs).toISOString();
+}

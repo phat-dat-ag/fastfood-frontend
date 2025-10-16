@@ -38,6 +38,7 @@ export const ROUTE_NAMES = {
     CATEGORY_MANAGEMENT: "CategoryManagement",
     PRODUCT_MANAGEMENT: "ProductManagement",
     PROMOTION_CATEGORY_MANAGEMENT: "PromotionByCategoryManagement",
+    PROMOTION_CATEGORY_ADD: "PromotionByCategoryAdd",
     PROMOTION_PRODUCT_MANAGEMENT: "PromotionByProductManagement",
   },
 } as const;
