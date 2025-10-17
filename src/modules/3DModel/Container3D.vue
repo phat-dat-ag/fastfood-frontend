@@ -2,7 +2,12 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+
+const props = defineProps<{
+    modelUrl?: string;
+    modelFile?: File;
+}>()
 
 const container = ref<HTMLDivElement>()
 
@@ -12,6 +17,8 @@ let renderer: THREE.WebGLRenderer
 let controls: OrbitControls
 let mixer: THREE.AnimationMixer | null = null
 let clock = new THREE.Clock()
+
+let currentModel: THREE.Object3D | null = null
 
 function init() {
     if (!container.value) return
@@ -58,29 +65,55 @@ function init() {
     controls.maxDistance = 50
     controls.maxPolarAngle = Math.PI
 
+    if (props.modelUrl && !props.modelFile) {
+        loadModelFromUrl(props.modelUrl)
+    }
+
+    animate()
+    window.addEventListener('resize', onWindowResize)
+}
+
+function loadModelFromUrl(url: string) {
     const loader = new GLTFLoader()
+    loader.setCrossOrigin('anonymous');
+
     loader.load(
-        'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760662563/CAFETERIAdemoscene_cbotmg.glb',
+        url,
         (gltf) => {
-            const model = gltf.scene
-            model.traverse((child) => {
-                if ((child as THREE.Mesh).isMesh) child.castShadow = true
-            })
-            scene.add(model)
-
-            fitCameraToObject(model, camera, controls)
-
-            if (gltf.animations && gltf.animations.length > 0) {
-                mixer = new THREE.AnimationMixer(model)
-                gltf.animations.forEach((clip) => mixer!.clipAction(clip).play())
-            }
+            addModelToScene(gltf.scene, gltf.animations)
         },
         (xhr) => console.log(`Loading: ${(xhr.loaded / xhr.total) * 100}%`),
         (err) => console.error(err)
     )
+}
 
-    animate()
-    window.addEventListener('resize', onWindowResize)
+function loadModelFromFile(file: File) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        const arrayBuffer = e.target?.result
+        if (!arrayBuffer || !(arrayBuffer instanceof ArrayBuffer)) return
+
+        const loader = new GLTFLoader()
+        loader.parse(arrayBuffer, '', (gltf) => {
+            addModelToScene(gltf.scene, gltf.animations)
+        })
+    }
+    reader.readAsArrayBuffer(file)
+}
+
+function addModelToScene(model: THREE.Object3D, animations?: THREE.AnimationClip[]) {
+    if (currentModel) scene.remove(currentModel)
+    currentModel = model
+    model.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) child.castShadow = true
+    })
+    scene.add(model)
+    fitCameraToObject(model, camera, controls)
+
+    if (animations && animations.length > 0) {
+        mixer = new THREE.AnimationMixer(model)
+        animations.forEach((clip) => mixer!.clipAction(clip).play())
+    }
 }
 
 function animate() {
@@ -119,6 +152,10 @@ function fitCameraToObject(
     controls.target.copy(center)
     controls.update()
 }
+
+watch(() => props.modelFile, (newFile) => {
+    if (newFile) loadModelFromFile(newFile)
+})
 
 onMounted(init)
 

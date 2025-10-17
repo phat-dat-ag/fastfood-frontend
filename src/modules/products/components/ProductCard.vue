@@ -32,14 +32,14 @@ const userStore = useUserStore();
 function showProductDetail() {
   const role = userStore.user?.role;
   if (role === "ADMIN") {
-    router.push({ name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL });
+    router.push({ name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL, params: { slug: props.product.slug } });
   }
   else if (role === "USER") {
-    router.push({ name: ROUTE_NAMES.USER.PRODUCT_DETAIL });
+    router.push({ name: ROUTE_NAMES.USER.PRODUCT_DETAIL, params: { slug: props.product.slug } });
   } else if (role === "STAFF") {
-    router.push({ name: ROUTE_NAMES.STAFF.PRODUCT_DETAIL });
+    router.push({ name: ROUTE_NAMES.STAFF.PRODUCT_DETAIL, params: { slug: props.product.slug } });
   } else {
-    router.push({ name: ROUTE_NAMES.GUEST.PRODUCT_DETAIL });
+    router.push({ name: ROUTE_NAMES.GUEST.PRODUCT_DETAIL, params: { slug: props.product.slug } });
   }
 }
 

@@ -7,6 +7,7 @@ export interface ProductCreateRequest {
   price: string;
   activated: boolean;
   imageUrl: File | null;
+  modelUrl: File | null;
 }
 
 export interface ProductUpdateRequest {
@@ -15,6 +16,7 @@ export interface ProductUpdateRequest {
   description: string;
   activated: boolean;
   imageUrl: File | null;
+  modelUrl: File | null;
 }
 
 export interface Product {
@@ -26,6 +28,7 @@ export interface Product {
   price: string;
   description: string;
   imageUrl: string;
+  modelUrl: string;
   activated: boolean;
   deleted: boolean;
   createdAt: string;

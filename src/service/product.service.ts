@@ -12,6 +12,7 @@ export const createProduct = (data: ProductCreateRequest) => {
   formData.append("price", data.price);
   formData.append("activated", data.activated ? "true" : "false");
   if (data.imageUrl) formData.append("imageUrl", data.imageUrl);
+  if (data.modelUrl) formData.append("modelUrl", data.modelUrl);
   return api.post("/admin/product", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -26,6 +27,7 @@ export const updateProduct = (data: ProductUpdateRequest) => {
   formData.append("description", data.description);
   formData.append("activated", data.activated ? "true" : "false");
   if (data.imageUrl) formData.append("imageUrl", data.imageUrl);
+  if (data.modelUrl) formData.append("modelUrl", data.modelUrl);
   return api.put("/admin/product", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -35,6 +37,10 @@ export const updateProduct = (data: ProductUpdateRequest) => {
 
 export const getProducts = () => {
   return api.get("/admin/product");
+};
+
+export const getProductBySlug = (slug: string) => {
+  return api.get("/admin/product/detail", { params: { slug } });
 };
 
 export const deleteProduct = (id: number) => {

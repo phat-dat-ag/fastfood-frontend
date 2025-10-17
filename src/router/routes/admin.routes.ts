@@ -18,47 +18,47 @@ export const adminRoutes = {
   children: [
     { path: "", name: ROUTE_NAMES.ADMIN.HOME, component: ProductsPage },
     {
-      path: "/product-detail",
+      path: "product-detail/:slug",
       name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL,
       component: ProductDetail,
     },
     {
-      path: "/manage-customer",
+      path: "manage-customer",
       name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT,
       component: AccountManagementPage,
     },
     {
-      path: "/manage-staff",
+      path: "manage-staff",
       name: ROUTE_NAMES.ADMIN.STAFF_MANAGEMENT,
       component: AccountManagementPage,
     },
     {
-      path: "/manage-category",
+      path: "manage-category",
       name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT,
       component: CategoriesPage,
     },
     {
-      path: "/manage-product",
+      path: "manage-product",
       name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT,
       component: ProductManagementPage,
     },
     {
-      path: "/manage-promotion-by-category",
+      path: "manage-promotion-by-category",
       name: ROUTE_NAMES.ADMIN.PROMOTION_CATEGORY_MANAGEMENT,
       component: PromotionByCategoryPage,
     },
     {
-      path: "/add-category-promotion",
+      path: "add-category-promotion",
       name: ROUTE_NAMES.ADMIN.PROMOTION_CATEGORY_ADD,
       component: AddPromotionByCategoryPage,
     },
     {
-      path: "/manage-promotion-by-product",
+      path: "manage-promotion-by-product",
       name: ROUTE_NAMES.ADMIN.PROMOTION_PRODUCT_MANAGEMENT,
       component: PromotionByProductPage,
     },
     {
-      path: "/add-product-promotion",
+      path: "add-product-promotion",
       name: ROUTE_NAMES.ADMIN.PROMOTION_PRODUCT_ADD,
       component: AddPromotionByProductPage,
     },

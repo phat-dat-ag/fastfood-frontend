@@ -18,22 +18,22 @@ export const userRoutes = {
   children: [
     { path: "", name: ROUTE_NAMES.USER.HOME, component: ProductsPage },
     {
-      path: "/product-detail",
+      path: "product-detail/:slug",
       name: ROUTE_NAMES.USER.PRODUCT_DETAIL,
       component: ProductDetail,
     },
     {
-      path: "/promotion",
+      path: "promotion",
       name: ROUTE_NAMES.USER.PROMOTION,
       component: PromotionPage,
     },
     {
-      path: "/challenge",
+      path: "challenge",
       name: ROUTE_NAMES.USER.CHALLENGE,
       component: ChallengePage,
     },
     {
-      path: "/about",
+      path: "about",
       name: ROUTE_NAMES.USER.ABOUT,
       component: AboutUsPage,
     },
@@ -53,7 +53,7 @@ export const userRoutes = {
       component: ChangePasswordPage,
     },
     {
-      path: "/cart",
+      path: "cart",
       name: ROUTE_NAMES.USER.CART,
       component: CartPage,
     },

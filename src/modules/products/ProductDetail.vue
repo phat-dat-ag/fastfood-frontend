@@ -1,11 +1,120 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
 import Container3D from '../3DModel/Container3D.vue';
+import { useApiHandler } from '../../composables/useApiHandler';
+import { getProductBySlug } from '../../service/product.service';
+import { CART_MESSAGE, PRODUCT_MESSAGES } from '../../constants/messages';
+import type { Product } from '../../types/product.types';
+import { onMounted, ref } from 'vue';
+import NumberInput from '../../components/inputs/NumberInput.vue';
+import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
+import { formatCurrencyVND } from '../../utils/currency.utils';
+import { useUserStore } from '../../store/useUserStore.store';
+import { notifyError } from '../../utils/notification.utils';
+import { addProductToCart } from '../../service/cart.service';
+
+const route = useRoute();
+const slug = String(route.params.slug || "");
+
+const product = ref<Product | null>(null);
+
+async function loadProduct() {
+    await useApiHandler(
+        () => getProductBySlug(slug),
+        {
+            loading: PRODUCT_MESSAGES.get,
+            error: PRODUCT_MESSAGES.getError,
+        },
+        (data: Product) => product.value = data,
+    )
+}
+
+onMounted(loadProduct);
+
+const quantity = ref<number>(0);
+function onQuantityChange(newQuantity: number) {
+    quantity.value = newQuantity;
+}
+
+const userStore = useUserStore();
+
+async function handleAddToCart() {
+    if (!userStore.isSignedIn()) {
+        notifyError("Hãy đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
+        return;
+    }
+    if (quantity.value < 1) return;
+    if (product.value === null) {
+        notifyError("Không có thông tin sản phẩm để đặt hàng");
+        return;
+    }
+    await useApiHandler(
+        () => addProductToCart({ productId: product.value!.id, quantity: quantity.value }),
+        {
+            loading: CART_MESSAGE.create,
+            success: CART_MESSAGE.createSuccess,
+            error: CART_MESSAGE.createError,
+        },
+        () => { },
+    )
+}
 
 </script>
 
 <template>
-    Mô hình 3D nè
-    <div class="h-[100px] w-[100px]">
-        <Container3D></Container3D>
+    <div v-if="product" class="container mx-auto p-8 space-y-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white shadow rounded-2xl p-4 flex items-center justify-center">
+                <img :src="product.imageUrl" alt="Product image" class="w-full h-[400px] object-contain rounded-xl" />
+            </div>
+
+            <div v-if="product.modelUrl" class="bg-white shadow rounded-2xl p-4 flex items-center justify-center">
+                <Container3D :modelUrl="product.modelUrl" />
+            </div>
+            <div v-else
+                class="bg-gray-50 shadow-inner rounded-2xl p-4 flex items-center justify-center text-gray-400 italic">
+                Không có mô hình 3D
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <h1 class="text-3xl font-bold">{{ product.name }}</h1>
+            <p class="text-gray-500">Danh mục: {{ product.categoryName }}</p>
+            <p class="text-gray-700 leading-relaxed">{{ product.description }}</p>
+
+            <div class="flex items-center gap-4">
+                <span class="text-2xl font-semibold text-blue-600">
+                    {{ formatCurrencyVND(product.discountedPrice) }}
+                </span>
+                <span v-if="product.discountedPrice !== product.price" class="text-gray-400 line-through">
+                    {{ product.price }}₫
+                </span>
+            </div>
+
+            <div class="w-[50%]">
+                <label class="block text-gray-600 font-medium mb-2">Số lượng:</label>
+                <NumberInput :value="quantity" :min="0" :max="99" :step="1" @quantity-change="onQuantityChange" />
+                <PrimaryButton label="Thêm vào giỏ hàng" :onClick="() => handleAddToCart()" class="mt-4" />
+            </div>
+        </div>
+
+        <div class="border-t pt-10">
+            <h2 class="text-2xl font-bold mb-4">Đánh giá khách hàng</h2>
+        </div>
+
+        <div class="border-t pt-10">
+            <h2 class="text-2xl font-bold mb-6">Sản phẩm gợi ý</h2>
+        </div>
+
+    </div>
+
+    <div v-else class="p-8 text-center text-gray-500">
+        Lỗi khi tải thông tin sản phẩm, hãy thử lại.
     </div>
 </template>
+
+<style scoped>
+.container {
+    max-width: 1200px;
+}
+</style>

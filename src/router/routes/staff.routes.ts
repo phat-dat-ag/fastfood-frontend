@@ -19,22 +19,22 @@ export const staffRoutes = {
   children: [
     { path: "", name: ROUTE_NAMES.STAFF.HOME, component: ProductsPage },
     {
-      path: "/product-detail",
+      path: "product-detail/:slug",
       name: ROUTE_NAMES.STAFF.PRODUCT_DETAIL,
       component: ProductDetail,
     },
     {
-      path: "/promotion",
+      path: "promotion",
       name: ROUTE_NAMES.STAFF.PROMOTION,
       component: PromotionPage,
     },
     {
-      path: "/challenge",
+      path: "challenge",
       name: ROUTE_NAMES.STAFF.CHALLENGE,
       component: ChallengePage,
     },
     {
-      path: "/about",
+      path: "about",
       name: ROUTE_NAMES.STAFF.ABOUT,
       component: AboutUsPage,
     },
@@ -54,7 +54,7 @@ export const staffRoutes = {
       component: ChangePasswordPage,
     },
     {
-      path: "/cart",
+      path: "cart",
       name: ROUTE_NAMES.STAFF.CART,
       component: CartPage,
     },

@@ -9,6 +9,7 @@ import type { ProductCreateRequest, ProductUpdateRequest } from '../../../types/
 import type { Category } from '../../../types/category.types'
 import { useProductStore } from '../../../store/useProductStore.store'
 import { notifyError } from '../../../utils/notification.utils'
+import Container3D from '../../3DModel/Container3D.vue'
 
 
 interface ProductModalProps {
@@ -31,6 +32,11 @@ const handleImageChange = (file: any) => {
     previewUrl.value = URL.createObjectURL(file.raw);
 }
 
+const selected3DFile = ref<File | null>(null);
+
+const handele3DModelChange = (file3D: any) => {
+    selected3DFile.value = file3D.raw;
+}
 const schema = yup.object({
     category_id: yup.number().required("Vui lòng chọn danh mục"),
     name: yup.string().required("Vui lòng nhập tên sản phẩm").test("check-category-name", "Tên sản phẩm từ 2 đến 80 ký tự", function (value) {
@@ -56,6 +62,7 @@ const handleSubmit = (formValues: any) => {
             price: formValues.price,
             activated: formValues.activated,
             imageUrl: selectedFile.value,
+            modelUrl: selected3DFile.value,
         }
         emit('create-product', formData);
     } else {
@@ -69,6 +76,7 @@ const handleSubmit = (formValues: any) => {
             description: formValues.description,
             activated: formValues.activated,
             imageUrl: selectedFile.value,
+            modelUrl: selected3DFile.value,
         }
         emit('update-product', formData);
     }
@@ -85,7 +93,7 @@ const handleSubmit = (formValues: any) => {
             description: isCreatingProduct ? '' : (productStore.product?.description || 'Không xác định'),
             price: isCreatingProduct ? null : (productStore.product?.price || null),
             activated: isCreatingProduct ? true : (productStore.product?.activated || 'Không xác định'),
-        }" class="space-y-4">
+        }" class="grid grid-cols-2 gap-4 items-start">
             <div v-if="categories && categories.length">
                 <label for="category_id" class="block text-gray-700 font-medium mb-1">Danh mục sản phẩm</label>
                 <Field id="category_id" name="category_id" as="select" :disabled="!isCreatingProduct"
@@ -98,21 +106,20 @@ const handleSubmit = (formValues: any) => {
             </div>
 
             <div>
+                <label class="block text-gray-700 font-medium mb-1">Kích hoạt sản phẩm</label>
+                <Field name="activated" v-slot="{ field }">
+                    <ElSwitch :model-value="field.value" @update:model-value="field.onChange" />
+                </Field>
+                <ErrorMessage name="activated" class="text-red-500 text-sm mt-1 block" />
+            </div>
+
+            <div>
                 <label for="name" class="block text-gray-700 font-medium mb-1">Tên sản phẩm</label>
                 <Field id="name" name="name" type="text"
                     class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     placeholder="Tên sản phẩm">
                 </Field>
                 <ErrorMessage name="name" class="text-red-500 text-sm mt-1 block"></ErrorMessage>
-            </div>
-
-            <div>
-                <label for="description" class="block text-gray-700 font-medium mb-1">Mô tả sản phẩm</label>
-                <Field id="description" name="description" as="textarea"
-                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    placeholder="Mô tả sản phẩm">
-                </Field>
-                <ErrorMessage name="description" class="text-red-500 text-sm mt-1 block"></ErrorMessage>
             </div>
 
             <div>
@@ -123,24 +130,41 @@ const handleSubmit = (formValues: any) => {
                 <ErrorMessage name="price" class="text-red-500 text-sm mt-1 block"></ErrorMessage>
             </div>
 
-            <div>
-                <label class="block text-gray-700 font-medium mb-1">Kích hoạt sản phẩm</label>
-                <Field name="activated" v-slot="{ field }">
-                    <ElSwitch :model-value="field.value" @update:model-value="field.onChange" />
+            <div class="col-span-2">
+                <label for="description" class="block text-gray-700 font-medium mb-1">Mô tả sản phẩm</label>
+                <Field id="description" name="description" as="textarea"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    placeholder="Mô tả sản phẩm">
                 </Field>
-                <ErrorMessage name="activated" class="text-red-500 text-sm mt-1 block" />
+                <ErrorMessage name="description" class="text-red-500 text-sm mt-1 block"></ErrorMessage>
             </div>
 
-            <div class="mt-3">
-                <label>Ảnh sản phẩm</label>
-                <ElUpload class="mt-1" action="" :auto-upload="false" :on-change="handleImageChange">
-                    <ElButton type="warning">Chọn ảnh</ElButton>
-                </ElUpload>
-                <ErrorMessage name="image" class="text-red-500 text-sm" />
-                <img v-if="previewUrl" :src="previewUrl" class="mt-2 w-24 h-24 object-cover rounded" />
+            <div class="col-span-2 flex gap-4">
+                <div class="grow">
+                    <label>Ảnh sản phẩm</label>
+                    <ElUpload class="mt-1" action="" :auto-upload="false" :on-change="handleImageChange">
+                        <ElButton type="warning">Chọn ảnh</ElButton>
+                    </ElUpload>
+                    <ErrorMessage name="image" class="text-red-500 text-sm" />
+                </div>
+                <img v-if="previewUrl" :src="previewUrl" class="grow mt-2 w-24 h-24 object-cover rounded" />
             </div>
 
-            <div class="flex justify-end space-x-2">
+            <div class="col-span-2 flex gap-4">
+                <div class="grow">
+                    <label>Mô hình 3D</label>
+                    <ElUpload class="mt-1" action="" accept=".glb" :auto-upload="false"
+                        :on-change="handele3DModelChange">
+                        <ElButton type="warning">Chọn mô hình</ElButton>
+                    </ElUpload>
+                    <ErrorMessage name="model3D" class="text-red-500 text-sm" />
+                </div>
+                <div v-if="selected3DFile" class="h-[100px] w-[100px]">
+                    <Container3D :modelFile="selected3DFile" />
+                </div>
+            </div>
+
+            <div class="col-start-2 flex justify-end space-x-2">
                 <SecondaryButton :onClick="() => emit('close')" label="Hủy" />
                 <PrimaryButton label="Lưu" />
             </div>

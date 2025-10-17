@@ -15,22 +15,22 @@ export const guestRoutes = {
   children: [
     { path: "", name: ROUTE_NAMES.GUEST.HOME, component: ProductsPage },
     {
-      path: "/product-detail",
+      path: "product-detail/:slug",
       name: ROUTE_NAMES.GUEST.PRODUCT_DETAIL,
       component: ProductDetail,
     },
     {
-      path: "/promotion",
+      path: "promotion",
       name: ROUTE_NAMES.GUEST.PROMOTION,
       component: PromotionPage,
     },
     {
-      path: "/challenge",
+      path: "challenge",
       name: ROUTE_NAMES.GUEST.CHALLENGE,
       component: ChallengeIntroductionPage,
     },
     {
-      path: "/about",
+      path: "about",
       name: ROUTE_NAMES.GUEST.ABOUT,
       component: AboutUsPage,
     },
