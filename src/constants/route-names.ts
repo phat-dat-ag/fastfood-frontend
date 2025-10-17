@@ -45,5 +45,7 @@ export const ROUTE_NAMES = {
     PROMOTION_CATEGORY_ADD: "PromotionByCategoryAdd",
     PROMOTION_PRODUCT_MANAGEMENT: "PromotionByProductManagement",
     PROMOTION_PRODUCT_ADD: "PromotionByProductAdd",
+    PROMOTION_ORDER_MANAGEMENT: "PromotionOrderManagement",
+    PROMOTION_ORDER_ADD: "PromotionOrderAdd",
   },
 } as const;

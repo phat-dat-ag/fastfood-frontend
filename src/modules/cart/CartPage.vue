@@ -57,8 +57,11 @@ async function handleDeleteProduct(productId: number): Promise<boolean> {
 }
 </script>
 <template>
-    <div class="grid grid-cols-[6fr_4fr] gap-4">
+    <div v-if="carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
         <CartList :carts="carts" @delete-product="handleDeleteProduct" @quantity-change="handleQuantityChange" />
-        <CheckoutSummary :carts="carts"/>
+        <CheckoutSummary :carts="carts" />
+    </div>
+    <div v-else>
+        Giỏ hàng trống, hãy mua sắm thôi nào
     </div>
 </template>

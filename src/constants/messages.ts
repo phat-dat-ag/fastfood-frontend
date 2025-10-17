@@ -40,3 +40,6 @@ export const PROMOTION_CATEGORY_MESSAGE = createEntityMessages(
 export const PROMOTION_PRODUCT_MESSAGE = createEntityMessages(
   "mã khuyến mãi theo sản phẩm"
 );
+export const PROMOTION_ORDER_MESSAGE = createEntityMessages(
+  "mã khuyến mãi cho đơn hàng"
+);
