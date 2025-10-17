@@ -5,6 +5,7 @@ import CartPage from "../../modules/cart/CartPage.vue";
 import ChallengePage from "../../modules/challenge/ChallengePage.vue";
 import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
 import StaffOrderDetailPage from "../../modules/order/StaffOrderDetailPage.vue";
+import ProductDetail from "../../modules/products/ProductDetail.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
 import ChangePasswordPage from "../../modules/profile/pages/ChangePasswordPage.vue";
 import EditProfilePage from "../../modules/profile/pages/EditProfilePage.vue";
@@ -17,6 +18,11 @@ export const staffRoutes = {
   meta: { requireAuth: true, roles: [USER_ROLES.STAFF] },
   children: [
     { path: "", name: ROUTE_NAMES.STAFF.HOME, component: ProductsPage },
+    {
+      path: "/product-detail",
+      name: ROUTE_NAMES.STAFF.PRODUCT_DETAIL,
+      component: ProductDetail,
+    },
     {
       path: "/promotion",
       name: ROUTE_NAMES.STAFF.PROMOTION,

@@ -4,6 +4,7 @@ import UserLayout from "../../layouts/UserLayout.vue";
 import CartPage from "../../modules/cart/CartPage.vue";
 import ChallengePage from "../../modules/challenge/ChallengePage.vue";
 import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
+import ProductDetail from "../../modules/products/ProductDetail.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
 import ChangePasswordPage from "../../modules/profile/pages/ChangePasswordPage.vue";
 import EditProfilePage from "../../modules/profile/pages/EditProfilePage.vue";
@@ -16,6 +17,11 @@ export const userRoutes = {
   meta: { requireAuth: true, roles: [USER_ROLES.USER] },
   children: [
     { path: "", name: ROUTE_NAMES.USER.HOME, component: ProductsPage },
+    {
+      path: "/product-detail",
+      name: ROUTE_NAMES.USER.PRODUCT_DETAIL,
+      component: ProductDetail,
+    },
     {
       path: "/promotion",
       name: ROUTE_NAMES.USER.PROMOTION,

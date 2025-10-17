@@ -9,6 +9,7 @@ import PromotionByCategoryPage from "../../modules/promotion/PromotionByCategory
 import PromotionByProductPage from "../../modules/promotion/PromotionByProductPage.vue";
 import AddPromotionByCategoryPage from "../../modules/promotion/AddPromotionByCategoryPage.vue";
 import AddPromotionByProductPage from "../../modules/promotion/AddPromotionByProductPage.vue";
+import ProductDetail from "../../modules/products/ProductDetail.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -16,6 +17,11 @@ export const adminRoutes = {
   meta: { requireAuth: true, roles: [USER_ROLES.ADMIN] },
   children: [
     { path: "", name: ROUTE_NAMES.ADMIN.HOME, component: ProductsPage },
+    {
+      path: "/product-detail",
+      name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL,
+      component: ProductDetail,
+    },
     {
       path: "/manage-customer",
       name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT,

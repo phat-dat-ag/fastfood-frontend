@@ -6,12 +6,14 @@ export const ROUTE_NAMES = {
   },
   GUEST: {
     HOME: "GuestHome",
+    PRODUCT_DETAIL: "GuestProductDetail",
     PROMOTION: "GuestPromotion",
     CHALLENGE: "GuestChallengeIntroduction",
     ABOUT: "GuestAbout",
   },
   USER: {
     HOME: "UserHome",
+    PRODUCT_DETAIL: "UserProductDetail",
     PROMOTION: "UserPromotion",
     CHALLENGE: "UserChanllenge",
     ABOUT: "UserAbout",
@@ -22,6 +24,7 @@ export const ROUTE_NAMES = {
   },
   STAFF: {
     HOME: "StaffHome",
+    PRODUCT_DETAIL: "StaffProductDetail",
     PROMOTION: "StaffPromotion",
     CHALLENGE: "StaffChallenge",
     ABOUT: "StaffAbout",
@@ -33,6 +36,7 @@ export const ROUTE_NAMES = {
   },
   ADMIN: {
     HOME: "AdminHome",
+    PRODUCT_DETAIL: "AdminProductDetail",
     CUSTOMER_MANAGEMENT: "CustomerManagement",
     STAFF_MANAGEMENT: "StaffManagement",
     CATEGORY_MANAGEMENT: "CategoryManagement",
