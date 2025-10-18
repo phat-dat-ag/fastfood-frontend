@@ -1,5 +1,6 @@
 import type {
   PromotionCategoryCreateRequest,
+  PromotionOrderCreateRequest,
   PromotionProductCreateRequest,
 } from "../types/promotion.types";
 import api from "../api/axios";
@@ -20,6 +21,14 @@ export const createPromotionProduct = (data: PromotionProductCreateRequest) => {
 
 export const getPromotionProduct = () => {
   return api.get("/admin/promotion/product");
+};
+
+export const createPromotionOrder = (data: PromotionOrderCreateRequest) => {
+  return api.post("/admin/promotion/order", data);
+};
+
+export const getPromotionOrder = () => {
+  return api.get("/admin/promotion/order");
 };
 
 export const deletePromotion = (promotionId: number) => {

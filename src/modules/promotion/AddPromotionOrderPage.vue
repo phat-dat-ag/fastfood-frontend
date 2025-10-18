@@ -1,5 +1,39 @@
 <script setup lang="ts">
-import PromotionForm from './components/PromotionForm.vue';
+import { useApiHandler } from '../../composables/useApiHandler';
+import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
+import router from '../../router';
+import { createPromotionOrder } from '../../service/promotion.service';
+import type { PromotionOrderCreateRequest } from '../../types/promotion.types';
+import { toVietnamTimezoneISOString } from '../../utils/time.utils';
+import PromotionFormBase from './components/PromotionFormBase.vue';
+
+async function handleSubmitPromotionOrder(formValues: any) {
+    const startAt = toVietnamTimezoneISOString(new Date(formValues.startAt), false);
+    const endAt = toVietnamTimezoneISOString(new Date(formValues.endAt), true);
+
+    const data: PromotionOrderCreateRequest = {
+        type: formValues.type,
+        value: formValues.value,
+        startAt: startAt,
+        endAt: endAt,
+        quantity: formValues.quantity,
+        maxDiscountAmount: formValues.maxDiscountAmount,
+        minSpendAmount: formValues.minSpendAmount,
+        isGlobal: true,
+        isActivated: formValues.isActivated,
+        code: formValues.code,
+    }
+
+    await useApiHandler(
+        () => createPromotionOrder(data),
+        {
+            loading: PROMOTION_ORDER_MESSAGE.create,
+            success: PROMOTION_ORDER_MESSAGE.createSuccess,
+            error: PROMOTION_ORDER_MESSAGE.createError,
+        },
+        () => { router.back() },
+    )
+}
 
 </script>
 <template>
@@ -7,7 +41,6 @@ import PromotionForm from './components/PromotionForm.vue';
         <h2 class="text-2xl font-semibold text-orange-500">
             Thêm mã khuyến mãi cho đơn hàng
         </h2>
-        <PromotionForm :isPromotionCategory=false selectLabel="Áp dụng cho đơn hàng" placeholderOption="Chọn đơn hàng"
-            :options="[]" />
+        <PromotionFormBase :isGlobal="true" :showTargetSelect="false" :onSubmit="handleSubmitPromotionOrder" />
     </div>
 </template>

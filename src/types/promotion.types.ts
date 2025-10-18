@@ -26,6 +26,19 @@ export interface PromotionProductCreateRequest {
   code: string;
 }
 
+export interface PromotionOrderCreateRequest {
+  type: string;
+  value: number;
+  startAt: string;
+  endAt: string;
+  quantity: number;
+  maxDiscountAmount: number;
+  minSpendAmount: number;
+  isGlobal: boolean;
+  isActivated: boolean;
+  code: string;
+}
+
 export interface Promotion {
   id: number;
   type: string;

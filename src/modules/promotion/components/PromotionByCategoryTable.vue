@@ -6,6 +6,7 @@ import type { Promotion } from '../../../types/promotion.types';
 import { formatDateTimeString } from '../../../utils/time.utils';
 import { formatCurrencyVND } from '../../../utils/currency.utils';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
+import { ElTable, ElTableColumn } from 'element-plus';
 
 const router = useRouter();
 
@@ -22,7 +23,7 @@ const props = defineProps<{
     </div>
     <div class="bg-white rounded-xl shadow-md overflow-hidden border border-orange-100">
         <ElTable :data="props.promotions" border class="w-full">
-            <ElTableColumn width="100" label="Mã KM" prop="code" />
+            <ElTableColumn label="Mã KM" prop="code" />
             <ElTableColumn label="Áp dụng cho" prop="name" />
             <ElTableColumn label="Từ ngày">
                 <template #default="scope">
@@ -44,14 +45,18 @@ const props = defineProps<{
                     </span>
                 </template>
             </ElTableColumn>
-
             <ElTableColumn label="Giảm tối đa" header-align="left" align="right">
                 <template #default="scope">
                     {{ formatCurrencyVND(scope.row.maxDiscountAmount) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn width="100" label="Số lượng" prop="quantity" header-align="left" align="right" />
-            <ElTableColumn label="Đã áp dụng" prop="usedQuantity" header-align="left" align="right" />
+            <ElTableColumn label="Đã áp dụng" header-align="left" align="right">
+                <template #default="scope">
+                    <span>
+                        {{ scope.row.usedQuantity }} / {{ scope.row.quantity }}
+                    </span>
+                </template>
+            </ElTableColumn>
             <ElTableColumn width="100" label="Trạng thái" prop="activated">
                 <template #default="scope">
                     <span v-if="scope.row.activated" class="text-green-500 font-medium">
