@@ -3,10 +3,12 @@ import { onMounted, ref } from 'vue';
 import type { Cart, CartResponse } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
-import { CART_MESSAGE } from '../../constants/messages';
+import { CART_MESSAGE, PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
+import { getValidPromotionOrder } from '../../service/promotion.service';
+import type { Promotion, PromotionResponse } from '../../types/promotion.types';
 
 const carts = ref<Cart[]>([]);
 async function loadCarts() {
@@ -20,6 +22,19 @@ async function loadCarts() {
     )
 }
 onMounted(loadCarts);
+
+const promotions = ref<Promotion[]>([]);
+async function loadPromotions() {
+    await useApiHandler<PromotionResponse>(
+        getValidPromotionOrder,
+        {
+            loading: PROMOTION_ORDER_MESSAGE.get,
+            error: PROMOTION_ORDER_MESSAGE.getError,
+        },
+        (data: PromotionResponse) => promotions.value = data.promotions,
+    )
+}
+onMounted(loadPromotions);
 
 async function handleQuantityChange({ newQuantity, productId }: { newQuantity: number, productId: number }) {
     if (newQuantity == 0) {
@@ -59,7 +74,7 @@ async function handleDeleteProduct(productId: number): Promise<boolean> {
 <template>
     <div v-if="carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
         <CartList :carts="carts" @delete-product="handleDeleteProduct" @quantity-change="handleQuantityChange" />
-        <CheckoutSummary :carts="carts" />
+        <CheckoutSummary :carts="carts" :promotions="promotions" />
     </div>
     <div v-else>
         Giỏ hàng trống, hãy mua sắm thôi nào
