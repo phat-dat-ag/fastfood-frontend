@@ -49,46 +49,47 @@ async function onSubmit(values: any) {
 </script>
 <template>
     <div class="flex justify-center items-center">
-        <div class="w-full max-w-md p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold text-center mb-6">Cập nhật thông tin</h2>
+        <div class="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl border border-orange-200">
+            <h2 class="text-3xl font-bold text-center mb-8 text-orange-600">Cập nhật thông tin</h2>
+
             <Form :validation-schema="schema" @submit="onSubmit" :initial-values="{
-                phone: userStore.user?.phone ?? 'Không thấy số điện thoại của tài khoản',
-                name: userStore.user?.name || 'Không thấy tên của tài khoản',
-                email: userStore.user?.email || 'Không thấy email của tài khoản',
-                birthdayString: userStore.user?.birthday || 'Không thấy sinh nhật của tài khoản',
-            }" class="space-y-4">
+                phone: userStore.user?.phone ?? 'Không thấy số điện thoại',
+                name: userStore.user?.name || 'Không thấy tên',
+                email: userStore.user?.email || 'Không thấy email',
+                birthdayString: userStore.user?.birthday || 'Không thấy sinh nhật',
+            }" class="space-y-6">
                 <div>
-                    <label for="phone" class="block text-gray-700 font-medium mb-1">Số điện thoại</label>
+                    <label for="phone" class="block text-gray-700 font-semibold mb-1">Số điện thoại</label>
                     <Field id="phone" name="phone" type="text" disabled
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="Nhập số điện thoại"></Field>
-                    <ErrorMessage name="phone" class="text-red-500 text-sm mt-1 block"></ErrorMessage>
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
+                        placeholder="Nhập số điện thoại" />
+                    <ErrorMessage name="phone" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="name" class="block text-gray-700 font-medium mb-1">Họ và tên</label>
+                    <label for="name" class="block text-gray-700 font-semibold mb-1">Họ và tên</label>
                     <Field id="name" name="name" type="text"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
                         placeholder="Họ và tên của bạn" />
                     <ErrorMessage name="name" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="email" class="block text-gray-700 font-medium mb-1">Địa chỉ email</label>
+                    <label for="email" class="block text-gray-700 font-semibold mb-1">Địa chỉ email</label>
                     <Field id="email" name="email" type="email"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="Nhập đia chỉ email" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
+                        placeholder="Nhập địa chỉ email" />
                     <ErrorMessage name="email" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="birthdayString" class="block text-gray-700 font-medium mb-1">Sinh nhật</label>
+                    <label for="birthdayString" class="block text-gray-700 font-semibold mb-1">Ngày sinh</label>
                     <Field id="birthdayString" name="birthdayString" type="date"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition" />
                     <ErrorMessage name="birthdayString" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <div class="flex gap-4">
+                <div class="flex justify-center gap-4 pt-4">
                     <SecondaryButton :onClick="() => router.back()" label="Quay lại" />
                     <PrimaryButton label="Cập nhật" />
                 </div>

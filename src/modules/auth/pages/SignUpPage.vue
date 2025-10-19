@@ -84,65 +84,66 @@ const onSubmit = async (values: any) => {
     await sendOTP();
 }
 </script>
-
 <template>
     <div class="flex justify-center items-center">
-        <div class="w-full max-w-md p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold text-center mb-6">Đăng ký</h2>
-            <Form :validation-schema="schema" @submit="onSubmit" class="space-y-4">
+        <div class="w-full max-w-4xl bg-white p-10 rounded-2xl shadow-xl border border-orange-200">
+            <h2 class="text-3xl font-bold text-center mb-8 text-orange-600">Đăng ký tài khoản</h2>
+
+            <Form :validation-schema="schema" @submit="onSubmit" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="name" class="block text-gray-700 font-medium mb-1">Họ và tên</label>
+                    <label for="name" class="block text-gray-700 font-semibold mb-1">Họ và tên</label>
                     <Field id="name" name="name" type="text"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="Họ và tên của bạn" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
+                        placeholder="Nhập họ và tên của bạn" />
                     <ErrorMessage name="name" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="phone" class="block text-gray-700 font-medium mb-1">Số điện thoại</label>
+                    <label for="phone" class="block text-gray-700 font-semibold mb-1">Số điện thoại</label>
                     <Field id="phone" name="phone" type="text"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
                         placeholder="Nhập số điện thoại" />
                     <ErrorMessage name="phone" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="email" class="block text-gray-700 font-medium mb-1">Địa chỉ email</label>
+                    <label for="email" class="block text-gray-700 font-semibold mb-1">Địa chỉ email</label>
                     <Field id="email" name="email" type="email"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="Nhập đia chỉ email" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
+                        placeholder="Nhập địa chỉ email" />
                     <ErrorMessage name="email" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="birthdayString" class="block text-gray-700 font-medium mb-1">Sinh nhật</label>
+                    <label for="birthdayString" class="block text-gray-700 font-semibold mb-1">Ngày sinh</label>
                     <Field id="birthdayString" name="birthdayString" type="date"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition" />
                     <ErrorMessage name="birthdayString" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="password" class="block text-gray-700 font-medium mb-1">Mật khẩu</label>
+                    <label for="password" class="block text-gray-700 font-semibold mb-1">Mật khẩu</label>
                     <Field id="password" name="password" type="password"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
                         placeholder="Nhập mật khẩu" />
                     <ErrorMessage name="password" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
                 <div>
-                    <label for="confirmPassword" class="block text-gray-700 font-medium mb-1">Xác nhận mật khẩu</label>
+                    <label for="confirmPassword" class="block text-gray-700 font-semibold mb-1">Xác nhận mật
+                        khẩu</label>
                     <Field id="confirmPassword" name="confirmPassword" type="password"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="Nhập mật khẩu để xác nhận" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
+                        placeholder="Nhập lại mật khẩu" />
                     <ErrorMessage name="confirmPassword" class="text-red-500 text-sm mt-1 block" />
                 </div>
 
-                <div class="flex gap-4">
+                <div class="md:col-span-2 flex justify-center gap-4 pt-4">
                     <SecondaryButton :onClick="() => router.back()" label="Quay lại" />
                     <PrimaryButton label="Đăng ký" />
                 </div>
 
-                <p class="text-center">
+                <p class="md:col-span-2 text-center text-gray-600 text-sm mt-2">
                     Bạn đã có tài khoản?
                     <TextButton :onClick="() => router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })"
                         label="Đăng nhập tại đây" />
