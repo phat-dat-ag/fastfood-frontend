@@ -95,54 +95,94 @@ function goToProfilePage() {
 }
 </script>
 <template>
-    <header class="w-[80%] mx-auto flex gap-4 border-b border-red-300">
+    <header class="sticky top-0 z-50 w-[100%] mx-auto flex items-center justify-between py-3 px-6
+           bg-gradient-to-r from-orange-500 via-red-400 to-orange-600
+           shadow-lg shadow-orange-300/40 backdrop-blur-sm
+           transition-all duration-300 hover:shadow-orange-400/60">
 
-        <div class="w-[10%] flex items-center justify-center">
-            <div class="w-[80%]">
-                <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo cửa hàng">
-            </div>
+        <div class="flex items-center gap-2 w-[15%]">
+            <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo cửa hàng"
+                class="w-9 h-9 object-contain rounded-full ring-2 ring-white/70 shadow-md hover:scale-105 transition-transform duration-300" />
+            <h1 class="text-lg font-bold text-white tracking-wide uppercase drop-shadow-sm">
+                Aurelion
+            </h1>
         </div>
 
-        <div class="h-[100px] w-[70%] flex gap-4 items-center text-xl">
-            <div v-for="item in menuItems" :key="item.id" :id="item.id"
-                :class="['cursor-pointer', selectedDiv === item.id ? 'border-b-4 border-orange-500 text-orange-500' : 'text-gray-700']"
-                @click="onClickMenuItem(item.id, item.key)">
+        <nav class="flex-1 flex justify-center gap-10 text-base font-semibold tracking-wide">
+            <div v-for="item in menuItems" :key="item.id" :id="item.id" :class="[
+                'cursor-pointer relative transition-all duration-300 px-2 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10',
+                selectedDiv === item.id ? 'text-white font-bold bg-white/15 shadow-md' : ''
+            ]" @click="onClickMenuItem(item.id, item.key)">
                 {{ item.label }}
+                <span v-if="selectedDiv === item.id"
+                    class="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-[40%] h-[2px] bg-white rounded-full"></span>
             </div>
+        </nav>
+
+        <div v-if="props.role === USER_ROLES.USER" class="flex items-center justify-end gap-8 w-[20%]">
+            <ElBadge :value="30" :max="10">
+                <ElTooltip effect="dark" content="Giỏ hàng của tôi" placement="bottom">
+                    <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
+                        @click="() => router.push({ name: ROUTE_NAMES.USER.CART })">
+                        <ShoppingCartFull />
+                    </el-icon>
+                </ElTooltip>
+            </ElBadge>
+
+            <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
+                @goToProfilePage="goToProfilePage" @signOut="signOut"
+                class="w-9 h-9 rounded-full ring-2 ring-white/70 hover:ring-white transition-all duration-300 shadow-md" />
         </div>
 
-        <div v-if="props.role === USER_ROLES.USER" class="w-[20%] flex items-center justify-end gap-8">
+        <div v-else-if="props.role === USER_ROLES.STAFF" class="flex items-center justify-end gap-8 w-[20%]">
             <ElBadge :value="30" :max="10">
-                <ElTooltip class="box-item" effect="dark" content="Giỏ hàng của tôi" placement="left-start">
-                    <el-icon :size="32" @click="() => router.push({ name: ROUTE_NAMES.USER.CART })">
+                <ElTooltip effect="dark" content="Giỏ hàng của tôi" placement="bottom">
+                    <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
+                        @click="() => router.push({ name: ROUTE_NAMES.STAFF.CART })">
                         <ShoppingCartFull />
                     </el-icon>
                 </ElTooltip>
             </ElBadge>
-            <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
-                @goToProfilePage="goToProfilePage" @signOut="signOut"></AvatarDropdown>
-        </div>
-        <div v-else-if="props.role === USER_ROLES.STAFF" class="w-[20%] flex items-center justify-end gap-8">
-            <ElBadge :value="30" :max="10">
-                <ElTooltip class="box-item" effect="dark" content="Giỏ hàng của tôi" placement="left-start">
-                    <el-icon :size="32" @click="() => router.push({ name: ROUTE_NAMES.STAFF.CART })">
-                        <ShoppingCartFull />
-                    </el-icon>
-                </ElTooltip>
-            </ElBadge>
+
             <ElBadge :value="400" :max="50">
-                <ElTooltip class="box-item" effect="dark" content="Đơn hàng cần duyệt" placement="left-start">
-                    <el-icon :size="32" @click="() => router.push({ name: ROUTE_NAMES.STAFF.ORDER_MANAGEMENT })">
+                <ElTooltip effect="dark" content="Đơn hàng cần duyệt" placement="bottom">
+                    <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
+                        @click="() => router.push({ name: ROUTE_NAMES.STAFF.ORDER_MANAGEMENT })">
                         <Box />
                     </el-icon>
                 </ElTooltip>
             </ElBadge>
+
             <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
-                @goToProfilePage="goToProfilePage" @signOut="signOut"></AvatarDropdown>
+                @goToProfilePage="goToProfilePage" @signOut="signOut"
+                class="w-9 h-9 rounded-full ring-2 ring-white/70 hover:ring-white transition-all duration-300 shadow-md" />
         </div>
-        <div v-else class="w-[20%] flex justify-end gap-4">
-            <button class="hover:underline hover:text-orange-500" @click="onClickSignUpButton">Đăng ký ngay</button>
-            <button class="hover:underline hover:text-orange-500" @click="onClickSignInButton">Đăng nhập</button>
+
+        <div v-else class="flex items-center justify-end gap-4 w-[20%]">
+            <button class="px-4 py-1.5 border border-white/70 text-white font-semibold rounded-lg
+               hover:bg-white hover:text-orange-600 transition-all duration-300 shadow-sm hover:shadow-md"
+                @click="onClickSignUpButton">
+                Đăng ký
+            </button>
+
+            <button class="px-4 py-1.5 bg-white text-orange-600 font-semibold rounded-lg
+               hover:bg-orange-100 transition-all duration-300 shadow-sm hover:shadow-md" @click="onClickSignInButton">
+                Đăng nhập
+            </button>
         </div>
     </header>
 </template>
+
+<style scoped>
+@keyframes slideIn {
+    from {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+</style>

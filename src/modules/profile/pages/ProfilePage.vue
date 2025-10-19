@@ -86,51 +86,74 @@ function goToChangePasswordPage() {
 
 </script>
 <template>
-    <div class="w-[80%] flex flex-col gap-4 mx-auto">
-        <h1 class="text-xl pt-4">Xin chào {{ userStore.user?.name || "Không xác định" }},
-            tại đây bạn có thể quản lý thông tin cá nhân của mình!
-        </h1>
-        <div class="border rounded-lg">
-            <h1 class="rounded-t-lg bg-orange-300 p-2 text-xl font-bold">Ảnh đại diện</h1>
-            <div class="flex p-4">
-                <div class="grow">
-                    <ElAvatar :size="200" :src="avatarImage" alt="Ảnh đại diện"></ElAvatar>
+    <div class="w-[80%] mx-auto py-10 space-y-10">
+        <div class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg">
+            <h1 class="text-3xl font-bold drop-shadow-md">
+                Xin chào
+                <span class="text-yellow-200">{{ userStore.user?.name || "Không xác định" }}</span> 👋
+            </h1>
+            <p class="text-white/90 mt-2">Tại đây bạn có thể quản lý thông tin cá nhân của mình!</p>
+        </div>
+
+        <div
+            class="bg-white/90 shadow-lg rounded-2xl overflow-hidden border border-orange-100 hover:shadow-2xl transition-all duration-300">
+            <div class="bg-gradient-to-r from-orange-500 to-amber-400 px-5 py-3">
+                <h2 class="text-white text-lg font-semibold tracking-wide">Ảnh đại diện</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-8 p-6">
+                <div class="flex flex-col items-center gap-3">
+                    <ElAvatar :size="120" :src="avatarImage" alt="Ảnh đại diện"
+                        class="shadow-md border-2 border-orange-300 hover:scale-105 transition-transform duration-300" />
                 </div>
-                <div class="grow flex flex-col gap-2 content-start">
-                    <h1>Cập nhật ảnh đại diện</h1>
-                    <input ref="fileInputRef" type="file" accept="image/*" @change="onImageChange">
+
+                <div class="flex flex-col gap-3 text-gray-700">
+                    <h3 class="font-semibold text-lg">Cập nhật ảnh đại diện</h3>
+                    <input ref="fileInputRef" type="file" accept="image/*" @change="onImageChange" class="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                     file:bg-orange-100 file:text-orange-600 hover:file:bg-orange-200 transition" />
                     <button v-if="avatarFile"
-                        class="w-fit bg-blue-500 text-white p-1 rounded hover:bg-blue-600 transition duration-200 font-semibold"
-                        @click="handleUpdateAvatar">Cập nhật</button>
+                        class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl font-semibold shadow transition-all duration-300"
+                        @click="handleUpdateAvatar">
+                        Cập nhật
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="border rounded-lg">
-            <h1 class="rounded-t-lg bg-orange-300 p-2 text-xl font-bold">Thông tin cá nhân</h1>
-            <div class="flex p-4">
-                <div class="grow">
-                    <h2>{{ userStore.user?.name || "Không xác định" }}</h2>
-                    <h2>{{ userStore.user?.phone || "Không xác định" }}</h2>
-                    <h2>{{ userStore.user?.email || "Không xác định" }}</h2>
-                    <h2>{{ formatDateString(userStore.user?.birthday) || "Không xác định" }}</h2>
+        <div
+            class="bg-white/90 shadow-lg rounded-2xl overflow-hidden border border-orange-100 hover:shadow-2xl transition-all duration-300">
+            <div class="bg-gradient-to-r from-orange-500 to-amber-400 px-5 py-3">
+                <h2 class="text-white text-lg font-semibold tracking-wide">Thông tin cá nhân</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between p-6 gap-6">
+                <div class="space-y-2 text-gray-700 leading-relaxed">
+                    <p><span class="font-semibold">Tên:</span> {{ userStore.user?.name || "Không xác định" }}</p>
+                    <p><span class="font-semibold">SĐT:</span> {{ userStore.user?.phone || "Không xác định" }}</p>
+                    <p><span class="font-semibold">Email:</span> {{ userStore.user?.email || "Không xác định" }}</p>
+                    <p><span class="font-semibold">Ngày sinh:</span> {{ formatDateString(userStore.user?.birthday) ||
+                        "Không xác định" }}</p>
                 </div>
-                <div class="grow flex flex-col items-start">
-                    <TextButton :onClick="goToEditProfilePage" label="Chỉnh sửa thông tin" />
-                    <TextButton :onClick="goToChangePasswordPage" label="Đổi mật khẩu" />
+
+                <div class="flex flex-col gap-3 items-start">
+                    <TextButton :onClick="goToEditProfilePage" label="✏️ Chỉnh sửa thông tin" />
+                    <TextButton :onClick="goToChangePasswordPage" label="🔒 Đổi mật khẩu" />
                 </div>
             </div>
         </div>
 
-        <div class="border rounded-lg">
-            <h1 class="rounded-t-lg bg-orange-300 p-2 text-xl font-bold">Địa chỉ giao hàng</h1>
-            <div class="flex p-4">
+        <div
+            class="bg-white/90 shadow-lg rounded-2xl overflow-hidden border border-orange-100 hover:shadow-2xl transition-all duration-300">
+            <div class="bg-gradient-to-r from-orange-500 to-amber-400 px-5 py-3">
+                <h2 class="text-white text-lg font-semibold tracking-wide">Địa chỉ giao hàng</h2>
+            </div>
 
-                <div class="grow">
-                    <h1>Đại học Cần Thơ, đường 3/2, Xuân Khánh, Ninh Kiều, Cần Thơ</h1>
+            <div class="flex flex-col md:flex-row justify-between items-center p-6 gap-6">
+                <div class="text-gray-700">
+                    <p>🏠 Đại học Cần Thơ, đường 3/2, Xuân Khánh, Ninh Kiều, Cần Thơ</p>
                 </div>
-                <div class="grow">
-                    <TextButton :onClick="() => { }" label="Thêm địa chỉ mới" />
+                <div>
+                    <TextButton :onClick="() => { }" label="➕ Thêm địa chỉ mới" />
                 </div>
             </div>
         </div>

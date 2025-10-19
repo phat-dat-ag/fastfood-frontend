@@ -7,7 +7,7 @@ defineEmits(["signOut", "goToProfilePage"]);
 </script>
 <template>
     <ElDropdown>
-        <el-avatar :size="80" :src="avatarUrl" />
+        <el-avatar :size="40" :src="avatarUrl" />
         <template #dropdown>
             <el-dropdown-menu>
                 <el-dropdown-item @click="$emit('goToProfilePage')">Thông tin cá nhân</el-dropdown-item>
