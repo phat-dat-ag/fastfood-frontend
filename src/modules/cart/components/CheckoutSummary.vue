@@ -4,6 +4,8 @@ import type { Cart } from "../../../types/cart.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
+import AddressSelector from "../../../components/AddressSelector.vue";
+import AddressList from "../../../components/AddressList.vue";
 
 const props = defineProps<{ carts: Cart[]; promotions: Promotion[] }>();
 
@@ -38,6 +40,14 @@ function placeOrder() {
     </div>
     <div v-else>
       Quý khách thông cảm, hiện tại không có chương trình khuyến mãi nào phù hợp
+    </div>
+
+    <div>
+      <AddressList />
+    </div>
+
+    <div class="w-full">
+      <AddressSelector />
     </div>
 
     <div class="space-y-1">

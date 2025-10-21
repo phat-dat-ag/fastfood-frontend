@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@goongmaps/goong-js": "^1.0.9",
     "@types/three": "^0.180.0",
     "axios": "^1.12.2",
     "element-plus": "^2.11.2",
