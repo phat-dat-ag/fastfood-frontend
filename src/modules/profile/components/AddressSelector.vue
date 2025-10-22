@@ -49,11 +49,14 @@ function handleClickAddButton() {
     }
 
     emit("add-address", address);
+    selectedAddress.value = null;
+    name.value = "";
+    detail.value = "";
 }
 </script>
 <template>
     <ElCard class="p-6 rounded-2xl shadow-md w-full">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-5">Thêm địa chỉ giao hàng nè mày</h2>
+        <h2 class="text-2xl font-semibold text-gray-700 mb-5">Thêm địa chỉ giao hàng nè cưng ơi!</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="w-full h-[400px] rounded-xl border overflow-hidden shadow-sm">
