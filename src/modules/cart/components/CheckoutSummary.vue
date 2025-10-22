@@ -1,18 +1,43 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import type { Cart } from "../../../types/cart.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
-import AddressSelector from "../../../components/AddressSelector.vue";
 import AddressList from "../../../components/AddressList.vue";
+import type { Address, AddressResponse } from "../../../types/geocode.types";
+import { useApiHandler } from "../../../composables/useApiHandler";
+import { getAddresses } from "../../../service/address.service";
+import { ADDRESS_MESSAGE } from "../../../constants/messages";
 
 const props = defineProps<{ carts: Cart[]; promotions: Promotion[] }>();
+
+const addresses = ref<Address[]>([]);
+
+async function loadAddresses() {
+  await useApiHandler<AddressResponse>(
+    getAddresses,
+    {
+      loading: ADDRESS_MESSAGE.get,
+      error: ADDRESS_MESSAGE.getError,
+    },
+    (data: AddressResponse) => addresses.value = data.addresses,
+  )
+}
+
+onMounted(loadAddresses);
 
 const selectedPromotionCode = ref<string>("");
 
 async function onPromotionCodeChange() {
   console.log("Mã được chọn: ", selectedPromotionCode.value);
+}
+
+const selectedAddressId = ref<number | null>(null);
+
+function onAddressIdChange(id: number) {
+  selectedAddressId.value = id;
+  console.log("Địa chỉ được chọn nè: ", id);
 }
 
 const subtotal = computed(() =>
@@ -43,11 +68,7 @@ function placeOrder() {
     </div>
 
     <div>
-      <AddressList />
-    </div>
-
-    <div class="w-full">
-      <AddressSelector />
+      <AddressList :addresses="addresses" @change-address="onAddressIdChange" />
     </div>
 
     <div class="space-y-1">

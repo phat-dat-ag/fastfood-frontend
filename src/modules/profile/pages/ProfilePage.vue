@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useUserStore } from '../../../store/useUserStore.store';
 import { formatDateString } from '../../../utils/time.utils';
 import { ElAvatar } from 'element-plus';
@@ -13,10 +13,32 @@ import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { USER_ROLES } from '../../../constants/user-roles';
 import TextButton from '../../../components/buttons/TextButton.vue';
+import AddressSelector from '../../../components/AddressSelector.vue';
+import type { Address, AddressCreateRequest, AddressResponse } from '../../../types/geocode.types';
+import { useApiHandler } from '../../../composables/useApiHandler';
+import { createAddress, deleteAddress, getAddresses } from '../../../service/address.service';
+import { ADDRESS_MESSAGE } from '../../../constants/messages';
+import DeleteButton from '../../../components/buttons/DeleteButton.vue';
+import { openConfirmDeleteMessage } from '../../../utils/confirmation.utils';
 
 const router = useRouter();
 
 const userStore = useUserStore();
+
+const addresses = ref<Address[]>([]);
+
+async function loadAddresses() {
+    await useApiHandler<AddressResponse>(
+        getAddresses,
+        {
+            loading: ADDRESS_MESSAGE.get,
+            error: ADDRESS_MESSAGE.getError,
+        },
+        (data: AddressResponse) => addresses.value = data.addresses,
+    )
+}
+
+onMounted(loadAddresses);
 
 const defaultAvatarUrl: string = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1747122687/books/mzkfsohlqelvamwm0wzk.jpg';
 
@@ -54,7 +76,6 @@ async function handleUpdateAvatar() {
         notifyError(err.response?.data.message || "Xảy ra lỗi khi cập nhật ảnh đại diện");
     } finally {
         closeLoading(loading);
-
     }
 }
 
@@ -82,6 +103,34 @@ function goToChangePasswordPage() {
         default:
             notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
     }
+}
+
+async function handleAddAddress(address: AddressCreateRequest) {
+    await useApiHandler(
+        () => createAddress(address),
+        {
+            loading: ADDRESS_MESSAGE.create,
+            error: ADDRESS_MESSAGE.createError,
+            success: ADDRESS_MESSAGE.createSuccess,
+        },
+        () => { },
+        loadAddresses,
+    )
+}
+
+async function handleDeleteAddress(id: number) {
+    const confirmed: boolean = await openConfirmDeleteMessage("Xóa địa chỉ giao hàng này?");
+    if (!confirmed) return;
+    await useApiHandler(
+        () => deleteAddress(id),
+        {
+            loading: ADDRESS_MESSAGE.delete,
+            success: ADDRESS_MESSAGE.deleteSuccess,
+            error: ADDRESS_MESSAGE.deleteError,
+        },
+        () => { },
+        loadAddresses,
+    )
 }
 
 </script>
@@ -148,14 +197,37 @@ function goToChangePasswordPage() {
                 <h2 class="text-white text-lg font-semibold tracking-wide">Địa chỉ giao hàng</h2>
             </div>
 
-            <div class="flex flex-col md:flex-row justify-between items-center p-6 gap-6">
-                <div class="text-gray-700">
-                    <p>🏠 Đại học Cần Thơ, đường 3/2, Xuân Khánh, Ninh Kiều, Cần Thơ</p>
+            <div class="p-6 space-y-6">
+                <div v-if="addresses.length > 0" class="space-y-3">
+                    <div v-for="(address, index) in addresses" :key="index"
+                        class="border rounded-xl p-4 flex justify-between items-center hover:shadow-md transition">
+                        <div>
+                            <p class="font-semibold text-gray-800">
+                                {{ address.name }}
+                            </p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                {{ address.detail ? (address.detail + ', ') : '' }}
+                                {{ address.street }}, {{ address.ward }}, {{ address.district }},
+                                {{ address.province }}
+                            </p>
+                        </div>
+                        <div class="w-[10%]">
+                            <DeleteButton label="Xóa" :onClick="() => handleDeleteAddress(address.id)" />
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <TextButton :onClick="() => { }" label="➕ Thêm địa chỉ mới" />
+
+                <div v-else class="text-gray-500 italic text-center">
+                    Bạn chưa có địa chỉ nào. Hãy thêm địa chỉ mới nhé!
                 </div>
+
+                <transition name="fade">
+                    <div>
+                        <AddressSelector @add-address="handleAddAddress" />
+                    </div>
+                </transition>
             </div>
+
         </div>
     </div>
 </template>

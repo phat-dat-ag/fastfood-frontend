@@ -43,3 +43,4 @@ export const PROMOTION_PRODUCT_MESSAGE = createEntityMessages(
 export const PROMOTION_ORDER_MESSAGE = createEntityMessages(
   "mã khuyến mãi cho đơn hàng"
 );
+export const ADDRESS_MESSAGE = createEntityMessages("địa chỉ giao hàng");
