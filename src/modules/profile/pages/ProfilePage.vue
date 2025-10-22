@@ -13,13 +13,13 @@ import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { USER_ROLES } from '../../../constants/user-roles';
 import TextButton from '../../../components/buttons/TextButton.vue';
-import AddressSelector from '../../../components/addresses/AddressSelector.vue';
 import type { Address, AddressCreateRequest, AddressResponse } from '../../../types/geocode.types';
 import { useApiHandler } from '../../../composables/useApiHandler';
 import { createAddress, deleteAddress, getAddresses } from '../../../service/address.service';
 import { ADDRESS_MESSAGE } from '../../../constants/messages';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
 import { openConfirmDeleteMessage } from '../../../utils/confirmation.utils';
+import AddressSelector from '../components/AddressSelector.vue';
 
 const router = useRouter();
 

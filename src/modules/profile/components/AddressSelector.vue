@@ -1,65 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
-import goongjs from "@goongmaps/goong-js";
+import { ref } from "vue";
 import "@goongmaps/goong-js/dist/goong-js.css";
 import { ElInput, ElCard } from "element-plus";
-import type { AddressCreateRequest, ParsedAddress } from "../../types/geocode.types";
-import { parseAddressComponents } from "../../utils/geocode.utils";
-import { notifyError } from "../../utils/notification.utils";
-import PrimaryButton from "../buttons/PrimaryButton.vue";
+import AddressMap from "../../../components/addresses/AddressMap.vue";
+import type { AddressCreateRequest, ParsedAddress } from "../../../types/geocode.types";
+import { notifyError } from "../../../utils/notification.utils";
+import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 const emit = defineEmits(["add-address"]);
-
-const mapApiKey = import.meta.env.VITE_GOONG_MAP_KEY as string;
-const geocodeApiKey = import.meta.env.VITE_GOONG_API_KEY as string;
-
-let map: any = null;
-let marker: any = null;
 
 const selectedAddress = ref<ParsedAddress | null>(null);
 const name = ref<string>("");
 const detail = ref<string>("");
 
-onMounted(async () => {
-    await nextTick();
-    initMap();
-});
-
-function initMap() {
-    if (map) map.remove();
-
-    goongjs.accessToken = mapApiKey;
-    map = new goongjs.Map({
-        container: "goong-map",
-        style: "https://tiles.goong.io/assets/goong_map_web.json",
-        center: [105.7705, 10.0299],
-        zoom: 13,
-    });
-
-    map.on("click", async (e: any) => {
-        const { lng, lat } = e.lngLat;
-
-        if (marker) marker.remove();
-        marker = new goongjs.Marker({ color: "#FF7A00" }).setLngLat([lng, lat]).addTo(map);
-
-        try {
-            const res = await fetch(
-                `https://rsapi.goong.io/Geocode?latlng=${lat},${lng}&api_key=${geocodeApiKey}`
-            );
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-            const data = await res.json();
-            const result = data.results?.[0];
-            const parsedAddress: ParsedAddress = parseAddressComponents(result?.address_components || [], lat, lng);
-            selectedAddress.value = parsedAddress;
-        } catch (err) {
-            notifyError(`Lỗi chọn địa điểm, hãy thử lại! ${err}`);
-        }
-    });
+function onAddressChange(parsedAddress: ParsedAddress) {
+    selectedAddress.value = parsedAddress;
 }
-
-onBeforeUnmount(() => {
-    if (map) map.remove();
-});
 
 function handleClickAddButton() {
     if (name.value.length < 3 || name.value.length > 40) {
@@ -98,11 +53,11 @@ function handleClickAddButton() {
 </script>
 <template>
     <ElCard class="p-6 rounded-2xl shadow-md w-full">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-5">Thêm địa chỉ giao hàng</h2>
+        <h2 class="text-2xl font-semibold text-gray-700 mb-5">Thêm địa chỉ giao hàng nè mày</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="w-full h-[400px] rounded-xl border overflow-hidden shadow-sm">
-                <div id="goong-map" class="w-full h-full"></div>
+                <AddressMap @change-address="onAddressChange" />
             </div>
 
             <div class="flex flex-col justify-between space-y-4">

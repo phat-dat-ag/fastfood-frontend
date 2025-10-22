@@ -21,6 +21,7 @@ function onAddressChange(value: string) {
     <ElSelect v-model="selectedAddress" placeholder="Địa chỉ giao hàng" clearable filterable class="w-full"
         @change="onAddressChange">
         <ElOption v-for="address in props.addresses" :key="address.id"
-            :label="address.ward + ', ' + address.district + ', ' + address.province" :value="address.id" />
+            :label="address.name + ': ' + address.ward + ', ' + address.district + ', ' + address.province"
+            :value="address.id" />
     </ElSelect>
 </template>
