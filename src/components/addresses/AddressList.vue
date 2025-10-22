@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ElOption, ElSelect } from 'element-plus';
 import { ref } from 'vue';
-import type { Address } from '../types/geocode.types';
+import type { Address } from '../../types/geocode.types';
 
 const props = defineProps<{
     addresses: Address[];

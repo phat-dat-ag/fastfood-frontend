@@ -4,7 +4,7 @@ import type { Cart } from "../../../types/cart.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
-import AddressList from "../../../components/AddressList.vue";
+import AddressList from "../../../components/addresses/AddressList.vue";
 import type { Address, AddressResponse } from "../../../types/geocode.types";
 import { useApiHandler } from "../../../composables/useApiHandler";
 import { getAddresses } from "../../../service/address.service";

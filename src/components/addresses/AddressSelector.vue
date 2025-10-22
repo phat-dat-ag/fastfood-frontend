@@ -3,11 +3,10 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import goongjs from "@goongmaps/goong-js";
 import "@goongmaps/goong-js/dist/goong-js.css";
 import { ElInput, ElCard } from "element-plus";
-import type { AddressCreateRequest, ParsedAddress } from "../types/geocode.types";
-import { parseAddressComponents } from "../utils/geocode.utils";
-import { notifyError } from "../utils/notification.utils";
-import PrimaryButton from "./buttons/PrimaryButton.vue";
-
+import type { AddressCreateRequest, ParsedAddress } from "../../types/geocode.types";
+import { parseAddressComponents } from "../../utils/geocode.utils";
+import { notifyError } from "../../utils/notification.utils";
+import PrimaryButton from "../buttons/PrimaryButton.vue";
 const emit = defineEmits(["add-address"]);
 
 const mapApiKey = import.meta.env.VITE_GOONG_MAP_KEY as string;
