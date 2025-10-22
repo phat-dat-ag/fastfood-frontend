@@ -9,6 +9,7 @@ import type { Address, AddressResponse } from "../../../types/geocode.types";
 import { useApiHandler } from "../../../composables/useApiHandler";
 import { getAddresses } from "../../../service/address.service";
 import { ADDRESS_MESSAGE } from "../../../constants/messages";
+import { ElOption, ElSelect } from "element-plus";
 
 const props = defineProps<{ carts: Cart[]; promotions: Promotion[] }>();
 
@@ -54,14 +55,14 @@ function placeOrder() {
     <h2 class="text-2xl font-semibold">Tóm tắt đơn hàng</h2>
 
     <div v-if="props.promotions.length > 0" class="space-y-2">
-      <select v-model="selectedPromotionCode" class="w-full border rounded-lg p-2 mt-2" @change="onPromotionCodeChange">
-        <option value="" disabled selected>Chọn mã có sẵn</option>
-        <option v-for="promotion in props.promotions" :key="promotion.id" :value="promotion.code">
+      <ElSelect v-model="selectedPromotionCode" placeholder="Áp dụng mã khuyến mãi ngay!" clearable filterable
+        class="w-full" @change="onPromotionCodeChange">
+        <ElOption v-for="promotion in props.promotions" :key="promotion.id" :value="promotion.code">
           {{ promotion.code }}: Giảm {{ promotion.type === "FIXED_AMOUNT" ?
             formatCurrencyVND(promotion.value.toString()) :
             `${promotion.value}%` }} cho đơn từ {{ formatCurrencyVND(promotion.minSpendAmount.toString()) }}
-        </option>
-      </select>
+        </ElOption>
+      </ElSelect>
     </div>
     <div v-else>
       Quý khách thông cảm, hiện tại không có chương trình khuyến mãi nào phù hợp
