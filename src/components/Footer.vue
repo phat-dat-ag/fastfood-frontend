@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { STORE_LOCATION } from '../constants/location-store';
+import AddressMap from './addresses/AddressMap.vue';
+
 const FOOTER_LINKS = {
     INFORMATION: {
         title: "Thông tin",
@@ -29,15 +32,30 @@ const FOOTER_LINKS = {
 </script>
 <template>
     <footer class="mt-12 bg-gradient-to-r from-orange-500 via-red-400 to-orange-600 text-white">
-        <div class="w-[80%] mx-auto py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="w-[85%] mx-auto py-12 grid grid-cols-1 md:grid-cols-5 gap-10 items-start">
             <div
-                class="flex flex-col items-center md:items-start gap-3 transition-transform duration-500 hover:scale-105">
-                <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo"
-                    class="w-20 h-20 object-contain rounded-full ring-2 ring-white/60 shadow-md hover:shadow-lg hover:ring-white transition-all duration-500" />
-                <p
-                    class="text-sm text-white/90 leading-relaxed text-center md:text-left hover:text-white transition-colors duration-300">
-                    Aurelion Shop – nơi bạn thưởng thức hương vị tuyệt hảo mỗi ngày 🍔🍟
-                </p>
+                class="md:col-span-2 flex flex-col items-center md:items-start gap-4 transition-transform duration-500 hover:scale-[1.02]">
+                <div class="flex items-center gap-4">
+                    <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo"
+                        class="w-20 h-20 object-contain rounded-full ring-2 ring-white/60 shadow-md hover:shadow-lg hover:ring-white transition-all duration-500" />
+                    <p
+                        class="text-lg font-bold text-white/90 leading-relaxed text-center md:text-left hover:text-white transition-colors duration-300">
+                        Aurelion Shop – hương vị tuyệt hảo
+                    </p>
+                </div>
+
+                <div
+                    class="w-full h-52 rounded-xl overflow-hidden ring-2 ring-white/30 shadow-lg hover:ring-white/50 transition-all duration-500">
+                    <AddressMap />
+                </div>
+
+                <div class="text-sm text-white/90 mt-2 text-center md:text-left space-y-1 leading-relaxed">
+                    <p>{{ STORE_LOCATION.detail }}</p>
+                    <p>
+                        {{ STORE_LOCATION.street }}, {{ STORE_LOCATION.ward }},
+                        {{ STORE_LOCATION.district }}, {{ STORE_LOCATION.province }}
+                    </p>
+                </div>
             </div>
 
             <div v-for="section in FOOTER_LINKS" :key="section.title"
