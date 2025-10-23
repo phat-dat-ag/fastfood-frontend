@@ -33,6 +33,10 @@ function initMap() {
         zoom: 13,
     });
 
+    map.on("load", () => {
+        setTimeout(() => map.resize(), 300);
+    });
+
     const storeEl = document.createElement("div");
     storeEl.innerHTML =
         `<div style="
@@ -63,6 +67,8 @@ function initMap() {
         ${STORE_LOCATION.name}
         </span>
     </div>`;
+
+    document.querySelectorAll(".goongjs-marker").forEach(el => el.remove());
 
     const storeMarker = new goongjs.Marker({ element: storeEl })
         .setLngLat(storeCenter)

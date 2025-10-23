@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { STORE_LOCATION } from '../constants/location-store';
-import AddressMap from './addresses/AddressMap.vue';
 
 const FOOTER_LINKS = {
     INFORMATION: {
@@ -42,11 +41,6 @@ const FOOTER_LINKS = {
                         class="text-lg font-bold text-white/90 leading-relaxed text-center md:text-left hover:text-white transition-colors duration-300">
                         Aurelion Shop – hương vị tuyệt hảo
                     </p>
-                </div>
-
-                <div
-                    class="w-full h-52 rounded-xl overflow-hidden ring-2 ring-white/30 shadow-lg hover:ring-white/50 transition-all duration-500">
-                    <AddressMap />
                 </div>
 
                 <div class="text-sm text-white/90 mt-2 text-center md:text-left space-y-1 leading-relaxed">
