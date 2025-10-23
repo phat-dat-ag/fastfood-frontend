@@ -1,4 +1,5 @@
 import type { Product } from "./product.types";
+import type { Promotion } from "./promotion.types";
 import type { User } from "./user.types";
 
 export interface CartCreateRequest {
@@ -17,6 +18,16 @@ export interface Cart {
   user: User;
 }
 
+export interface PromotionCodeCheckResult {
+  success: boolean;
+  message: string;
+  promotion: Promotion | null;
+}
+
 export interface CartResponse {
   carts: Cart[];
+  originalPrice: string;
+  subtotalPrice: string;
+  totalPrice: string;
+  applyPromotionResult: PromotionCodeCheckResult | null;
 }

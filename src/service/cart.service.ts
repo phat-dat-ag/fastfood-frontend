@@ -5,8 +5,9 @@ export const addProductToCart = (data: CartCreateRequest) => {
   return api.post("/cart", data);
 };
 
-export const getCartDetail = () => {
-  return api.get("/cart");
+export const getCartDetail = (promotionCode: string) => {
+  const code: string = promotionCode ?? "";
+  return api.get("/cart", { params: { code } });
 };
 
 export const updateCart = (data: CartUpdateRequest) => {

@@ -24,7 +24,8 @@ function onQuantityChange(newQuantity: number) {
 }
 
 function onClickAddButton() {
-  emit('add-to-cart', { product: props.product, quantity: quantity.value })
+  emit('add-to-cart', { product: props.product, quantity: quantity.value });
+  quantity.value = 0;
 }
 
 const userStore = useUserStore();

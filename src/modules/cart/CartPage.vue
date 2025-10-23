@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { Cart, CartResponse } from '../../types/cart.types';
+import type { CartResponse, PromotionCodeCheckResult } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
 import { CART_MESSAGE, PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
@@ -9,16 +9,31 @@ import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
 import { getValidPromotionOrder } from '../../service/promotion.service';
 import type { Promotion, PromotionResponse } from '../../types/promotion.types';
+import { notifyError, notifySuccess } from '../../utils/notification.utils';
 
-const carts = ref<Cart[]>([]);
+const selectedPromotionCode = ref<string>("");
+
+const cartDetail = ref<CartResponse | null>(null);
+
+function handleCartResponse(data: CartResponse) {
+    cartDetail.value = data;
+    if (cartDetail.value.applyPromotionResult) {
+        const result: PromotionCodeCheckResult = cartDetail.value.applyPromotionResult;
+        if (result.success)
+            notifySuccess(result.message);
+        else
+            notifyError(result.message);
+    }
+}
+
 async function loadCarts() {
     await useApiHandler<CartResponse>(
-        getCartDetail,
+        () => getCartDetail(selectedPromotionCode.value),
         {
             loading: CART_MESSAGE.get,
             error: CART_MESSAGE.getError,
         },
-        (data: CartResponse) => carts.value = data.carts,
+        (data: CartResponse) => handleCartResponse(data),
     )
 }
 onMounted(loadCarts);
@@ -70,11 +85,19 @@ async function handleDeleteProduct(productId: number): Promise<boolean> {
     )
     return true;
 }
+
+async function onPromotionCodeChange(promotionCode: string) {
+    const code: string = promotionCode ?? "";
+    selectedPromotionCode.value = code;
+    await loadCarts();
+}
+
 </script>
 <template>
-    <div v-if="carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
-        <CartList :carts="carts" @delete-product="handleDeleteProduct" @quantity-change="handleQuantityChange" />
-        <CheckoutSummary :carts="carts" :promotions="promotions" />
+    <div v-if="cartDetail && cartDetail.carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
+        <CartList :carts="cartDetail.carts" @delete-product="handleDeleteProduct"
+            @quantity-change="handleQuantityChange" />
+        <CheckoutSummary :cartDetail="cartDetail" :promotions="promotions" @change-promotion="onPromotionCodeChange" />
     </div>
     <div v-else>
         Giỏ hàng trống, hãy mua sắm thôi nào

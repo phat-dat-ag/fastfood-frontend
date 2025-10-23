@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import type { Cart } from "../../../types/cart.types";
+import { ref, onMounted } from "vue";
+import type { CartResponse } from "../../../types/cart.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
@@ -11,7 +11,8 @@ import { getAddresses } from "../../../service/address.service";
 import { ADDRESS_MESSAGE } from "../../../constants/messages";
 import { ElOption, ElSelect } from "element-plus";
 
-const props = defineProps<{ carts: Cart[]; promotions: Promotion[] }>();
+const props = defineProps<{ cartDetail: CartResponse; promotions: Promotion[] }>();
+const emit = defineEmits(["change-promotion"]);
 
 const addresses = ref<Address[]>([]);
 
@@ -31,7 +32,8 @@ onMounted(loadAddresses);
 const selectedPromotionCode = ref<string>("");
 
 async function onPromotionCodeChange() {
-  console.log("Mã được chọn: ", selectedPromotionCode.value);
+  const code: string = selectedPromotionCode.value ?? "";
+  emit("change-promotion", code);
 }
 
 const selectedAddressId = ref<number | null>(null);
@@ -40,10 +42,6 @@ function onAddressIdChange(id: number) {
   selectedAddressId.value = id;
   console.log("Địa chỉ được chọn nè: ", id);
 }
-
-const subtotal = computed(() =>
-  props.carts.reduce((sum, cart) => sum + Number(cart.product.discountedPrice) * cart.quantity, 0)
-);
 
 function placeOrder() {
   console.log("Đặt hàng");
@@ -72,9 +70,36 @@ function placeOrder() {
       <AddressSelection :addresses="addresses" @change-address="onAddressIdChange" />
     </div>
 
-    <div class="space-y-1">
-      <p>Tạm tính: <span class="font-semibold">{{ formatCurrencyVND(subtotal.toString()) }}</span></p>
-      <p class="text-xl font-bold">Tổng cộng: <span>{{ formatCurrencyVND(subtotal.toString()) }}</span></p>
+    <div class="space-y-2">
+      <p class="flex justify-between">
+        <span>Tạm tính:</span>
+        <span class="font-semibold">{{ formatCurrencyVND(cartDetail.originalPrice) }}</span>
+      </p>
+
+      <p v-if="cartDetail.originalPrice !== cartDetail.subtotalPrice" class="flex justify-between text-gray-600">
+        <span>Giảm giá sản phẩm:</span>
+        <span>
+          -{{ formatCurrencyVND((Number(cartDetail.originalPrice) - Number(cartDetail.subtotalPrice)).toString()) }}
+        </span>
+      </p>
+
+      <p v-if="cartDetail.originalPrice !== cartDetail.subtotalPrice" class="flex justify-between text-lg font-bold">
+        <span>Tổng cộng:</span>
+        <span>{{ formatCurrencyVND(cartDetail.subtotalPrice) }}</span>
+      </p>
+
+      <p v-if="cartDetail.applyPromotionResult && cartDetail.applyPromotionResult.promotion"
+        class="flex justify-between text-green-600">
+        <span>Khuyến mãi:</span>
+        <span>
+          -{{ formatCurrencyVND((Number(cartDetail.subtotalPrice) - Number(cartDetail.totalPrice)).toString()) }}
+        </span>
+      </p>
+
+      <p class="flex justify-between text-xl font-bold border-t pt-2">
+        <span>Tổng thanh toán:</span>
+        <span>{{ formatCurrencyVND(cartDetail.totalPrice) }}</span>
+      </p>
     </div>
 
     <PrimaryButton label="Đặt hàng" :onClick="placeOrder" />
