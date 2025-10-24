@@ -1,3 +1,4 @@
+import type { DeliveryResponse } from "./delivery.types";
 import type { Product } from "./product.types";
 import type { Promotion } from "./promotion.types";
 import type { User } from "./user.types";
@@ -30,4 +31,6 @@ export interface CartResponse {
   subtotalPrice: string;
   totalPrice: string;
   applyPromotionResult: PromotionCodeCheckResult | null;
+  deliveryInformation: DeliveryResponse;
+  deliveryFee: string;
 }

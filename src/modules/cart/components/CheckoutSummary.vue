@@ -1,33 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import type { CartResponse } from "../../../types/cart.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
 import AddressSelection from "../../../components/addresses/AddressSelection.vue";
-import type { Address, AddressResponse } from "../../../types/geocode.types";
-import { useApiHandler } from "../../../composables/useApiHandler";
-import { getAddresses } from "../../../service/address.service";
-import { ADDRESS_MESSAGE } from "../../../constants/messages";
+import type { Address } from "../../../types/geocode.types";
 import { ElOption, ElSelect } from "element-plus";
 
-const props = defineProps<{ cartDetail: CartResponse; promotions: Promotion[] }>();
-const emit = defineEmits(["change-promotion"]);
-
-const addresses = ref<Address[]>([]);
-
-async function loadAddresses() {
-  await useApiHandler<AddressResponse>(
-    getAddresses,
-    {
-      loading: ADDRESS_MESSAGE.get,
-      error: ADDRESS_MESSAGE.getError,
-    },
-    (data: AddressResponse) => addresses.value = data.addresses,
-  )
-}
-
-onMounted(loadAddresses);
+const props = defineProps<{ cartDetail: CartResponse; promotions: Promotion[]; addresses: Address[] }>();
+const emit = defineEmits(["change-promotion", "change-address"]);
 
 const selectedPromotionCode = ref<string>("");
 
@@ -36,11 +18,8 @@ async function onPromotionCodeChange() {
   emit("change-promotion", code);
 }
 
-const selectedAddressId = ref<number | null>(null);
-
-function onAddressIdChange(id: number) {
-  selectedAddressId.value = id;
-  console.log("Địa chỉ được chọn nè: ", id);
+function onAddressChange(address: Address) {
+  emit("change-address", address);
 }
 
 function placeOrder() {
@@ -67,7 +46,7 @@ function placeOrder() {
     </div>
 
     <div>
-      <AddressSelection :addresses="addresses" @change-address="onAddressIdChange" />
+      <AddressSelection :addresses="props.addresses" @change-address="onAddressChange" />
     </div>
 
     <div class="space-y-2">
@@ -86,6 +65,11 @@ function placeOrder() {
       <p v-if="cartDetail.originalPrice !== cartDetail.subtotalPrice" class="flex justify-between text-lg font-bold">
         <span>Tổng cộng:</span>
         <span>{{ formatCurrencyVND(cartDetail.subtotalPrice) }}</span>
+      </p>
+
+      <p v-if="cartDetail.deliveryInformation.success" class="flex justify-between text-lg font-bold">
+        <span>Phí giao hàng</span>
+        <span>{{ formatCurrencyVND(cartDetail.deliveryFee) }}</span>
       </p>
 
       <p v-if="cartDetail.applyPromotionResult && cartDetail.applyPromotionResult.promotion"

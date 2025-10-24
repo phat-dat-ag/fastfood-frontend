@@ -3,17 +3,22 @@ import { onMounted, ref } from 'vue';
 import type { CartResponse, PromotionCodeCheckResult } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
-import { CART_MESSAGE, PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
+import { ADDRESS_MESSAGE, CART_MESSAGE, PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
 import { getValidPromotionOrder } from '../../service/promotion.service';
 import type { Promotion, PromotionResponse } from '../../types/promotion.types';
 import { notifyError, notifySuccess } from '../../utils/notification.utils';
+import type { Address, AddressResponse } from '../../types/geocode.types';
+import { getAddresses } from '../../service/address.service';
+import type { DeliveryRequest } from '../../types/delivery.types';
 
 const selectedPromotionCode = ref<string>("");
 
 const cartDetail = ref<CartResponse | null>(null);
+
+const deliveryRequest = ref<DeliveryRequest | null>(null);
 
 function handleCartResponse(data: CartResponse) {
     cartDetail.value = data;
@@ -24,11 +29,18 @@ function handleCartResponse(data: CartResponse) {
         else
             notifyError(result.message);
     }
+    const deliveryMessage: string = cartDetail.value.deliveryInformation.message;
+    if (cartDetail.value.deliveryInformation.success) {
+        notifySuccess(deliveryMessage);
+    } else {
+        if (deliveryRequest.value)
+            notifyError(deliveryMessage);
+    }
 }
 
 async function loadCarts() {
     await useApiHandler<CartResponse>(
-        () => getCartDetail(selectedPromotionCode.value),
+        () => getCartDetail(selectedPromotionCode.value, deliveryRequest.value),
         {
             loading: CART_MESSAGE.get,
             error: CART_MESSAGE.getError,
@@ -50,6 +62,21 @@ async function loadPromotions() {
     )
 }
 onMounted(loadPromotions);
+
+const addresses = ref<Address[]>([]);
+
+async function loadAddresses() {
+    await useApiHandler<AddressResponse>(
+        getAddresses,
+        {
+            loading: ADDRESS_MESSAGE.get,
+            error: ADDRESS_MESSAGE.getError,
+        },
+        (data: AddressResponse) => addresses.value = data.addresses,
+    )
+}
+
+onMounted(loadAddresses);
 
 async function handleQuantityChange({ newQuantity, productId }: { newQuantity: number, productId: number }) {
     if (newQuantity == 0) {
@@ -92,12 +119,22 @@ async function onPromotionCodeChange(promotionCode: string) {
     await loadCarts();
 }
 
+async function onAddressChange(address: Address) {
+    const dataRequest: DeliveryRequest = {
+        customerLatitude: address.latitude,
+        customerLongitude: address.longitude,
+    };
+    deliveryRequest.value = dataRequest;
+    await loadCarts();
+}
+
 </script>
 <template>
     <div v-if="cartDetail && cartDetail.carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
         <CartList :carts="cartDetail.carts" @delete-product="handleDeleteProduct"
             @quantity-change="handleQuantityChange" />
-        <CheckoutSummary :cartDetail="cartDetail" :promotions="promotions" @change-promotion="onPromotionCodeChange" />
+        <CheckoutSummary :cartDetail="cartDetail" :promotions="promotions" :addresses="addresses"
+            @change-promotion="onPromotionCodeChange" @change-address="onAddressChange" />
     </div>
     <div v-else>
         Giỏ hàng trống, hãy mua sắm thôi nào
