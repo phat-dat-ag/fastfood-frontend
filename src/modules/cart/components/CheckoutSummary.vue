@@ -76,7 +76,8 @@ function placeOrder() {
         class="flex justify-between text-green-600">
         <span>Khuyến mãi:</span>
         <span>
-          -{{ formatCurrencyVND((Number(cartDetail.subtotalPrice) - Number(cartDetail.totalPrice)).toString()) }}
+          -{{ formatCurrencyVND((Number(cartDetail.subtotalPrice) - (Number(cartDetail.totalPrice) -
+            Number(cartDetail.deliveryFee))).toString()) }}
         </span>
       </p>
 

@@ -1,14 +1,20 @@
 <script setup lang="ts">
+import { ElTable, ElTableColumn } from 'element-plus';
 import AddButton from '../../../components/buttons/AddButton.vue';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
-import EditButton from '../../../components/buttons/EditButton.vue';
 import type { User } from '../../../types/user.types';
 import { formatDateString, formatDateTimeString } from '../../../utils/time.utils';
 
 interface AccountTableProps {
     accounts: User[];
 }
+
 const props = defineProps<AccountTableProps>();
+const emit = defineEmits(["delete-account"]);
+
+function handleDeleteAccount(phone: string) {
+    emit("delete-account", phone);
+}
 </script>
 
 <template>
@@ -25,13 +31,11 @@ const props = defineProps<AccountTableProps>();
                 </ElTableColumn>
                 <ElTableColumn label="Người dùng" prop="name" />
                 <ElTableColumn label="Số điện thoại" prop="phone" />
-                <ElTableColumn label="Vai trò" prop="role" />
-                <ElTableColumn label="Sinh nhật">
+                <ElTableColumn width="100" label="Sinh nhật">
                     <template #default="scope">
                         {{ formatDateString(scope.row.birthday) }}
                     </template>
                 </ElTableColumn>
-
 
                 <ElTableColumn label="Tham gia">
                     <template #default="scope">
@@ -54,8 +58,7 @@ const props = defineProps<AccountTableProps>();
                 <ElTableColumn label="Thao tác">
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
-                            <EditButton :onClick="() => { }" label="Cập nhật" />
-                            <DeleteButton :onClick="() => { }" label="Xóa" />
+                            <DeleteButton :onClick="() => handleDeleteAccount(scope.row.phone)" label="Xóa" />
                         </div>
                     </template>
                 </ElTableColumn>

@@ -4,7 +4,7 @@ import AdminLayout from "../../layouts/AdminLayout.vue";
 import CategoriesPage from "../../modules/category/CategoriesPage.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
 import ProductManagementPage from "../../modules/products/ProductManagementPage.vue";
-import AccountManagementPage from "../../modules/account/AccountManagementPage.vue";
+import CustomerManagementPage from "../../modules/account/CustomerManagementPage.vue";
 import PromotionByCategoryPage from "../../modules/promotion/PromotionByCategoryPage.vue";
 import PromotionByProductPage from "../../modules/promotion/PromotionByProductPage.vue";
 import AddPromotionByCategoryPage from "../../modules/promotion/AddPromotionByCategoryPage.vue";
@@ -12,6 +12,7 @@ import AddPromotionByProductPage from "../../modules/promotion/AddPromotionByPro
 import ProductDetail from "../../modules/products/ProductDetail.vue";
 import PromotionOrderPage from "../../modules/promotion/PromotionOrderPage.vue";
 import AddPromotionOrderPage from "../../modules/promotion/AddPromotionOrderPage.vue";
+import StaffManagementPage from "../../modules/account/StaffManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -27,12 +28,12 @@ export const adminRoutes = {
     {
       path: "manage-customer",
       name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT,
-      component: AccountManagementPage,
+      component: CustomerManagementPage,
     },
     {
       path: "manage-staff",
       name: ROUTE_NAMES.ADMIN.STAFF_MANAGEMENT,
-      component: AccountManagementPage,
+      component: StaffManagementPage,
     },
     {
       path: "manage-category",

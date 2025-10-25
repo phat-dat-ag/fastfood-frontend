@@ -28,8 +28,11 @@ function createEntityMessages(entityName: string): Message {
   };
 }
 
-export const ACCOUNT_MESSAGES = createEntityMessages(
-  "tài khoản khách hàng và nhân viên"
+export const CUSTOMER_ACCOUNT_MESSAGES = createEntityMessages(
+  "tài khoản khách hàng"
+);
+export const STAFF_ACCOUNT_MESSAGES = createEntityMessages(
+  "tài khoản nhân viên"
 );
 export const CATEGORY_MESSAGES = createEntityMessages("danh mục");
 export const PRODUCT_MESSAGES = createEntityMessages("sản phẩm");

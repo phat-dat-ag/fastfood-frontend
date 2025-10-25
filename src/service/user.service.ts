@@ -4,8 +4,12 @@ import type {
   EidtUserRequest,
 } from "../types/user.types";
 
-export const getAccounts = () => {
-  return api.get("/user");
+export const getAllCustomerAccounts = () => {
+  return api.get("/user/customers");
+};
+
+export const getAllStaffAccounts = () => {
+  return api.get("/user/staff");
 };
 
 export const updateAvatar = (file: File) => {
@@ -23,4 +27,8 @@ export const updateUserInformation = (data: EidtUserRequest) => {
 
 export const changePassword = (data: ChangePasswordRequest) => {
   return api.post("/user/change-password", data);
+};
+
+export const deleteUser = (phone: string) => {
+  return api.delete("/user", { params: { phone } });
 };

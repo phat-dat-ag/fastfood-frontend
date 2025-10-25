@@ -4,27 +4,27 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import type { User } from '../../types/user.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getAccounts } from '../../service/user.service';
-import { ACCOUNT_MESSAGES } from '../../constants/messages';
+import { deleteUser, getAllCustomerAccounts } from '../../service/user.service';
+import { CUSTOMER_ACCOUNT_MESSAGES } from '../../constants/messages';
 import AccountTable from './components/AccountTable.vue';
+import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 
-const accounts = ref<User[]>([]);
+const customerAccounts = ref<User[]>([]);
 
-async function loadAccounts() {
+async function loadCustomerAccounts() {
     await useApiHandler<User[]>(
-        getAccounts,
+        getAllCustomerAccounts,
         {
-            loading: ACCOUNT_MESSAGES.get,
-            error: ACCOUNT_MESSAGES.getError,
+            loading: CUSTOMER_ACCOUNT_MESSAGES.get,
+            error: CUSTOMER_ACCOUNT_MESSAGES.getError,
         },
-        (data: User[]) => accounts.value = data,
+        (data: User[]) => customerAccounts.value = data,
     )
 }
 
-onMounted(loadAccounts);
+onMounted(loadCustomerAccounts);
 
 const filterOptions: Filter[] = [
-    { label: 'Nhân viên', value: 'staff' },
     { label: 'Khách hàng', value: 'customer' },
     { label: 'Mới tham gia', value: 'new_member' },
     { label: 'Khách hàng tiềm năng', value: 'potential_customer' },
@@ -43,16 +43,32 @@ function handleSearchChange(searchText: string) {
     search.value = searchText;
     console.log(search.value);
 }
+
+async function deleteCustomerAccount(phone: string) {
+    const confirmed: boolean = await openConfirmDeleteMessage("Bạn muốn xóa tài khoản khách hàng này?");
+    if (!confirmed) return;
+
+    await useApiHandler(
+        () => deleteUser(phone),
+        {
+            loading: CUSTOMER_ACCOUNT_MESSAGES.delete,
+            success: CUSTOMER_ACCOUNT_MESSAGES.deleteSuccess,
+            error: CUSTOMER_ACCOUNT_MESSAGES.deleteError,
+        },
+        () => { },
+        loadCustomerAccounts,
+    )
+}
 </script>
 
 <template>
     <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
         <h2 class="text-2xl font-semibold text-orange-500">
-            Quản lý khách hàng và nhân viên
+            Quản lý khách hàng
         </h2>
         <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
             @update:filter="handleFilterChange" />
 
-        <AccountTable :accounts="accounts" />
+        <AccountTable :accounts="customerAccounts" @delete-account="deleteCustomerAccount" />
     </div>
 </template>

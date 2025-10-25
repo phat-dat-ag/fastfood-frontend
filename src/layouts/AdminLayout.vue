@@ -22,7 +22,7 @@ function signOut() {
                     <el-menu-item index="1-1" @click="router.push({ name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT })">
                         Khách hàng
                     </el-menu-item>
-                    <el-menu-item index="1-2" @click="router.push({ name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT })">
+                    <el-menu-item index="1-2" @click="router.push({ name: ROUTE_NAMES.ADMIN.STAFF_MANAGEMENT })">
                         Nhân viên
                     </el-menu-item>
                 </el-sub-menu>

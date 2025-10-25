@@ -87,7 +87,7 @@ async function handleAddToCart() {
                     {{ formatCurrencyVND(product.discountedPrice) }}
                 </span>
                 <span v-if="product.discountedPrice !== product.price" class="text-gray-400 line-through">
-                    {{ product.price }}₫
+                    {{ formatCurrencyVND(product.price) }}
                 </span>
             </div>
 
