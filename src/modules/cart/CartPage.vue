@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import type { CartResponse, PromotionCodeCheckResult } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
-import { ADDRESS_MESSAGE, CART_MESSAGE, PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
+import { ADDRESS_MESSAGE, CART_MESSAGE, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_MESSAGE } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
@@ -13,12 +13,18 @@ import { notifyError, notifySuccess } from '../../utils/notification.utils';
 import type { Address, AddressResponse } from '../../types/geocode.types';
 import { getAddresses } from '../../service/address.service';
 import type { DeliveryRequest } from '../../types/delivery.types';
+import { PAYMENT_METHODS } from '../../constants/payment-methods';
+import { createPaymentIntentApi } from '../../service/payment.service';
+import type { PaymentResponse } from '../../types/payment.types';
+import CheckoutModal from './components/CheckoutModal.vue';
 
 const selectedPromotionCode = ref<string>("");
 
 const cartDetail = ref<CartResponse | null>(null);
 
 const deliveryRequest = ref<DeliveryRequest | null>(null);
+
+const selectedPaymentMethod = ref<string>("");
 
 function handleCartResponse(data: CartResponse) {
     cartDetail.value = data;
@@ -128,15 +134,56 @@ async function onAddressChange(address: Address) {
     await loadCarts();
 }
 
+function onPaymentMethodChange(paymentMethod: string) {
+    if (paymentMethod === PAYMENT_METHODS.BANK_TRANSFER || paymentMethod === PAYMENT_METHODS.CASH_ON_DELIVERY)
+        selectedPaymentMethod.value = paymentMethod;
+    else {
+        selectedPaymentMethod.value = "";
+        notifyError("Lỗi chọn phương thức thanh toán. Hãy thử lại")
+    }
+}
+
+const isCheckoutModalVisible = ref(false);
+const clientSecret = ref<string | null>(null);
+
+async function createPaymentIntent() {
+    await useApiHandler<PaymentResponse>(
+        () => createPaymentIntentApi(selectedPromotionCode.value, deliveryRequest.value),
+        {
+            loading: STRIPE_PAYMENT_MESSAGE.create,
+            error: STRIPE_PAYMENT_MESSAGE.createError,
+        },
+        (data: PaymentResponse) => clientSecret.value = data.clientSecret,
+    )
+}
+
+async function placeOrder() {
+    if (!deliveryRequest.value) {
+        notifyError("Vui lòng chọn địa chỉ giao hàng!");
+        return;
+    }
+    if (!selectedPaymentMethod.value) {
+        notifyError("Vui lòng chọn hình thức thanh toán!");
+        return;
+    }
+    if (selectedPaymentMethod.value !== PAYMENT_METHODS.BANK_TRANSFER) return;
+
+    await createPaymentIntent();
+    isCheckoutModalVisible.value = true;
+}
+
 </script>
 <template>
     <div v-if="cartDetail && cartDetail.carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
         <CartList :carts="cartDetail.carts" @delete-product="handleDeleteProduct"
             @quantity-change="handleQuantityChange" />
         <CheckoutSummary :cartDetail="cartDetail" :promotions="promotions" :addresses="addresses"
-            @change-promotion="onPromotionCodeChange" @change-address="onAddressChange" />
+            @change-promotion="onPromotionCodeChange" @change-address="onAddressChange"
+            @change-payment-method="onPaymentMethodChange" @place-order="placeOrder" />
     </div>
     <div v-else>
         Giỏ hàng trống, hãy mua sắm thôi nào
     </div>
+
+    <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="isCheckoutModalVisible = false" />
 </template>

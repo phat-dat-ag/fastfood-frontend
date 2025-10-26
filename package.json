@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@goongmaps/goong-js": "^1.0.9",
+    "@stripe/stripe-js": "^8.1.0",
     "@types/three": "^0.180.0",
     "axios": "^1.12.2",
     "element-plus": "^2.11.2",

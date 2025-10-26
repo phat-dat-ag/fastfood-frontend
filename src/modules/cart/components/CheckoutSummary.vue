@@ -7,9 +7,10 @@ import type { Promotion } from "../../../types/promotion.types";
 import AddressSelection from "../../../components/addresses/AddressSelection.vue";
 import type { Address } from "../../../types/geocode.types";
 import { ElOption, ElSelect } from "element-plus";
+import { PAYMENT_METHODS } from "../../../constants/payment-methods";
 
 const props = defineProps<{ cartDetail: CartResponse; promotions: Promotion[]; addresses: Address[] }>();
-const emit = defineEmits(["change-promotion", "change-address"]);
+const emit = defineEmits(["change-promotion", "change-address", "change-payment-method", "place-order"]);
 
 const selectedPromotionCode = ref<string>("");
 
@@ -22,8 +23,15 @@ function onAddressChange(address: Address) {
   emit("change-address", address);
 }
 
+const selectedPaymentMethod = ref<string>("");
+
+function onPaymentMethodChange() {
+  if (selectedPaymentMethod.value)
+    emit("change-payment-method", selectedPaymentMethod.value);
+}
+
 function placeOrder() {
-  console.log("Đặt hàng");
+  emit("place-order");
 }
 </script>
 
@@ -86,6 +94,12 @@ function placeOrder() {
         <span>{{ formatCurrencyVND(cartDetail.totalPrice) }}</span>
       </p>
     </div>
+
+    <ElSelect v-model="selectedPaymentMethod" placeholder="Hình thức thanh toán" filterable class="w-full"
+      @change="onPaymentMethodChange">
+      <ElOption :value="PAYMENT_METHODS.BANK_TRANSFER" label="Thanh toán trực tuyến" />
+      <ElOption :value="PAYMENT_METHODS.CASH_ON_DELIVERY" label="Thanh toán khi nhận hàng" />
+    </ElSelect>
 
     <PrimaryButton label="Đặt hàng" :onClick="placeOrder" />
   </div>
