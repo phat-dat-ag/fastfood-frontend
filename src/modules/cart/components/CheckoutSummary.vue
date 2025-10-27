@@ -6,7 +6,7 @@ import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
 import AddressSelection from "../../../components/addresses/AddressSelection.vue";
 import type { Address } from "../../../types/geocode.types";
-import { ElOption, ElSelect } from "element-plus";
+import { ElInput, ElOption, ElSelect } from "element-plus";
 import { PAYMENT_METHODS } from "../../../constants/payment-methods";
 
 const props = defineProps<{ cartDetail: CartResponse; promotions: Promotion[]; addresses: Address[] }>();
@@ -30,8 +30,10 @@ function onPaymentMethodChange() {
     emit("change-payment-method", selectedPaymentMethod.value);
 }
 
+const userNote = ref<string>("");
+
 function placeOrder() {
-  emit("place-order");
+  emit("place-order", userNote.value);
 }
 </script>
 
@@ -100,6 +102,9 @@ function placeOrder() {
       <ElOption :value="PAYMENT_METHODS.BANK_TRANSFER" label="Thanh toán trực tuyến" />
       <ElOption :value="PAYMENT_METHODS.CASH_ON_DELIVERY" label="Thanh toán khi nhận hàng" />
     </ElSelect>
+
+    <ElInput v-model="userNote" type="textarea" :rows="2" maxlength="100" show-word-limit
+      placeholder="Ghi chú, ví dụ: Giao sau 18h, Lấy dụng cụ ăn uống,..." />
 
     <PrimaryButton label="Đặt hàng" :onClick="placeOrder" />
   </div>

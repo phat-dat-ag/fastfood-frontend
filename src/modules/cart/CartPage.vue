@@ -157,7 +157,7 @@ async function createPaymentIntent() {
     )
 }
 
-async function placeOrder() {
+async function placeOrder(userNote: string) {
     if (!deliveryRequest.value) {
         notifyError("Vui lòng chọn địa chỉ giao hàng!");
         return;
