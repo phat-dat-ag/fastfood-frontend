@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import type { CartResponse, PromotionCodeCheckResult } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
-import { ADDRESS_MESSAGE, CART_MESSAGE, CASH_ON_DELIVERY_ORDER, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_MESSAGE } from '../../constants/messages';
+import { ADDRESS_MESSAGE, CART_MESSAGE, CASH_ON_DELIVERY_ORDER, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_ORDER } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
@@ -14,11 +14,9 @@ import type { Address, AddressResponse } from '../../types/geocode.types';
 import { getAddresses } from '../../service/address.service';
 import type { DeliveryRequest } from '../../types/delivery.types';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
-import { createPaymentIntentApi } from '../../service/payment.service';
-import type { PaymentResponse } from '../../types/payment.types';
 import CheckoutModal from './components/CheckoutModal.vue';
 import type { Order, OrderCreateRequest } from '../../types/order.types';
-import { createCashOnDeliveryOrder } from '../../service/order.service';
+import { createCashOnDeliveryOrder, createStripePaymentOrder } from '../../service/order.service';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -150,17 +148,6 @@ function onPaymentMethodChange(paymentMethod: string) {
 const isCheckoutModalVisible = ref(false);
 const clientSecret = ref<string | null>(null);
 
-async function createPaymentIntent() {
-    await useApiHandler<PaymentResponse>(
-        () => createPaymentIntentApi(selectedPromotionCode.value, deliveryRequest.value),
-        {
-            loading: STRIPE_PAYMENT_MESSAGE.create,
-            error: STRIPE_PAYMENT_MESSAGE.createError,
-        },
-        (data: PaymentResponse) => clientSecret.value = data.clientSecret,
-    )
-}
-
 async function placeOrder(userNote: string) {
     if (!deliveryRequest.value) {
         notifyError("Vui lòng chọn địa chỉ giao hàng!");
@@ -170,12 +157,12 @@ async function placeOrder(userNote: string) {
         notifyError("Vui lòng chọn hình thức thanh toán!");
         return;
     }
+    const dataRequest: OrderCreateRequest = {
+        promotionCode: selectedPromotionCode.value,
+        addressId: deliveryRequest.value.addressId,
+        userNote,
+    }
     if (selectedPaymentMethod.value == PAYMENT_METHODS.CASH_ON_DELIVERY) {
-        const dataRequest: OrderCreateRequest = {
-            promotionCode: selectedPromotionCode.value,
-            addressId: deliveryRequest.value.addressId,
-            userNote,
-        }
         await useApiHandler<Order>(
             () => createCashOnDeliveryOrder(dataRequest),
             {
@@ -185,11 +172,18 @@ async function placeOrder(userNote: string) {
             },
             () => router.back(),
         )
-        return;
+    } else {
+        await useApiHandler<Order>(
+            () => createStripePaymentOrder(dataRequest),
+            {
+                loading: STRIPE_PAYMENT_ORDER.create,
+                error: STRIPE_PAYMENT_ORDER.createError,
+                success: STRIPE_PAYMENT_ORDER.createSuccess,
+            },
+            (data: Order) => { clientSecret.value = data.clientSecret },
+        )
+        isCheckoutModalVisible.value = true;
     }
-
-    await createPaymentIntent();
-    isCheckoutModalVisible.value = true;
 }
 
 </script>

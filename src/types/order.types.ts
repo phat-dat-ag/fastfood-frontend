@@ -17,4 +17,5 @@ export interface Order {
   originalPrice: string;
   subtotalPrice: string;
   deliveryFee: string;
+  clientSecret: string | null;
 }

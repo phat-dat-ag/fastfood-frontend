@@ -47,9 +47,9 @@ export const PROMOTION_ORDER_MESSAGE = createEntityMessages(
   "mã khuyến mãi cho đơn hàng"
 );
 export const ADDRESS_MESSAGE = createEntityMessages("địa chỉ giao hàng");
-export const STRIPE_PAYMENT_MESSAGE = createEntityMessages(
-  "thanh toán qua Stripe"
-);
 export const CASH_ON_DELIVERY_ORDER = createEntityMessages(
   "đơn thanh toán khi nhận hàng"
+);
+export const STRIPE_PAYMENT_ORDER = createEntityMessages(
+  "đơn thanh toán qua Stripe"
 );
