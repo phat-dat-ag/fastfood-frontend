@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import type { CartResponse, PromotionCodeCheckResult } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
-import { ADDRESS_MESSAGE, CART_MESSAGE, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_MESSAGE } from '../../constants/messages';
+import { ADDRESS_MESSAGE, CART_MESSAGE, CASH_ON_DELIVERY_ORDER, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_MESSAGE } from '../../constants/messages';
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
@@ -17,6 +17,11 @@ import { PAYMENT_METHODS } from '../../constants/payment-methods';
 import { createPaymentIntentApi } from '../../service/payment.service';
 import type { PaymentResponse } from '../../types/payment.types';
 import CheckoutModal from './components/CheckoutModal.vue';
+import type { Order, OrderCreateRequest } from '../../types/order.types';
+import { createCashOnDeliveryOrder } from '../../service/order.service';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const selectedPromotionCode = ref<string>("");
 
@@ -165,7 +170,23 @@ async function placeOrder(userNote: string) {
         notifyError("Vui lòng chọn hình thức thanh toán!");
         return;
     }
-    if (selectedPaymentMethod.value !== PAYMENT_METHODS.BANK_TRANSFER) return;
+    if (selectedPaymentMethod.value == PAYMENT_METHODS.CASH_ON_DELIVERY) {
+        const dataRequest: OrderCreateRequest = {
+            promotionCode: selectedPromotionCode.value,
+            addressId: deliveryRequest.value.addressId,
+            userNote,
+        }
+        await useApiHandler<Order>(
+            () => createCashOnDeliveryOrder(dataRequest),
+            {
+                loading: CASH_ON_DELIVERY_ORDER.create,
+                error: CASH_ON_DELIVERY_ORDER.createError,
+                success: CASH_ON_DELIVERY_ORDER.createSuccess,
+            },
+            () => router.back(),
+        )
+        return;
+    }
 
     await createPaymentIntent();
     isCheckoutModalVisible.value = true;
