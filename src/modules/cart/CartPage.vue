@@ -125,10 +125,9 @@ async function onPromotionCodeChange(promotionCode: string) {
     await loadCarts();
 }
 
-async function onAddressChange(address: Address) {
+async function onAddressChange(addressId: number) {
     const dataRequest: DeliveryRequest = {
-        customerLatitude: address.latitude,
-        customerLongitude: address.longitude,
+        addressId: addressId,
     };
     deliveryRequest.value = dataRequest;
     await loadCarts();

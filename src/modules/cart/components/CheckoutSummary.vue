@@ -19,8 +19,8 @@ async function onPromotionCodeChange() {
   emit("change-promotion", code);
 }
 
-function onAddressChange(address: Address) {
-  emit("change-address", address);
+function onAddressChange(addressId: number) {
+  emit("change-address", addressId);
 }
 
 const selectedPaymentMethod = ref<string>("");

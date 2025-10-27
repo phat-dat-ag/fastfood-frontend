@@ -13,10 +13,7 @@ const selectedAddressId = ref<number | undefined>(undefined);
 
 function onAddressChange(value: number) {
     if (!value) return;
-    const selectedAddress = props.addresses.find(address => address.id === value);
-    if (selectedAddress) {
-        emit("change-address", selectedAddress);
-    }
+    emit("change-address", selectedAddressId);
 }
 
 </script>

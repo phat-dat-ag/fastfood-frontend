@@ -1,6 +1,5 @@
 export interface DeliveryRequest {
-  customerLatitude: number;
-  customerLongitude: number;
+  addressId: number;
 }
 
 export interface DeliveryResponse {
