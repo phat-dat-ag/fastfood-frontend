@@ -1,4 +1,4 @@
-import type { ParsedAddress } from "../types/geocode.types";
+import type { Address, ParsedAddress } from "../types/geocode.types";
 
 export function parseAddressComponents(
   components: any[],
@@ -26,4 +26,18 @@ export function parseAddressComponents(
     latitude: lat,
     longitude: lng,
   };
+}
+
+export function getDetailAddress(address: Address): string {
+  const detail: string = address.detail ? address.detail + ", " : "";
+  return (
+    detail +
+    address.street +
+    ", " +
+    address.ward +
+    ", " +
+    address.district +
+    ", " +
+    address.province
+  );
 }

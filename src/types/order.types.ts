@@ -1,3 +1,6 @@
+import type { Address } from "./geocode.types";
+import type { User } from "./user.types";
+
 export interface OrderCreateRequest {
   userNote: string;
   promotionCode: string;
@@ -7,7 +10,7 @@ export interface OrderCreateRequest {
 export interface Order {
   id: number;
   orderStatus: string;
-  placedAt: string | null;
+  placedAt: string;
   confirmedAt: string | null;
   deliveringAt: string | null;
   deliveredAt: string | null;
@@ -17,5 +20,11 @@ export interface Order {
   originalPrice: string;
   subtotalPrice: string;
   deliveryFee: string;
+  address: Address;
+  user: User;
   clientSecret: string | null;
+}
+
+export interface OrderResponse {
+  orders: Order[];
 }

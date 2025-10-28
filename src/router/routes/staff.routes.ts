@@ -4,7 +4,7 @@ import StaffLayout from "../../layouts/StaffLayout.vue";
 import CartPage from "../../modules/cart/CartPage.vue";
 import ChallengePage from "../../modules/challenge/ChallengePage.vue";
 import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
-import StaffOrderDetailPage from "../../modules/order/StaffOrderDetailPage.vue";
+import StaffOrderManagementPage from "../../modules/order/StaffOrderManagementPage.vue";
 import ProductDetail from "../../modules/products/ProductDetail.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
 import ChangePasswordPage from "../../modules/profile/pages/ChangePasswordPage.vue";
@@ -61,7 +61,7 @@ export const staffRoutes = {
     {
       path: "order-detail",
       name: ROUTE_NAMES.STAFF.ORDER_MANAGEMENT,
-      component: StaffOrderDetailPage,
+      component: StaffOrderManagementPage,
     },
   ],
 };

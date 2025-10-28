@@ -1,0 +1,52 @@
+<script setup lang="ts">
+import { useApiHandler } from '../../composables/useApiHandler';
+import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
+import { getUnfinishedOrder } from '../../service/order.service';
+import { onMounted, ref } from 'vue';
+import type { Order, OrderResponse } from '../../types/order.types';
+import StaffOrderTable from './components/StaffOrderTable.vue';
+import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
+import StaffOrderModal from './components/StaffOrderModal.vue';
+
+const orders = ref<Order[]>([]);
+
+async function loadUnfinishedOrders() {
+    await useApiHandler<OrderResponse>(
+        getUnfinishedOrder,
+        {
+            loading: STAFF_MANAGEMENT_ORDER_MESSAGE.get,
+            error: STAFF_MANAGEMENT_ORDER_MESSAGE.getError,
+        },
+        (data: OrderResponse) => orders.value = data.orders,
+    )
+}
+
+onMounted(loadUnfinishedOrders);
+
+const isStaffOrderModalVisible = ref<boolean>(false);
+
+const selectedOrder = ref<Order | null>(null);
+
+function handleUpdateOrder(order: Order) {
+    isStaffOrderModalVisible.value = true;
+    selectedOrder.value = order;
+}
+
+</script>
+<template>
+    <div class="mx-auto space-y-6">
+        <div
+            class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold drop-shadow-md">📦 Quản lý đơn hàng</h1>
+                <p class="text-white/90 mt-1">Theo dõi, cập nhật và quản lý đơn hàng tại đây!</p>
+            </div>
+            <div class="w-[20%]">
+                <PrimaryButton label="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
+            </div>
+        </div>
+        <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
+    </div>
+    <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder"
+        @close="isStaffOrderModalVisible = false" />
+</template>

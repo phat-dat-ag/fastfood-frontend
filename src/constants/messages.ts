@@ -53,3 +53,6 @@ export const CASH_ON_DELIVERY_ORDER = createEntityMessages(
 export const STRIPE_PAYMENT_ORDER = createEntityMessages(
   "đơn thanh toán qua Stripe"
 );
+export const STAFF_MANAGEMENT_ORDER_MESSAGE = createEntityMessages(
+  "đơn hàng cho nhân viên quản lý"
+);
