@@ -6,6 +6,7 @@ import { formatCurrencyVND } from '../../../utils/currency.utils';
 import { getOrderTagType, getPaymentTagType, ORDER_STATUS_TEXT, PAYMENT_METHOD_TEXT, PAYMENT_STATUS_TEXT } from '../../../utils/order-display.utils';
 import EditButton from '../../../components/buttons/EditButton.vue';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
+import { getDetailAddress } from '../../../utils/geocode.utils';
 
 const props = defineProps<{
     orders: Order[];
@@ -81,7 +82,7 @@ const props = defineProps<{
 
                 <ElTableColumn label="Địa chỉ" min-width="180">
                     <template #default="scope">
-                        <ElTooltip :content="scope.row.address.detail" placement="top">
+                        <ElTooltip :content="getDetailAddress(scope.row.address)" placement="top">
                             <span class="text-gray-600 truncate">
                                 {{ scope.row.address.district }}, {{ scope.row.address.province }}
                             </span>
@@ -99,7 +100,6 @@ const props = defineProps<{
                 </ElTableColumn>
             </ElTable>
         </div>
-
     </div>
 </template>
 
