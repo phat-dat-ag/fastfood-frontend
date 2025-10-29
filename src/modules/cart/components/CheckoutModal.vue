@@ -3,6 +3,8 @@ import { ref, watch, onBeforeUnmount } from "vue";
 import { ElDialog } from "element-plus";
 import { loadStripe, type Stripe, type StripeElements } from "@stripe/stripe-js";
 import { notifyError, notifySuccess } from "../../../utils/notification.utils";
+import { closeLoading, openLoading } from "../../../utils/loading.utils";
+import { useRouter } from "vue-router";
 
 const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
@@ -15,9 +17,6 @@ const emit = defineEmits(["close"]);
 const isVisible = ref(true);
 const stripe = ref<Stripe | null>(null);
 const elements = ref<StripeElements | null>(null);
-const paymentMessage = ref<string>("");
-const paymentStatus = ref<"success" | "error" | null>(null);
-const isLoading = ref(false);
 
 watch(
     () => props.clientSecret,
@@ -58,28 +57,33 @@ onBeforeUnmount(() => {
     });
 });
 
+const router = useRouter();
+
 async function handleSubmit() {
     if (!stripe.value || !elements.value || !props.clientSecret)
         return notifyError("Stripe chưa sẵn sàng!");
 
-    isLoading.value = true;
+    const loading = openLoading("Đang thanh toán");
 
-    const { paymentIntent, error } = await stripe.value.confirmCardPayment(props.clientSecret, {
-        payment_method: {
-            card: elements.value.getElement("cardNumber")!,
-            billing_details: { name: "Khách hàng test" },
-        },
-    });
+    try {
+        const { paymentIntent, error } = await stripe.value.confirmCardPayment(props.clientSecret, {
+            payment_method: {
+                card: elements.value.getElement("cardNumber")!,
+                billing_details: { name: "Khách hàng test" },
+            },
+        });
 
-    isLoading.value = false;
-
-    if (error) {
-        paymentStatus.value = "error";
-        paymentMessage.value = "Thanh toán thất bại: " + error.message;
-    } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        paymentStatus.value = "success";
-        paymentMessage.value = "Thanh toán thành công!";
-        notifySuccess("Thanh toán thành công!");
+        if (error) {
+            notifyError(error.message || "Hãy thử lại", "Thanh toán thất bại");
+        } else if (paymentIntent && paymentIntent.status === "succeeded") {
+            notifySuccess("Thanh toán thành công, hãy theo dõi đơn hàng nhé!");
+            isVisible.value = false;
+            router.back();
+        }
+    } catch (error: any) {
+        notifyError("Lỗi thanh toán: ", error.messaage);
+    } finally {
+        closeLoading(loading);
     }
 }
 </script>
@@ -110,20 +114,10 @@ async function handleSubmit() {
                 </div>
             </div>
 
-            <button type="submit" :disabled="isLoading"
+            <button type="submit"
                 class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold py-3 rounded-xl shadow hover:opacity-90 transition disabled:opacity-60">
-                <span v-if="!isLoading">💳 Thanh toán ngay</span>
-                <span v-else>Đang xử lý...</span>
+                <span>Thanh toán ngay</span>
             </button>
-
-            <div v-if="paymentMessage" class="text-center mt-4">
-                <p :class="{
-                    'text-green-600 font-medium': paymentStatus === 'success',
-                    'text-red-600 font-medium': paymentStatus === 'error'
-                }">
-                    {{ paymentMessage }}
-                </p>
-            </div>
         </form>
     </ElDialog>
 </template>
