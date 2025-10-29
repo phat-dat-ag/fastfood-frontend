@@ -20,3 +20,7 @@ export const confirmOrder = (orderId: number) => {
 export const markAsDelivering = (orderId: number) => {
   return api.put("/order/mark-delivering", null, { params: { orderId } });
 };
+
+export const markAsDelivered = (orderId: number) => {
+  return api.put("/order/mark-delivered", null, { params: { orderId } });
+};

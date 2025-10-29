@@ -19,7 +19,7 @@ const props = defineProps<{
     order: Order;
 }>();
 
-const emit = defineEmits(["close", "update-status", "confirm-order", "mark-delivering"]);
+const emit = defineEmits(["close", "update-status", "confirm-order", "mark-delivering", "mark-delivered"]);
 
 const isVisible = ref<boolean>(true);
 
@@ -44,7 +44,7 @@ const isVisible = ref<boolean>(true);
                     <p>
                         <span class="font-semibold">Tổng tiền:</span>
                         <span class="text-orange-600 font-bold">{{ formatCurrencyVND(props.order.subtotalPrice)
-                            }}</span>
+                        }}</span>
                     </p>
                 </div>
             </section>
@@ -85,7 +85,7 @@ const isVisible = ref<boolean>(true);
                             :onClick="() => emit('confirm-order', props.order.id)" />
                         <PrimaryButton v-else-if="props.order.orderStatus === ORDER_STATUS.CONFIRMED"
                             label="Giao hàng ngay" :onClick="() => emit('mark-delivering', props.order.id)" />
-                        <PrimaryButton v-else label="Đã giao" />
+                        <PrimaryButton v-else label="Đã giao" :onClick="() => emit('mark-delivered', props.order.id)" />
                     </div>
 
                     <div class="flex mt-2">
