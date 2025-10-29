@@ -78,6 +78,15 @@ function goToProfilePage() {
     else notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
 }
 
+function goToOrderHistoryPage() {
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.USER)
+        router.push({ name: ROUTE_NAMES.USER.ORDER_HISTORY });
+    else if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.ORDER_HISTORY });
+    else notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
+}
+
 const goTo = (routeName: string) => router.push({ name: routeName });
 
 interface UserIcon {
@@ -158,7 +167,8 @@ const userIcons = computed<UserIcon[]>(() => {
                 </template>
 
                 <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
-                    @goToProfilePage="goToProfilePage" @signOut="signOut"
+                    @go-to-profile-page="goToProfilePage" @go-to-order-history-page="goToOrderHistoryPage"
+                    @signOut="signOut"
                     class="w-9 h-9 rounded-full ring-2 ring-white/70 hover:ring-white transition-all duration-300 shadow-md" />
             </template>
 

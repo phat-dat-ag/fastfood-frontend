@@ -4,6 +4,7 @@ import UserLayout from "../../layouts/UserLayout.vue";
 import CartPage from "../../modules/cart/CartPage.vue";
 import ChallengePage from "../../modules/challenge/ChallengePage.vue";
 import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
+import OrderHistoryPage from "../../modules/order/OrderHistoryPage.vue";
 import OrderTrackingPage from "../../modules/order/OrderTrackingPage.vue";
 import ProductDetail from "../../modules/products/ProductDetail.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
@@ -62,6 +63,11 @@ export const userRoutes = {
       path: "order-tracking",
       name: ROUTE_NAMES.USER.ORDER_TRACKING,
       component: OrderTrackingPage,
+    },
+    {
+      path: "order-history",
+      name: ROUTE_NAMES.USER.ORDER_HISTORY,
+      component: OrderHistoryPage,
     },
   ],
 };

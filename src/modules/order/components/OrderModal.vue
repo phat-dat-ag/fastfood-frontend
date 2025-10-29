@@ -12,7 +12,7 @@ import OrderTimeline from './OrderTimeline.vue';
 import { PAYMENT_STATUS } from '../../../constants/payment-status';
 import { PAYMENT_METHODS } from '../../../constants/payment-methods';
 
-const props = defineProps<{ order: Order; isStaff: boolean }>();
+const props = defineProps<{ order: Order; isStaff: boolean; canCancelOrder: boolean }>();
 const emit = defineEmits([
     "close",
     "update-status",
@@ -83,7 +83,7 @@ const isVisible = ref(true);
                     <PrimaryButton v-else-if="props.isStaff" label="Đánh dấu đã giao"
                         :onClick="() => emit('mark-delivered', props.order.id)" />
                     <DeleteButton
-                        v-if="!props.order.deliveringAt && !(props.order.paymentStatus === PAYMENT_STATUS.PAID && props.order.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER)"
+                        v-if="props.canCancelOrder && !props.order.deliveringAt && !(props.order.paymentStatus === PAYMENT_STATUS.PAID && props.order.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER)"
                         label="Hủy đơn hàng" :onClick="() => emit('cancel-order', props.order)" />
                 </section>
             </div>

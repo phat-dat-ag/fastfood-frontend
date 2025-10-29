@@ -9,8 +9,8 @@ export const createStripePaymentOrder = (data: OrderCreateRequest) => {
   return api.post("/order/stripe-payment", data);
 };
 
-export const getUnfinishedOrder = () => {
-  return api.get("/order/unfinished-orders/all");
+export const getUnfinishedOrderByStaff = () => {
+  return api.get("/order/unfinished-orders/by-staff");
 };
 
 export const confirmOrder = (orderId: number) => {
@@ -43,4 +43,8 @@ export const cancelOrderByStaff = (orderId: number, reason: string) => {
 
 export const getUnfinishedOrderByUser = () => {
   return api.get("/order/unfinished-orders/by-user");
+};
+
+export const getAllOrderByUser = () => {
+  return api.get("/order/all/by-user");
 };

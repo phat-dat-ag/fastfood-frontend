@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { cancelOrderByStaff, confirmOrder, getUnfinishedOrder, markAsDelivered, markAsDelivering } from '../../service/order.service';
+import { cancelOrderByStaff, confirmOrder, getUnfinishedOrderByStaff, markAsDelivered, markAsDelivering } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/StaffOrderTable.vue';
@@ -13,7 +13,7 @@ const orders = ref<Order[]>([]);
 
 async function loadUnfinishedOrders() {
     await useApiHandler<OrderResponse>(
-        getUnfinishedOrder,
+        getUnfinishedOrderByStaff,
         {
             loading: STAFF_MANAGEMENT_ORDER_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_MESSAGE.getError,
@@ -104,6 +104,6 @@ async function handleMarkDelivered(orderId: number) {
             :handleCancelOrder="handleCancelOrder" />
     </div>
     <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder" :isStaff=true
-        @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder"
+        :canCancelOrder="true" @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder"
         @mark-delivered="handleMarkDelivered" @mark-delivering="handleMarkDelivering" />
 </template>

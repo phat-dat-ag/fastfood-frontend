@@ -59,3 +59,4 @@ export const STAFF_MANAGEMENT_ORDER_MESSAGE = createEntityMessages(
 export const ORDER_TRACKING_MESSAGE = createEntityMessages(
   "các đơn hàng đang giao"
 );
+export const ORDER_HISTORY_MESSAGE = createEntityMessages("lịch sử giao hàng");
