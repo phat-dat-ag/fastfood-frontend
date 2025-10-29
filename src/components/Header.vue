@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { ElBadge, ElTooltip } from "element-plus";
+import { ElTooltip } from "element-plus";
 import { useUserStore } from "../store/useUserStore.store";
 import { Box, ShoppingCartFull, Van } from "@element-plus/icons-vue";
 import { notifyError } from "../utils/notification.utils";
@@ -84,7 +84,6 @@ interface UserIcon {
     icon: any;
     tooltip: string;
     route: string;
-    value: number;
 }
 
 const userIcons = computed<UserIcon[]>(() => {
@@ -98,7 +97,6 @@ const userIcons = computed<UserIcon[]>(() => {
                 role === USER_ROLES.STAFF
                     ? ROUTE_NAMES.STAFF.CART
                     : ROUTE_NAMES.USER.CART,
-            value: 30,
         },
         {
             icon: Van,
@@ -107,7 +105,6 @@ const userIcons = computed<UserIcon[]>(() => {
                 role === USER_ROLES.STAFF
                     ? ROUTE_NAMES.STAFF.ORDER_TRACKING
                     : ROUTE_NAMES.USER.ORDER_TRACKING,
-            value: 30,
         },
     ];
 
@@ -116,7 +113,6 @@ const userIcons = computed<UserIcon[]>(() => {
             icon: Box,
             tooltip: "Đơn hàng cần duyệt",
             route: ROUTE_NAMES.STAFF.ORDER_MANAGEMENT,
-            value: 400,
         });
     }
 
@@ -153,14 +149,12 @@ const userIcons = computed<UserIcon[]>(() => {
         <div class="flex items-center justify-end gap-6 w-[20%]">
             <template v-if="props.role === USER_ROLES.USER || props.role === USER_ROLES.STAFF">
                 <template v-for="(item) in userIcons" :key="index">
-                    <ElBadge :value="item.value" :max="item.icon === Box ? 50 : 10">
-                        <ElTooltip :content="item.tooltip" placement="bottom">
-                            <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
-                                @click="() => goTo(item.route)">
-                                <component :is="item.icon" />
-                            </el-icon>
-                        </ElTooltip>
-                    </ElBadge>
+                    <ElTooltip :content="item.tooltip" placement="bottom">
+                        <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
+                            @click="() => goTo(item.route)">
+                            <component :is="item.icon" />
+                        </el-icon>
+                    </ElTooltip>
                 </template>
 
                 <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"

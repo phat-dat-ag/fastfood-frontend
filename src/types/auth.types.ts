@@ -1,12 +1,10 @@
 import type { User } from "./user.types";
 
-// response for sign up and forget password
 export interface OTPResponseType {
   phone: string;
   expiredAt: string;
 }
 
-// sign up
 export interface SignUpRequest {
   name: string;
   phone: string;
@@ -20,7 +18,6 @@ export interface SignUpConfirmRequest {
   otp: string;
 }
 
-// sign in
 export interface SignInRequest {
   phone: string;
   password: string;
@@ -31,7 +28,6 @@ export interface SignInResponse {
   user: User;
 }
 
-// forget password
 export interface ForgetPasswordRequest {
   phone: string;
   newPassword: string;

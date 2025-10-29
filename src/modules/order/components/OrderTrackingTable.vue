@@ -14,7 +14,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="min-h-screen">
+    <div>
         <div class="bg-white/95 rounded-2xl shadow-lg border border-orange-100 overflow-hidden">
             <ElTable :data="props.orders" border stripe class="w-full"
                 :header-cell-style="{ background: '#FFF3E0', color: '#B45309', fontWeight: 600, fontSize: '14px' }">
