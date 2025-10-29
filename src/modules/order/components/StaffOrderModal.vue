@@ -19,7 +19,7 @@ const props = defineProps<{
     order: Order;
 }>();
 
-const emit = defineEmits(["close", "update-status", "confirm-order"]);
+const emit = defineEmits(["close", "update-status", "confirm-order", "mark-delivering"]);
 
 const isVisible = ref<boolean>(true);
 
@@ -84,7 +84,7 @@ const isVisible = ref<boolean>(true);
                         <PrimaryButton v-if="props.order.orderStatus === ORDER_STATUS.PENDING" label="Xác nhận ngay"
                             :onClick="() => emit('confirm-order', props.order.id)" />
                         <PrimaryButton v-else-if="props.order.orderStatus === ORDER_STATUS.CONFIRMED"
-                            label="Giao hàng ngay" />
+                            label="Giao hàng ngay" :onClick="() => emit('mark-delivering', props.order.id)" />
                         <PrimaryButton v-else label="Đã giao" />
                     </div>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { confirmOrder, getUnfinishedOrder } from '../../service/order.service';
+import { confirmOrder, getUnfinishedOrder, markAsDelivering } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/StaffOrderTable.vue';
@@ -45,6 +45,19 @@ async function handleConfirmOrder(orderId: number) {
     )
 }
 
+async function handleMarkDelivering(orderId: number) {
+    await useApiHandler<Order>(
+        () => markAsDelivering(orderId),
+        {
+            loading: "Đang đánh dấu đơn hàng",
+            error: "Lỗi đánh dấu đơn hàng",
+            success: "Đơn hàng đã được đánh dấu là đang giao hàng",
+        },
+        () => isStaffOrderModalVisible.value = false,
+        loadUnfinishedOrders
+    )
+}
+
 </script>
 <template>
     <div class="mx-auto space-y-6">
@@ -61,5 +74,6 @@ async function handleConfirmOrder(orderId: number) {
         <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
     <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder"
-        @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder" />
+        @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder"
+        @mark-delivering="handleMarkDelivering" />
 </template>

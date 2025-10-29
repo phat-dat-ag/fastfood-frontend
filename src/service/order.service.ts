@@ -16,3 +16,7 @@ export const getUnfinishedOrder = () => {
 export const confirmOrder = (orderId: number) => {
   return api.put("/order/confirm", null, { params: { orderId } });
 };
+
+export const markAsDelivering = (orderId: number) => {
+  return api.put("/order/mark-delivering", null, { params: { orderId } });
+};
