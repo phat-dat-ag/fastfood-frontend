@@ -56,3 +56,6 @@ export const STRIPE_PAYMENT_ORDER = createEntityMessages(
 export const STAFF_MANAGEMENT_ORDER_MESSAGE = createEntityMessages(
   "đơn hàng cho nhân viên quản lý"
 );
+export const ORDER_TRACKING_MESSAGE = createEntityMessages(
+  "các đơn hàng đang giao"
+);

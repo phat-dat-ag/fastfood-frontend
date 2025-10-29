@@ -24,3 +24,15 @@ export const markAsDelivering = (orderId: number) => {
 export const markAsDelivered = (orderId: number) => {
   return api.put("/order/mark-delivered", null, { params: { orderId } });
 };
+
+export const cancelOrder = (orderId: number, reason: string) => {
+  return api.put(
+    "/order/user/cancel-order",
+    { reason },
+    { params: { orderId } }
+  );
+};
+
+export const getUnfinishedOrderByUser = () => {
+  return api.get("/order/unfinished-orders/by-user");
+};

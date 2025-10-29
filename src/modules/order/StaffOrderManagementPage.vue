@@ -6,7 +6,7 @@ import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/StaffOrderTable.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
-import StaffOrderModal from './components/StaffOrderModal.vue';
+import StaffOrderModal from './components/OrderModal.vue';
 
 const orders = ref<Order[]>([]);
 
@@ -86,7 +86,7 @@ async function handleMarkDelivered(orderId: number) {
         </div>
         <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
-    <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder"
+    <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder" :isStaff=true
         @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder"
         @mark-delivered="handleMarkDelivered" @mark-delivering="handleMarkDelivering" />
 </template>

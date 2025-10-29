@@ -9,14 +9,17 @@ import { ORDER_STATUS } from '../../../constants/order-status';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
 import OrderTimeline from './OrderTimeline.vue';
+import { PAYMENT_STATUS } from '../../../constants/payment-status';
+import { PAYMENT_METHODS } from '../../../constants/payment-methods';
 
-const props = defineProps<{ order: Order }>();
+const props = defineProps<{ order: Order; isStaff: boolean }>();
 const emit = defineEmits([
     "close",
     "update-status",
     "confirm-order",
     "mark-delivering",
-    "mark-delivered"
+    "mark-delivered",
+    "cancel-order",
 ]);
 
 const isVisible = ref(true);
@@ -73,14 +76,15 @@ const isVisible = ref(true);
                 </section>
 
                 <section class="mt-5 flex flex-col gap-3">
-                    <PrimaryButton v-if="props.order.orderStatus === ORDER_STATUS.PENDING" label="Xác nhận đơn"
-                        :onClick="() => emit('confirm-order', props.order.id)" />
-                    <PrimaryButton v-else-if="props.order.orderStatus === ORDER_STATUS.CONFIRMED" label="Giao hàng ngay"
-                        :onClick="() => emit('mark-delivering', props.order.id)" />
-                    <PrimaryButton v-else label="Đánh dấu đã giao"
+                    <PrimaryButton v-if="props.isStaff && props.order.orderStatus === ORDER_STATUS.PENDING"
+                        label="Xác nhận đơn" :onClick="() => emit('confirm-order', props.order.id)" />
+                    <PrimaryButton v-else-if="props.isStaff && props.order.orderStatus === ORDER_STATUS.CONFIRMED"
+                        label="Giao hàng ngay" :onClick="() => emit('mark-delivering', props.order.id)" />
+                    <PrimaryButton v-else-if="props.isStaff" label="Đánh dấu đã giao"
                         :onClick="() => emit('mark-delivered', props.order.id)" />
-
-                    <DeleteButton label="Hủy đơn hàng" :onClick="() => console.log('Hủy đơn')" />
+                    <DeleteButton
+                        v-if="!props.order.deliveringAt && !(props.order.paymentStatus === PAYMENT_STATUS.PAID && props.order.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER)"
+                        label="Hủy đơn hàng" :onClick="() => emit('cancel-order', props.order)" />
                 </section>
             </div>
         </div>
