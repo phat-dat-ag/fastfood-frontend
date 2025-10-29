@@ -23,8 +23,15 @@ export const openCancelOrderConfirm = async (): Promise<string | null> => {
         cancelButtonText: "Hủy",
         type: "warning",
         inputPlaceholder: "Nhập lý do...",
-        inputPattern: /.+/,
-        inputErrorMessage: "Vui lòng nhập lý do hủy đơn!",
+        inputValidator: (value: string) => {
+          if (!value || !value.trim()) {
+            return "Vui lòng nhập lý do hủy đơn!";
+          }
+          if (value.trim().length > 100) {
+            return "Lý do không được vượt quá 100 ký tự!";
+          }
+          return true;
+        },
       }
     );
     return reason.value.trim();

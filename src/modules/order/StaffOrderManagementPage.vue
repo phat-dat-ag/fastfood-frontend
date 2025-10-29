@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { confirmOrder, getUnfinishedOrder, markAsDelivered, markAsDelivering } from '../../service/order.service';
+import { cancelOrderByStaff, confirmOrder, getUnfinishedOrder, markAsDelivered, markAsDelivering } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/StaffOrderTable.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import StaffOrderModal from './components/OrderModal.vue';
+import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
 
 const orders = ref<Order[]>([]);
 
@@ -30,6 +31,21 @@ const selectedOrder = ref<Order | null>(null);
 function handleUpdateOrder(order: Order) {
     isStaffOrderModalVisible.value = true;
     selectedOrder.value = order;
+}
+
+async function handleCancelOrder(order: Order) {
+    const reason: string | null = await openCancelOrderConfirm();
+    if (!reason) return;
+    await useApiHandler<Order>(
+        () => cancelOrderByStaff(order.id, reason),
+        {
+            loading: "Đang hủy đơn cho khách",
+            error: "Lỗi hủy đơn cho khách",
+            success: "Hủy đơn cho khách thành công",
+        },
+        () => { },
+        loadUnfinishedOrders
+    )
 }
 
 async function handleConfirmOrder(orderId: number) {
@@ -84,7 +100,8 @@ async function handleMarkDelivered(orderId: number) {
                 <PrimaryButton label="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
             </div>
         </div>
-        <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
+        <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder"
+            :handleCancelOrder="handleCancelOrder" />
     </div>
     <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder" :isStaff=true
         @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder"

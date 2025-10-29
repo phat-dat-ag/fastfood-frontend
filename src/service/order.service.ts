@@ -33,6 +33,14 @@ export const cancelOrder = (orderId: number, reason: string) => {
   );
 };
 
+export const cancelOrderByStaff = (orderId: number, reason: string) => {
+  return api.put(
+    "/order/staff/cancel-order",
+    { reason },
+    { params: { orderId } }
+  );
+};
+
 export const getUnfinishedOrderByUser = () => {
   return api.get("/order/unfinished-orders/by-user");
 };

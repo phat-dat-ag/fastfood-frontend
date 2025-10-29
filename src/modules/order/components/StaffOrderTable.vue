@@ -6,10 +6,12 @@ import { formatCurrencyVND } from '../../../utils/currency.utils';
 import { getOrderTagType, getPaymentTagType, ORDER_STATUS_TEXT, PAYMENT_METHOD_TEXT, PAYMENT_STATUS_TEXT } from '../../../utils/order-display.utils';
 import EditButton from '../../../components/buttons/EditButton.vue';
 import { getDetailAddress } from '../../../utils/geocode.utils';
+import DeleteButton from '../../../components/buttons/DeleteButton.vue';
 
 const props = defineProps<{
     orders: Order[];
     handleUpdateOrder: (order: Order) => void;
+    handleCancelOrder: (order: Order) => Promise<void>;
 }>();
 </script>
 
@@ -91,7 +93,10 @@ const props = defineProps<{
 
                 <ElTableColumn label="Hành động" width="120" fixed="right" align="center">
                     <template #default="scope">
-                        <EditButton label="Cập nhật" :onClick="() => handleUpdateOrder(scope.row)" />
+                        <div class="flex flex-col gap-2">
+                            <EditButton label="Cập nhật" :onClick="() => handleUpdateOrder(scope.row)" />
+                            <DeleteButton label="Hủy đơn" :onClick="() => handleCancelOrder(scope.row)" />
+                        </div>
                     </template>
                 </ElTableColumn>
             </ElTable>
