@@ -4,6 +4,7 @@ import StaffLayout from "../../layouts/StaffLayout.vue";
 import CartPage from "../../modules/cart/CartPage.vue";
 import ChallengePage from "../../modules/challenge/ChallengePage.vue";
 import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
+import OrderTrackingPage from "../../modules/order/OrderTrackingPage.vue";
 import StaffOrderManagementPage from "../../modules/order/StaffOrderManagementPage.vue";
 import ProductDetail from "../../modules/products/ProductDetail.vue";
 import ProductsPage from "../../modules/products/ProductsPage.vue";
@@ -59,7 +60,12 @@ export const staffRoutes = {
       component: CartPage,
     },
     {
-      path: "order-detail",
+      path: "order-tracking",
+      name: ROUTE_NAMES.STAFF.ORDER_TRACKING,
+      component: OrderTrackingPage,
+    },
+    {
+      path: "order-management",
       name: ROUTE_NAMES.STAFF.ORDER_MANAGEMENT,
       component: StaffOrderManagementPage,
     },

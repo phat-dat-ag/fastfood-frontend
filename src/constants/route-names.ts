@@ -21,6 +21,7 @@ export const ROUTE_NAMES = {
     EDIT_PROFILE: "EditUserProfile",
     CHANGE_PASSWORD: "ChangeUserPassword",
     CART: "UserCart",
+    ORDER_TRACKING: "UserOrderTracking",
   },
   STAFF: {
     HOME: "StaffHome",
@@ -32,6 +33,7 @@ export const ROUTE_NAMES = {
     EDIT_PROFILE: "EditStaffProfile",
     CHANGE_PASSWORD: "ChangeStaffPassword",
     CART: "StaffCart",
+    ORDER_TRACKING: "StaffOrderTracking",
     ORDER_MANAGEMENT: "StaffOrderDetail",
   },
   ADMIN: {

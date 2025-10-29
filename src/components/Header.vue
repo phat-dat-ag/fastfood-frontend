@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElBadge, ElTooltip } from 'element-plus';
 import { useUserStore } from '../store/useUserStore.store';
-import { Box, ShoppingCartFull } from "@element-plus/icons-vue"
+import { Box, ShoppingCartFull, Van } from "@element-plus/icons-vue"
 import { notifyError } from '../utils/notification.utils';
 import { ROUTE_NAMES } from '../constants/route-names';
 import { USER_ROLES } from '../constants/user-roles';
@@ -129,6 +129,15 @@ function goToProfilePage() {
                 </ElTooltip>
             </ElBadge>
 
+            <ElBadge :value="30" :max="10">
+                <ElTooltip effect="dark" content="Đơn hàng đang giao" placement="bottom">
+                    <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
+                        @click="() => router.push({ name: ROUTE_NAMES.USER.ORDER_TRACKING })">
+                        <Van />
+                    </el-icon>
+                </ElTooltip>
+            </ElBadge>
+
             <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
                 @goToProfilePage="goToProfilePage" @signOut="signOut"
                 class="w-9 h-9 rounded-full ring-2 ring-white/70 hover:ring-white transition-all duration-300 shadow-md" />
@@ -140,6 +149,15 @@ function goToProfilePage() {
                     <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
                         @click="() => router.push({ name: ROUTE_NAMES.STAFF.CART })">
                         <ShoppingCartFull />
+                    </el-icon>
+                </ElTooltip>
+            </ElBadge>
+
+            <ElBadge :value="30" :max="10">
+                <ElTooltip effect="dark" content="Đơn hàng đang giao" placement="bottom">
+                    <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
+                        @click="() => router.push({ name: ROUTE_NAMES.STAFF.ORDER_TRACKING })">
+                        <Van />
                     </el-icon>
                 </ElTooltip>
             </ElBadge>
