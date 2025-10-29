@@ -9,10 +9,16 @@ import { ORDER_NOTE_AUTHOR, ORDER_NOTE_TYPE } from '../../../constants/order-not
 const props = defineProps<{ order: Order }>();
 
 const userNote: ComputedRef<OrderNote | undefined> = computed(() => {
-    return props.order?.orderNotes?.find(
+    return props.order.orderNotes.find(
         orderNote =>
             orderNote.authorType === ORDER_NOTE_AUTHOR.USER &&
             orderNote.noteType === ORDER_NOTE_TYPE.USER_NOTE
+    );
+});
+
+const cancelReason: ComputedRef<OrderNote | undefined> = computed(() => {
+    return props.order.orderNotes.find(
+        orderNote => orderNote.noteType === ORDER_NOTE_TYPE.CANCEL_REASON
     );
 });
 
@@ -61,7 +67,16 @@ const userNote: ComputedRef<OrderNote | undefined> = computed(() => {
             placement="top" color="#dc2626">
             <ElCard class="timeline-card cancelled">
                 <h4 class="timeline-title">Đã hủy</h4>
-                <p>Đơn hàng đã bị hủy</p>
+                <template v-if="cancelReason">
+                    <p v-if="cancelReason.authorType === ORDER_NOTE_AUTHOR.USER" class="user-note">
+                        <span class="customer-name">{{ props.order.user.name }}: </span>
+                        {{ cancelReason.message }}
+                    </p>
+                    <p v-else class="user-note">
+                        <span class="note-label">Lý do:</span> {{ cancelReason.message }}
+                    </p>
+                </template>
+                <p v-else>Đơn hàng này đã bị hủy</p>
             </ElCard>
         </ElTimelineItem>
     </ElTimeline>
