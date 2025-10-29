@@ -12,3 +12,7 @@ export const createStripePaymentOrder = (data: OrderCreateRequest) => {
 export const getUnfinishedOrder = () => {
   return api.get("/order/unfinished-orders/all");
 };
+
+export const confirmOrder = (orderId: number) => {
+  return api.put("/order/confirm", null, { params: { orderId } });
+};

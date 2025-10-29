@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElDialog, ElTag, ElDivider, ElTimeline, ElTimelineItem, ElCard } from 'element-plus';
+import { ElDialog, ElTag, ElDivider } from 'element-plus';
 import { ref } from 'vue';
 import type { Order } from '../../../types/order.types';
 import { formatDateTimeString } from '../../../utils/time.utils';
@@ -13,12 +13,13 @@ import { getDetailAddress } from '../../../utils/geocode.utils';
 import { ORDER_STATUS } from '../../../constants/order-status';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
+import OrderTimeline from './OrderTimeline.vue';
 
 const props = defineProps<{
     order: Order;
 }>();
 
-const emit = defineEmits(["close", "update-status"]);
+const emit = defineEmits(["close", "update-status", "confirm-order"]);
 
 const isVisible = ref<boolean>(true);
 
@@ -76,18 +77,12 @@ const isVisible = ref<boolean>(true);
                 <h3 class="font-semibold text-orange-600 text-lg mb-2">Trạng thái đơn hàng</h3>
                 <div class="flex flex-col gap-2">
                     <div>
-                        <ElTimeline>
-                            <ElTimelineItem :timestamp="formatDateTimeString(props.order.placedAt)" placement="top">
-                                <ElCard>
-                                    <h4 class="font-bold">Đã đặt hàng</h4>
-                                    <p>{{ props.order.user.name }} đã đặt hàng và đang chờ xác nhận</p>
-                                </ElCard>
-                            </ElTimelineItem>
-                        </ElTimeline>
+                        <OrderTimeline :order="props.order" />
                     </div>
 
                     <div class="flex mt-2">
-                        <PrimaryButton v-if="props.order.orderStatus === ORDER_STATUS.PENDING" label="Xác nhận ngay" />
+                        <PrimaryButton v-if="props.order.orderStatus === ORDER_STATUS.PENDING" label="Xác nhận ngay"
+                            :onClick="() => emit('confirm-order', props.order.id)" />
                         <PrimaryButton v-else-if="props.order.orderStatus === ORDER_STATUS.CONFIRMED"
                             label="Giao hàng ngay" />
                         <PrimaryButton v-else label="Đã giao" />

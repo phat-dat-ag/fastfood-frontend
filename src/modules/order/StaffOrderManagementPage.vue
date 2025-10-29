@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { getUnfinishedOrder } from '../../service/order.service';
+import { confirmOrder, getUnfinishedOrder } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/StaffOrderTable.vue';
@@ -32,6 +32,19 @@ function handleUpdateOrder(order: Order) {
     selectedOrder.value = order;
 }
 
+async function handleConfirmOrder(orderId: number) {
+    await useApiHandler<Order>(
+        () => confirmOrder(orderId),
+        {
+            loading: "Đang xác nhận đơn hàng",
+            error: "Lỗi xác nhận đơn hàng",
+            success: "Đơn hàng đã được xác nhận",
+        },
+        () => isStaffOrderModalVisible.value = false,
+        loadUnfinishedOrders
+    )
+}
+
 </script>
 <template>
     <div class="mx-auto space-y-6">
@@ -48,5 +61,5 @@ function handleUpdateOrder(order: Order) {
         <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
     <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder"
-        @close="isStaffOrderModalVisible = false" />
+        @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder" />
 </template>
