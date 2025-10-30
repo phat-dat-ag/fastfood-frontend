@@ -1,0 +1,26 @@
+.order-detail-modal :deep(.el-dialog__body) {
+    background-color: #fffdf8;
+    border-radius: 1rem;
+    padding: 1.75rem;
+}
+
+.order-detail-modal :deep(.el-dialog__header) {
+    background: linear-gradient(to right, #fb923c, #f59e0b);
+    color: white;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1.25rem 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+
+.section-title {
+    @apply font-semibold text-orange-600 text-lg mb-2;
+}
+
+.section-content {
+    @apply space-y-1 text-sm leading-relaxed;
+}
+
+.label {
+    @apply font-semibold text-gray-800;
+}

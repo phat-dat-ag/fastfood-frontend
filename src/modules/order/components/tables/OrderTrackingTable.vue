@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ElTable, ElTableColumn, ElTag, ElTooltip } from 'element-plus';
-import type { Order } from '../../../types/order.types';
-import { formatDateTimeString } from '../../../utils/time.utils';
-import { formatCurrencyVND } from '../../../utils/currency.utils';
-import { getOrderTagType, getPaymentTagType, ORDER_STATUS_TEXT, PAYMENT_METHOD_TEXT, PAYMENT_STATUS_TEXT } from '../../../utils/order-display.utils';
-import { getDetailAddress } from '../../../utils/geocode.utils';
-import EditButton from '../../../components/buttons/EditButton.vue';
+import type { Order } from '../../../../types/order.types';
+import { formatDateTimeString } from '../../../../utils/time.utils';
+import { formatCurrencyVND } from '../../../../utils/currency.utils';
+import { getOrderTagType, getPaymentTagType, ORDER_STATUS_TEXT, PAYMENT_METHOD_TEXT, PAYMENT_STATUS_TEXT } from '../../../../utils/order-display.utils';
+import { getDetailAddress } from '../../../../utils/geocode.utils';
+import EditButton from '../../../../components/buttons/EditButton.vue';
 
 const props = defineProps<{
     orders: Order[];
@@ -73,18 +73,4 @@ const props = defineProps<{
     </div>
 </template>
 
-<style scoped>
-.el-table .cell {
-    white-space: nowrap;
-}
-
-.el-table {
-    border-radius: 1rem;
-    overflow: hidden;
-}
-
-.el-table__body tr:hover>td {
-    background-color: #fff7ed !important;
-    transition: background-color 0.3s ease;
-}
-</style>
+<style scoped src="../../../../styles/order-modal.css"></style>

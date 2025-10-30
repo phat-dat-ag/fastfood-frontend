@@ -5,9 +5,9 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_TRACKING_MESSAGE } from '../../constants/messages';
 import { cancelOrder, getUnfinishedOrderByUser } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
-import OrderTrackingTable from './components/OrderTrackingTable.vue';
-import OrderModal from './components/OrderModal.vue';
+import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
+import OrderTrackingModal from './components/modals/OrderTrackingModal.vue';
 
 const orders = ref<Order[]>([]);
 
@@ -63,6 +63,6 @@ async function handleCancelOrder(order: Order) {
         </div>
         <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
-    <OrderModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder" :isStaff=false
-        :canCancelOrder="true" @cancel-order="handleCancelOrder" @close="isTrackingOrderModalVisible = false" />
+    <OrderTrackingModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder"
+        @cancel-order="handleCancelOrder" @close="isTrackingOrderModalVisible = false" />
 </template>

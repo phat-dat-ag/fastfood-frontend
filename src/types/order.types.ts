@@ -1,5 +1,7 @@
 import type { Address } from "./geocode.types";
+import type { OrderDetail } from "./order-detail.types";
 import type { OrderNote } from "./order-note.types";
+import type { Promotion } from "./promotion.types";
 import type { User } from "./user.types";
 
 export interface OrderCreateRequest {
@@ -21,9 +23,12 @@ export interface Order {
   originalPrice: string;
   subtotalPrice: string;
   deliveryFee: string;
+  totalPrice: string;
   address: Address;
   user: User;
   orderNotes: OrderNote[];
+  orderDetails: OrderDetail[];
+  promotion: Promotion;
   clientSecret: string | null;
 }
 

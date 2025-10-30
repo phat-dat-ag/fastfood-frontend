@@ -1,0 +1,13 @@
+.el-table .cell {
+    white-space: nowrap;
+}
+
+.el-table {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.el-table__body tr:hover>td {
+    background-color: #fff7ed !important;
+    transition: background-color 0.3s ease;
+}

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ElDialog, ElDivider } from 'element-plus';
 import { ref } from 'vue';
-import type { Order } from '../../../types/order.types';
-import { formatCurrencyVND } from '../../../utils/currency.utils';
-import { PAYMENT_METHOD_TEXT } from '../../../utils/order-display.utils';
-import { getDetailAddress } from '../../../utils/geocode.utils';
-import { ORDER_STATUS } from '../../../constants/order-status';
-import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
-import DeleteButton from '../../../components/buttons/DeleteButton.vue';
-import OrderTimeline from './OrderTimeline.vue';
-import { PAYMENT_STATUS } from '../../../constants/payment-status';
-import { PAYMENT_METHODS } from '../../../constants/payment-methods';
+import type { Order } from '../../../../types/order.types';
+import { formatCurrencyVND } from '../../../../utils/currency.utils';
+import { PAYMENT_METHOD_TEXT } from '../../../../utils/order-display.utils';
+import { getDetailAddress } from '../../../../utils/geocode.utils';
+import { ORDER_STATUS } from '../../../../constants/order-status';
+import PrimaryButton from '../../../../components/buttons/PrimaryButton.vue';
+import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
+import OrderTimeline from '../OrderTimeline.vue';
+import { PAYMENT_STATUS } from '../../../../constants/payment-status';
+import { PAYMENT_METHODS } from '../../../../constants/payment-methods';
 
 const props = defineProps<{ order: Order; isStaff: boolean; canCancelOrder: boolean }>();
 const emit = defineEmits([
@@ -91,31 +91,4 @@ const isVisible = ref(true);
     </ElDialog>
 </template>
 
-<style lang="postcss" scoped>
-.order-detail-modal :deep(.el-dialog__body) {
-    background-color: #fffdf8;
-    border-radius: 1rem;
-    padding: 1.75rem;
-}
-
-.order-detail-modal :deep(.el-dialog__header) {
-    background: linear-gradient(to right, #fb923c, #f59e0b);
-    color: white;
-    border-radius: 1rem 1rem 0 0;
-    padding: 1.25rem 1.5rem;
-    font-weight: bold;
-    letter-spacing: 0.3px;
-}
-
-.section-title {
-    @apply font-semibold text-orange-600 text-lg mb-2;
-}
-
-.section-content {
-    @apply space-y-1 text-sm leading-relaxed;
-}
-
-.label {
-    @apply font-semibold text-gray-800;
-}
-</style>
+<style lang="postcss" scoped src="../../../../styles/order-modal.css"></style>

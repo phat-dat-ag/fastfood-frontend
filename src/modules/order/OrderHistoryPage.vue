@@ -5,8 +5,8 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_HISTORY_MESSAGE } from '../../constants/messages';
 import { getAllOrderByUser } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
-import OrderTrackingTable from './components/OrderTrackingTable.vue';
-import OrderModal from './components/OrderModal.vue';
+import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
+import OrderHistoryModal from './components/modals/OrderHistoryModal.vue';
 
 const orders = ref<Order[]>([]);
 
@@ -47,6 +47,6 @@ function handleUpdateOrder(order: Order) {
         </div>
         <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
-    <OrderModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder" :isStaff=false
-        :canCancelOrder=false @cancel-order="() => { }" @close="isTrackingOrderModalVisible = false" />
+    <OrderHistoryModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder"
+        @close="isTrackingOrderModalVisible = false" />
 </template>

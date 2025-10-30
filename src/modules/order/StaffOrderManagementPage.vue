@@ -4,9 +4,9 @@ import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
 import { cancelOrderByStaff, confirmOrder, getUnfinishedOrderByStaff, markAsDelivered, markAsDelivering } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
-import StaffOrderTable from './components/StaffOrderTable.vue';
+import StaffOrderTable from './components/tables/StaffOrderTable.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
-import StaffOrderModal from './components/OrderModal.vue';
+import StaffOrderModal from './components/modals/StaffOrderModal.vue';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
 
 const orders = ref<Order[]>([]);
