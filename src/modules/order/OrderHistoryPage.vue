@@ -7,6 +7,11 @@ import { getAllOrderByUser } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
 import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
 import OrderHistoryModal from './components/modals/OrderHistoryModal.vue';
+import { useUserStore } from '../../store/useUserStore.store';
+import { USER_ROLES } from '../../constants/user-roles';
+import { useRouter } from 'vue-router';
+import { ROUTE_NAMES } from '../../constants/route-names';
+import { notifyError } from '../../utils/notification.utils';
 
 const orders = ref<Order[]>([]);
 
@@ -31,6 +36,18 @@ function handleUpdateOrder(order: Order) {
     isTrackingOrderModalVisible.value = true;
     selectedOrder.value = order;
 }
+
+const userStore = useUserStore();
+const router = useRouter();
+
+function handleReviewOrder(orderId: number) {
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.USER)
+        router.push({ name: ROUTE_NAMES.USER.PRODUCT_REVIEW, params: { orderId } });
+    else if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.PRODUCT_REVIEW, params: { orderId } });
+    else notifyError("Tài khoản không đủ quyền để đánh giá sản phẩm");
+}
 </script>
 
 <template>
@@ -48,5 +65,5 @@ function handleUpdateOrder(order: Order) {
         <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
     <OrderHistoryModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder"
-        @close="isTrackingOrderModalVisible = false" />
+        @review-order="handleReviewOrder" @close="isTrackingOrderModalVisible = false" />
 </template>

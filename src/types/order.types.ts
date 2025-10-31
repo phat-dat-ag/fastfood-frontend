@@ -2,6 +2,7 @@ import type { Address } from "./geocode.types";
 import type { OrderDetail } from "./order-detail.types";
 import type { OrderNote } from "./order-note.types";
 import type { Promotion } from "./promotion.types";
+import type { Review } from "./review.types";
 import type { User } from "./user.types";
 
 export interface OrderCreateRequest {
@@ -28,6 +29,7 @@ export interface Order {
   user: User;
   orderNotes: OrderNote[];
   orderDetails: OrderDetail[];
+  reviews: Review[];
   promotion: Promotion;
   clientSecret: string | null;
 }

@@ -23,6 +23,7 @@ export const ROUTE_NAMES = {
     CART: "UserCart",
     ORDER_TRACKING: "UserOrderTracking",
     ORDER_HISTORY: "UserOrderHistory",
+    PRODUCT_REVIEW: "UserProductReview",
   },
   STAFF: {
     HOME: "StaffHome",
@@ -36,6 +37,7 @@ export const ROUTE_NAMES = {
     CART: "StaffCart",
     ORDER_TRACKING: "StaffOrderTracking",
     ORDER_HISTORY: "StaffOrderHistory",
+    PRODUCT_REVIEW: "StaffProductReview",
     ORDER_MANAGEMENT: "StaffOrderDetail",
   },
   ADMIN: {

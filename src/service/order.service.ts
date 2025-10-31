@@ -9,6 +9,10 @@ export const createStripePaymentOrder = (data: OrderCreateRequest) => {
   return api.post("/order/stripe-payment", data);
 };
 
+export const getOrderById = (orderId: number) => {
+  return api.get("/order/by-order-id", { params: { orderId } });
+};
+
 export const getUnfinishedOrderByStaff = () => {
   return api.get("/order/unfinished-orders/by-staff");
 };

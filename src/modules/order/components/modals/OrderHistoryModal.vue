@@ -9,7 +9,7 @@ import PrimaryButton from '../../../../components/buttons/PrimaryButton.vue';
 import { ORDER_STATUS } from '../../../../constants/order-status';
 
 const props = defineProps<{ order: Order }>();
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "review-order"]);
 
 const isVisible = ref(true);
 
@@ -38,8 +38,8 @@ const isVisible = ref(true);
                 <div class="p-2">
                     <OrderTimeline :order="props.order" />
                 </div>
-                <div v-if="props.order.orderStatus === ORDER_STATUS.DELIVERED">
-                    <PrimaryButton label="Đánh giá ngay" />
+                <div v-if="props.order.orderStatus === ORDER_STATUS.DELIVERED && props.order.reviews.length == 0">
+                    <PrimaryButton label="Đánh giá ngay" :onClick="() => emit('review-order', props.order.id)" />
                 </div>
             </section>
         </div>
