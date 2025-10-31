@@ -1,17 +1,29 @@
 <script setup lang="ts">
 import { ElDialog } from 'element-plus';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { Order } from '../../../../types/order.types';
 import { getDetailAddress } from '../../../../utils/geocode.utils';
 import OrderTimeline from '../OrderTimeline.vue';
 import OrderInvoiceSummary from '../OrderInvoiceSummary.vue';
 import PrimaryButton from '../../../../components/buttons/PrimaryButton.vue';
-import { ORDER_STATUS } from '../../../../constants/order-status';
 
 const props = defineProps<{ order: Order }>();
 const emit = defineEmits(["close", "review-order"]);
 
 const isVisible = ref(true);
+
+const isReviewAllowed = computed<boolean>(() => {
+    const { deliveredAt, reviews } = props.order;
+
+    if (!deliveredAt || reviews.length !== 0) return false;
+
+    const now = new Date();
+    const deliveredDate = new Date(deliveredAt);
+    const diffDays = (now.getTime() - deliveredDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    return diffDays <= 2;
+});
+
 
 </script>
 
@@ -38,7 +50,7 @@ const isVisible = ref(true);
                 <div class="p-2">
                     <OrderTimeline :order="props.order" />
                 </div>
-                <div v-if="props.order.orderStatus === ORDER_STATUS.DELIVERED && props.order.reviews.length == 0">
+                <div v-if="isReviewAllowed">
                     <PrimaryButton label="Đánh giá ngay" :onClick="() => emit('review-order', props.order.id)" />
                 </div>
             </section>
