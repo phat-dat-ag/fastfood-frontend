@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Container3D from '../3DModel/Container3D.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getProductBySlug } from '../../service/product.service';
@@ -12,6 +12,9 @@ import { formatCurrencyVND } from '../../utils/currency.utils';
 import { useUserStore } from '../../store/useUserStore.store';
 import { notifyError } from '../../utils/notification.utils';
 import { addProductToCart } from '../../service/cart.service';
+import ProductReviewList from '../review/components/ProductReviewList.vue';
+import { USER_ROLES } from '../../constants/user-roles';
+import { ROUTE_NAMES } from '../../constants/route-names';
 
 const route = useRoute();
 const slug = String(route.params.slug || "");
@@ -59,6 +62,21 @@ async function handleAddToCart() {
     )
 }
 
+const router = useRouter();
+
+function goToAllReviewsPage() {
+    if (!product.value) {
+        notifyError("Không thể đến trang tất cả các đánh giá, hãy thử lại");
+        return;
+    }
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.USER)
+        router.push({ name: ROUTE_NAMES.USER.ALL_PRODUCT_REVIEWS, params: { productId: product.value.id } });
+    else if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.ALL_PRODUCT_REVIEWS, params: { productId: product.value.id } });
+    else notifyError("Tài khoản không đủ quyền để đánh giá sản phẩm");
+}
+
 </script>
 
 <template>
@@ -100,6 +118,8 @@ async function handleAddToCart() {
 
         <div class="border-t pt-10">
             <h2 class="text-2xl font-bold mb-4">Đánh giá khách hàng</h2>
+            <ProductReviewList :reviews="product.reviews" :showViewAllButton=true
+                @view-all-reviews="goToAllReviewsPage" />
         </div>
 
         <div class="border-t pt-10">

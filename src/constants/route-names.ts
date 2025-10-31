@@ -24,6 +24,7 @@ export const ROUTE_NAMES = {
     ORDER_TRACKING: "UserOrderTracking",
     ORDER_HISTORY: "UserOrderHistory",
     PRODUCT_REVIEW: "UserProductReview",
+    ALL_PRODUCT_REVIEWS: "UserAllProductReivews",
   },
   STAFF: {
     HOME: "StaffHome",
@@ -38,6 +39,7 @@ export const ROUTE_NAMES = {
     ORDER_TRACKING: "StaffOrderTracking",
     ORDER_HISTORY: "StaffOrderHistory",
     PRODUCT_REVIEW: "StaffProductReview",
+    ALL_PRODUCT_REVIEWS: "StaffAllProductReivews",
     ORDER_MANAGEMENT: "StaffOrderDetail",
   },
   ADMIN: {

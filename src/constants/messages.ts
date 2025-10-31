@@ -62,3 +62,6 @@ export const ORDER_TRACKING_MESSAGE = createEntityMessages(
 export const ORDER_HISTORY_MESSAGE = createEntityMessages("lịch sử giao hàng");
 export const ORDER_MESSAGE = createEntityMessages("đơn hàng");
 export const REVIEW_MESSAGE = createEntityMessages("đánh giá");
+export const ALL_PRODUCT_REVIEW_MESSAGE = createEntityMessages(
+  "các đánh giá của sản phẩm"
+);

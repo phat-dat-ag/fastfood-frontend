@@ -26,3 +26,7 @@ export const createProductReview = (
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+
+export const getAllReviewsByProduct = (productId: number) => {
+  return api.get("/review", { params: { productId } });
+};

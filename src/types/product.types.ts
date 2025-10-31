@@ -1,4 +1,5 @@
 import type { Promotion } from "./promotion.types";
+import type { Review } from "./review.types";
 
 export interface ProductCreateRequest {
   category_id: number;
@@ -34,6 +35,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   promotions: Promotion[];
+  reviews: Review[];
   discountedPrice: string;
   promotionId: number;
 }

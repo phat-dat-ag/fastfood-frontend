@@ -13,6 +13,7 @@ import ChangePasswordPage from "../../modules/profile/pages/ChangePasswordPage.v
 import EditProfilePage from "../../modules/profile/pages/EditProfilePage.vue";
 import ProfilePage from "../../modules/profile/pages/ProfilePage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
+import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vue";
 import ProductReviewPage from "../../modules/review/ProductReviewPage.vue";
 
 export const staffRoutes = {
@@ -75,6 +76,11 @@ export const staffRoutes = {
       path: "review-product/:orderId",
       name: ROUTE_NAMES.STAFF.PRODUCT_REVIEW,
       component: ProductReviewPage,
+    },
+    {
+      path: "product/:productId/all-review",
+      name: ROUTE_NAMES.STAFF.ALL_PRODUCT_REVIEWS,
+      component: AllProductReviewsPage,
     },
     {
       path: "order-management",
