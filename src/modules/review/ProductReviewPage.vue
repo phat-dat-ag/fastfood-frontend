@@ -3,11 +3,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getOrderById } from '../../service/order.service';
-import { ORDER_MESSAGE } from '../../constants/messages';
+import { ORDER_MESSAGE, REVIEW_MESSAGE } from '../../constants/messages';
 import { notifyError } from '../../utils/notification.utils';
 import type { Order } from '../../types/order.types';
 import type { ReviewCreateRequest } from '../../types/review.types';
 import ProductReviewFormItem from './components/ProductReviewFormItem.vue';
+import { createProductReview } from '../../service/review.service';
 
 const route = useRoute();
 const router = useRouter();
@@ -47,7 +48,7 @@ function handleUpdateReview(productId: number, newData: ReviewCreateRequest) {
     reviews.value[productId] = newData;
 }
 
-function handleSubmitReviews() {
+async function handleSubmitReviews() {
     if (!order.value) return;
     const allReviewed = order.value.orderDetails.every(
         (detail) =>
@@ -58,9 +59,18 @@ function handleSubmitReviews() {
         notifyError('Vui lòng đánh giá tất cả sản phẩm trước khi gửi!');
         return;
     }
-
+    const orderId = order.value.id;
     const result: Array<ReviewCreateRequest> = Object.values(reviews.value);
-    console.log('📦 Tất cả đánh giá:', result);
+
+    await useApiHandler(
+        () => createProductReview(orderId, result),
+        {
+            loading: REVIEW_MESSAGE.create,
+            error: REVIEW_MESSAGE.createError,
+            success: REVIEW_MESSAGE.createSuccess,
+        },
+        () => router.back(),
+    )
 }
 </script>
 
