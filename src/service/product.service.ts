@@ -39,6 +39,10 @@ export const getProducts = () => {
   return api.get("/admin/product");
 };
 
+export const getProductsByCategory = (categorySlug: string) => {
+  return api.get("/admin/product/by-category", { params: { categorySlug } });
+};
+
 export const getProductBySlug = (slug: string) => {
   return api.get("/admin/product/detail", { params: { slug } });
 };

@@ -15,13 +15,25 @@ import ProfilePage from "../../modules/profile/pages/ProfilePage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vue";
 import ProductReviewPage from "../../modules/review/ProductReviewPage.vue";
+import ProductPage from "../../modules/products/ProductPage.vue";
 
 export const staffRoutes = {
   path: "/staff",
   component: StaffLayout,
   meta: { requireAuth: true, roles: [USER_ROLES.STAFF] },
   children: [
-    { path: "", name: ROUTE_NAMES.STAFF.HOME, component: CategoryPage },
+    {
+      path: "",
+      name: ROUTE_NAMES.STAFF.HOME,
+      component: CategoryPage,
+      children: [
+        {
+          path: "category/:slug",
+          name: ROUTE_NAMES.STAFF.CATEGORY_DETAIL,
+          component: ProductPage,
+        },
+      ],
+    },
     {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.STAFF.PRODUCT_DETAIL,

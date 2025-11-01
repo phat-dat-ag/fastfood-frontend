@@ -3,13 +3,13 @@ import { onMounted, ref } from 'vue';
 import type { Category } from '../../types/category.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getCategories } from '../../service/category.service';
-import { CART_MESSAGE, CATEGORY_MESSAGES } from '../../constants/messages';
+import { CATEGORY_MESSAGES } from '../../constants/messages';
 import ProductSegment from './components/ProductSegment.vue';
-import type { Product } from '../../types/product.types';
-import ProductList from './components/ProductList.vue';
-import { addProductToCart } from '../../service/cart.service';
 import { useUserStore } from '../../store/useUserStore.store';
 import { notifyError } from '../../utils/notification.utils';
+import { useRouter } from 'vue-router';
+import { ROUTE_NAMES } from '../../constants/route-names';
+import { USER_ROLES } from '../../constants/user-roles';
 
 const categories = ref<Category[]>([]);
 async function loadCategories() {
@@ -24,33 +24,24 @@ async function loadCategories() {
 }
 onMounted(loadCategories);
 
-const selectedCategory = ref<Category>();
-function handleSelect(category: Category) {
-  selectedCategory.value = category;
-}
+const router = useRouter();
 
 const userStore = useUserStore();
 
-async function handleAddToCart(data: { product: Product; quantity: number }) {
-  if (!userStore.isSignedIn()) {
-    notifyError("Hãy đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
-    return;
-  }
-  if (data.quantity < 1) return;
-  await useApiHandler(
-    () => addProductToCart({ productId: data.product.id, quantity: data.quantity }),
-    {
-      loading: CART_MESSAGE.create,
-      success: CART_MESSAGE.createSuccess,
-      error: CART_MESSAGE.createError,
-    },
-    () => { },
-  )
+const selectedCategory = ref<Category>();
+function handleSelect(category: Category) {
+  selectedCategory.value = category;
+  const role = userStore.user?.role;
+  if (role === USER_ROLES.USER)
+    router.push({ name: ROUTE_NAMES.USER.CATEGORY_DETAIL, params: { slug: category.slug } });
+  else if (role === USER_ROLES.STAFF)
+    router.push({ name: ROUTE_NAMES.STAFF.CATEGORY_DETAIL, params: { slug: category.slug } });
+  else notifyError("Tài khoản không đủ quyền để xem sản phẩm của danh mục");
 }
 </script>
 <template>
   <div class="flex flex-col gap-4">
     <ProductSegment :categories="categories" @select="handleSelect" />
-    <ProductList v-if="selectedCategory" :products="selectedCategory.products" @add-to-cart="handleAddToCart" />
+    <router-view></router-view>
   </div>
 </template>

@@ -8,12 +8,24 @@ import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
 import ProductDetail from "../../modules/products/ProductDetail.vue";
 import CategoryPage from "../../modules/products/CategoryPage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
+import ProductPage from "../../modules/products/ProductPage.vue";
 
 export const guestRoutes = {
   path: "/",
   component: GuestLayout,
   children: [
-    { path: "", name: ROUTE_NAMES.GUEST.HOME, component: CategoryPage },
+    {
+      path: "",
+      name: ROUTE_NAMES.GUEST.HOME,
+      component: CategoryPage,
+      children: [
+        {
+          path: "category/:slug",
+          name: ROUTE_NAMES.GUEST.CATEGORY_DETAIL,
+          component: ProductPage,
+        },
+      ],
+    },
     {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.GUEST.PRODUCT_DETAIL,

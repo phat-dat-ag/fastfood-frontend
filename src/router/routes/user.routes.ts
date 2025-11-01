@@ -14,13 +14,25 @@ import ProfilePage from "../../modules/profile/pages/ProfilePage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vue";
 import ProductReviewPage from "../../modules/review/ProductReviewPage.vue";
+import ProductPage from "../../modules/products/ProductPage.vue";
 
 export const userRoutes = {
   path: "/user",
   component: UserLayout,
   meta: { requireAuth: true, roles: [USER_ROLES.USER] },
   children: [
-    { path: "", name: ROUTE_NAMES.USER.HOME, component: CategoryPage },
+    {
+      path: "",
+      name: ROUTE_NAMES.USER.HOME,
+      component: CategoryPage,
+      children: [
+        {
+          path: "category/:slug",
+          name: ROUTE_NAMES.USER.CATEGORY_DETAIL,
+          component: ProductPage,
+        },
+      ],
+    },
     {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.USER.PRODUCT_DETAIL,

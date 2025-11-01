@@ -13,13 +13,25 @@ import ProductDetail from "../../modules/products/ProductDetail.vue";
 import PromotionOrderPage from "../../modules/promotion/PromotionOrderPage.vue";
 import AddPromotionOrderPage from "../../modules/promotion/AddPromotionOrderPage.vue";
 import StaffManagementPage from "../../modules/account/StaffManagementPage.vue";
+import ProductPage from "../../modules/products/ProductPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
   component: AdminLayout,
   meta: { requireAuth: true, roles: [USER_ROLES.ADMIN] },
   children: [
-    { path: "", name: ROUTE_NAMES.ADMIN.HOME, component: CategoryPage },
+    {
+      path: "",
+      name: ROUTE_NAMES.ADMIN.HOME,
+      component: CategoryPage,
+      children: [
+        {
+          path: "category/:slug",
+          name: ROUTE_NAMES.ADMIN.CATEGORY_DETAIL,
+          component: ProductPage,
+        },
+      ],
+    },
     {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL,
