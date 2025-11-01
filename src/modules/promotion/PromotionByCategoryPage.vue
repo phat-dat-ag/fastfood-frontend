@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
-import PromotionByCategoryTable from './components/PromotionByCategoryTable.vue';
+import PromotionByCategoryTable from './components/tables/PromotionByCategoryTable.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deletePromotion, getPromotionCategory } from '../../service/promotion.service';
 import type { Promotion, PromotionResponse } from '../../types/promotion.types';

@@ -7,7 +7,7 @@ import { PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deletePromotion, getPromotionProduct } from '../../service/promotion.service';
-import PromotionByProductTable from './components/PromotionByProductTable.vue';
+import PromotionByProductTable from './components/tables/PromotionByProductTable.vue';
 
 const filterOptions: Filter[] = [
   { label: 'Thêm gần đây', value: 'recently-added' },

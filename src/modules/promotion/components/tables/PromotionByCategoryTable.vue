@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import AddButton from '../../../components/buttons/AddButton.vue';
-import { ROUTE_NAMES } from '../../../constants/route-names';
-import type { Promotion } from '../../../types/promotion.types';
-import { formatDateTimeString } from '../../../utils/time.utils';
-import { formatCurrencyVND } from '../../../utils/currency.utils';
-import DeleteButton from '../../../components/buttons/DeleteButton.vue';
+import AddButton from '../../../../components/buttons/AddButton.vue';
+import { ROUTE_NAMES } from '../../../../constants/route-names';
+import type { Promotion } from '../../../../types/promotion.types';
+import { formatDateTimeString } from '../../../../utils/time.utils';
+import { formatCurrencyVND } from '../../../../utils/currency.utils';
+import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
 import { ElTable, ElTableColumn } from 'element-plus';
 
 const router = useRouter();
 
 const props = defineProps<{
     promotions: Array<Promotion>;
-    handleDeletePromotionProduct: (promotionId: number) => Promise<void>;
+    handleDeletePromotionCategory: (promotionId: number) => Promise<void>;
 }>();
 </script>
 
 <template>
     <div class="py-2 flex justify-end">
-        <AddButton :onClick="() => router.push({ name: ROUTE_NAMES.ADMIN.PROMOTION_PRODUCT_ADD })"
-            label="Thêm mã khuyến mãi cho sản phẩm" />
+        <AddButton :onClick="() => router.push({ name: ROUTE_NAMES.ADMIN.PROMOTION_CATEGORY_ADD })"
+            label="Thêm mã khuyến mãi cho danh mục" />
     </div>
     <div class="bg-white rounded-xl shadow-md overflow-hidden border border-orange-100">
         <ElTable :data="props.promotions" border class="w-full">
@@ -69,7 +69,7 @@ const props = defineProps<{
             </ElTableColumn>
             <ElTableColumn label="Thao tác">
                 <template #default="scope">
-                    <DeleteButton :onClick="() => props.handleDeletePromotionProduct(scope.row.id)" label="Xóa" />
+                    <DeleteButton :onClick="() => props.handleDeletePromotionCategory(scope.row.id)" label="Xóa" />
                 </template>
             </ElTableColumn>
         </ElTable>

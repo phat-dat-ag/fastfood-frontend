@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import AddButton from '../../../components/buttons/AddButton.vue';
-import { ROUTE_NAMES } from '../../../constants/route-names';
-import type { Promotion } from '../../../types/promotion.types';
+import AddButton from '../../../../components/buttons/AddButton.vue';
+import { ROUTE_NAMES } from '../../../../constants/route-names';
+import type { Promotion } from '../../../../types/promotion.types';
 import { ElTable, ElTableColumn } from 'element-plus';
-import DeleteButton from '../../../components/buttons/DeleteButton.vue';
-import { formatDateTimeString } from '../../../utils/time.utils';
-import { formatCurrencyVND } from '../../../utils/currency.utils';
+import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
+import { formatDateTimeString } from '../../../../utils/time.utils';
+import { formatCurrencyVND } from '../../../../utils/currency.utils';
 
 const router = useRouter();
 
@@ -50,7 +50,7 @@ const props = defineProps<{
                     {{ formatCurrencyVND(scope.row.maxDiscountAmount) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Cho đơn từ" prop="minSpendAmount" header-align="left" align="right"/>
+            <ElTableColumn label="Cho đơn từ" prop="minSpendAmount" header-align="left" align="right" />
             <ElTableColumn label="Đã áp dụng" header-align="left" align="right">
                 <template #default="scope">
                     <span>

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
-import PromotionOrderTable from './components/PromotionOrderTable.vue';
+import PromotionOrderTable from './components/tables/PromotionOrderTable.vue';
 import type { Promotion, PromotionResponse } from '../../types/promotion.types';
 import { deletePromotion, getPromotionOrder } from '../../service/promotion.service';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
