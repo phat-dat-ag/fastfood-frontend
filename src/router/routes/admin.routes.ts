@@ -1,7 +1,7 @@
 import { ROUTE_NAMES } from "../../constants/route-names";
 import { USER_ROLES } from "../../constants/user-roles";
 import AdminLayout from "../../layouts/AdminLayout.vue";
-import CategoriesPage from "../../modules/category/CategoriesPage.vue";
+import CategoryManagementPage from "../../modules/category/CategoryManagementPage.vue";
 import CategoryPage from "../../modules/products/CategoryPage.vue";
 import ProductManagementPage from "../../modules/products/ProductManagementPage.vue";
 import CustomerManagementPage from "../../modules/account/CustomerManagementPage.vue";
@@ -50,7 +50,7 @@ export const adminRoutes = {
     {
       path: "manage-category",
       name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT,
-      component: CategoriesPage,
+      component: CategoryManagementPage,
     },
     {
       path: "manage-product",
