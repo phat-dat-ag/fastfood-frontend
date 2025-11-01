@@ -8,6 +8,7 @@ export const ROUTE_NAMES = {
     HOME: "GuestHome",
     CATEGORY_DETAIL: "GuestCategoryDetail",
     PRODUCT_DETAIL: "GuestProductDetail",
+    ALL_PRODUCT_REVIEWS: "GuestAllProductReivews",
     PROMOTION: "GuestPromotion",
     CHALLENGE: "GuestChallengeIntroduction",
     ABOUT: "GuestAbout",

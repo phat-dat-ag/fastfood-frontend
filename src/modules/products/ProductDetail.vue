@@ -74,7 +74,7 @@ function goToAllReviewsPage() {
         router.push({ name: ROUTE_NAMES.USER.ALL_PRODUCT_REVIEWS, params: { productId: product.value.id } });
     else if (role === USER_ROLES.STAFF)
         router.push({ name: ROUTE_NAMES.STAFF.ALL_PRODUCT_REVIEWS, params: { productId: product.value.id } });
-    else notifyError("Tài khoản không đủ quyền để đánh giá sản phẩm");
+    else router.push({ name: ROUTE_NAMES.GUEST.ALL_PRODUCT_REVIEWS, params: { productId: product.value.id } });
 }
 
 </script>

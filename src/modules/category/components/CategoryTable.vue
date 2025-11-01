@@ -27,11 +27,6 @@ const props = defineProps<CategoryTableProps>();
                     </template>
                 </ElTableColumn>
                 <ElTableColumn label="Tên danh mục" prop="name" />
-                <ElTableColumn width="120" label="Số sản phẩm">
-                    <template #default="scope">
-                        {{ scope.row.products.length }}
-                    </template>
-                </ElTableColumn>
                 <ElTableColumn label="Ra mắt">
                     <template #default="scope">
                         {{ formatDateTimeString(scope.row.createdAt) }}

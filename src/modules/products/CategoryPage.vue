@@ -6,7 +6,6 @@ import { getCategories } from '../../service/category.service';
 import { CATEGORY_MESSAGES } from '../../constants/messages';
 import ProductSegment from './components/ProductSegment.vue';
 import { useUserStore } from '../../store/useUserStore.store';
-import { notifyError } from '../../utils/notification.utils';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { USER_ROLES } from '../../constants/user-roles';
@@ -32,11 +31,13 @@ const selectedCategory = ref<Category>();
 function handleSelect(category: Category) {
   selectedCategory.value = category;
   const role = userStore.user?.role;
-  if (role === USER_ROLES.USER)
+  if (role === USER_ROLES.ADMIN)
+    router.push({ name: ROUTE_NAMES.ADMIN.CATEGORY_DETAIL, params: { slug: category.slug } })
+  else if (role === USER_ROLES.USER)
     router.push({ name: ROUTE_NAMES.USER.CATEGORY_DETAIL, params: { slug: category.slug } });
   else if (role === USER_ROLES.STAFF)
     router.push({ name: ROUTE_NAMES.STAFF.CATEGORY_DETAIL, params: { slug: category.slug } });
-  else notifyError("Tài khoản không đủ quyền để xem sản phẩm của danh mục");
+  else router.push({ name: ROUTE_NAMES.GUEST.CATEGORY_DETAIL, params: { slug: category.slug } });
 }
 </script>
 <template>

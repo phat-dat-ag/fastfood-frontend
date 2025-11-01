@@ -9,6 +9,7 @@ import ProductDetail from "../../modules/products/ProductDetail.vue";
 import CategoryPage from "../../modules/products/CategoryPage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
+import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vue";
 
 export const guestRoutes = {
   path: "/",
@@ -30,6 +31,11 @@ export const guestRoutes = {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.GUEST.PRODUCT_DETAIL,
       component: ProductDetail,
+    },
+    {
+      path: "product/:productId/all-review",
+      name: ROUTE_NAMES.GUEST.ALL_PRODUCT_REVIEWS,
+      component: AllProductReviewsPage,
     },
     {
       path: "promotion",
