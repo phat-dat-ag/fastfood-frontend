@@ -157,7 +157,7 @@ const userIcons = computed<UserIcon[]>(() => {
 
         <div class="flex items-center justify-end gap-6 w-[20%]">
             <template v-if="props.role === USER_ROLES.USER || props.role === USER_ROLES.STAFF">
-                <template v-for="(item) in userIcons" :key="index">
+                <template v-for="(item) in userIcons" :key="item.route">
                     <ElTooltip :content="item.tooltip" placement="bottom">
                         <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
                             @click="() => goTo(item.route)">

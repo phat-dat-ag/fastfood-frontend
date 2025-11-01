@@ -2,7 +2,7 @@ import { ROUTE_NAMES } from "../../constants/route-names";
 import { USER_ROLES } from "../../constants/user-roles";
 import AdminLayout from "../../layouts/AdminLayout.vue";
 import CategoriesPage from "../../modules/category/CategoriesPage.vue";
-import ProductsPage from "../../modules/products/ProductsPage.vue";
+import CategoryPage from "../../modules/products/CategoryPage.vue";
 import ProductManagementPage from "../../modules/products/ProductManagementPage.vue";
 import CustomerManagementPage from "../../modules/account/CustomerManagementPage.vue";
 import PromotionByCategoryPage from "../../modules/promotion/PromotionByCategoryPage.vue";
@@ -19,7 +19,7 @@ export const adminRoutes = {
   component: AdminLayout,
   meta: { requireAuth: true, roles: [USER_ROLES.ADMIN] },
   children: [
-    { path: "", name: ROUTE_NAMES.ADMIN.HOME, component: ProductsPage },
+    { path: "", name: ROUTE_NAMES.ADMIN.HOME, component: CategoryPage },
     {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL,

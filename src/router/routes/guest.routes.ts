@@ -6,14 +6,14 @@ import SignUpPage from "../../modules/auth/pages/SignUpPage.vue";
 import ChallengeIntroductionPage from "../../modules/challenge/ChallengeIntroductionPage.vue";
 import AboutUsPage from "../../modules/introduction/AboutUsPage.vue";
 import ProductDetail from "../../modules/products/ProductDetail.vue";
-import ProductsPage from "../../modules/products/ProductsPage.vue";
+import CategoryPage from "../../modules/products/CategoryPage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 
 export const guestRoutes = {
   path: "/",
   component: GuestLayout,
   children: [
-    { path: "", name: ROUTE_NAMES.GUEST.HOME, component: ProductsPage },
+    { path: "", name: ROUTE_NAMES.GUEST.HOME, component: CategoryPage },
     {
       path: "product-detail/:slug",
       name: ROUTE_NAMES.GUEST.PRODUCT_DETAIL,
