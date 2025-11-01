@@ -49,6 +49,10 @@ export const getUnfinishedOrderByUser = () => {
   return api.get("/order/unfinished-orders/by-user");
 };
 
-export const getAllOrderByUser = () => {
-  return api.get("/order/all/by-user");
+export const getAllOrderHistory = () => {
+  return api.get("/order/order-history/all");
+};
+
+export const getOrderHistory = (orderId: number) => {
+  return api.get("/order/order-history", { params: { orderId } });
 };

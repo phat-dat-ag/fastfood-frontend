@@ -16,6 +16,7 @@ import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vue";
 import ProductReviewPage from "../../modules/review/ProductReviewPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
+import OrderHistoryDetail from "../../modules/order/OrderHistoryDetail.vue";
 
 export const staffRoutes = {
   path: "/staff",
@@ -83,6 +84,11 @@ export const staffRoutes = {
       path: "order-history",
       name: ROUTE_NAMES.STAFF.ORDER_HISTORY,
       component: OrderHistoryPage,
+    },
+    {
+      path: "order-history/:orderId",
+      name: ROUTE_NAMES.STAFF.ORDER_HISTORY_DETAIL,
+      component: OrderHistoryDetail,
     },
     {
       path: "review-product/:orderId",

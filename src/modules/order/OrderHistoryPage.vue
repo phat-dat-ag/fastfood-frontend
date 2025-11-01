@@ -3,10 +3,9 @@ import { onMounted, ref } from 'vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_HISTORY_MESSAGE } from '../../constants/messages';
-import { getAllOrderByUser } from '../../service/order.service';
+import { getAllOrderHistory } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
 import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
-import OrderHistoryModal from './components/modals/OrderHistoryModal.vue';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import { useRouter } from 'vue-router';
@@ -17,7 +16,7 @@ const orders = ref<Order[]>([]);
 
 async function loadOrders() {
     await useApiHandler<OrderResponse>(
-        getAllOrderByUser,
+        getAllOrderHistory,
         {
             loading: ORDER_HISTORY_MESSAGE.get,
             error: ORDER_HISTORY_MESSAGE.getError,
@@ -28,25 +27,16 @@ async function loadOrders() {
 
 onMounted(loadOrders);
 
-const isTrackingOrderModalVisible = ref<boolean>(false);
-
-const selectedOrder = ref<Order | null>(null);
-
-function handleUpdateOrder(order: Order) {
-    isTrackingOrderModalVisible.value = true;
-    selectedOrder.value = order;
-}
-
 const userStore = useUserStore();
 const router = useRouter();
 
-function handleReviewOrder(orderId: number) {
+function handleViewOrderHistoryDetail(order: Order) {
     const role = userStore.user?.role;
     if (role === USER_ROLES.USER)
-        router.push({ name: ROUTE_NAMES.USER.PRODUCT_REVIEW, params: { orderId } });
+        router.push({ name: ROUTE_NAMES.USER.ORDER_HISTORY_DETAIL, params: { orderId: order.id } });
     else if (role === USER_ROLES.STAFF)
-        router.push({ name: ROUTE_NAMES.STAFF.PRODUCT_REVIEW, params: { orderId } });
-    else notifyError("Tài khoản không đủ quyền để đánh giá sản phẩm");
+        router.push({ name: ROUTE_NAMES.STAFF.ORDER_HISTORY_DETAIL, params: { orderId: order.id } });
+    else notifyError("Tài khoản không đủ quyền để xem chi tiết đơn hàng");
 }
 </script>
 
@@ -62,8 +52,6 @@ function handleReviewOrder(orderId: number) {
                 <PrimaryButton label="Làm mới" :onClick="loadOrders" />
             </div>
         </div>
-        <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
+        <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
     </div>
-    <OrderHistoryModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder"
-        @review-order="handleReviewOrder" @close="isTrackingOrderModalVisible = false" />
 </template>
