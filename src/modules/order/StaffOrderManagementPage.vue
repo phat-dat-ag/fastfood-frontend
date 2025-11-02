@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { cancelOrderByStaff, confirmOrder, getUnfinishedOrderByStaff, markAsDelivered, markAsDelivering } from '../../service/order.service';
+import { cancelOrderByStaff, getAllUnfinishedOrders } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/tables/StaffOrderTable.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
-import StaffOrderModal from './components/modals/StaffOrderModal.vue';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
+import { useUserStore } from '../../store/useUserStore.store';
+import { useRouter } from 'vue-router';
+import { USER_ROLES } from '../../constants/user-roles';
+import { ROUTE_NAMES } from '../../constants/route-names';
+import { notifyError } from '../../utils/notification.utils';
 
 const orders = ref<Order[]>([]);
 
 async function loadUnfinishedOrders() {
     await useApiHandler<OrderResponse>(
-        getUnfinishedOrderByStaff,
+        getAllUnfinishedOrders,
         {
             loading: STAFF_MANAGEMENT_ORDER_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_MESSAGE.getError,
@@ -24,13 +28,14 @@ async function loadUnfinishedOrders() {
 
 onMounted(loadUnfinishedOrders);
 
-const isStaffOrderModalVisible = ref<boolean>(false);
-
-const selectedOrder = ref<Order | null>(null);
+const userStore = useUserStore();
+const router = useRouter();
 
 function handleUpdateOrder(order: Order) {
-    isStaffOrderModalVisible.value = true;
-    selectedOrder.value = order;
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.ORDER_DETAIL_MANAGEMENT, params: { orderId: order.id } });
+    else notifyError("Tài khoản không đủ quyền để xem chi tiết đơn hàng");
 }
 
 async function handleCancelOrder(order: Order) {
@@ -44,45 +49,6 @@ async function handleCancelOrder(order: Order) {
             success: "Hủy đơn cho khách thành công",
         },
         () => { },
-        loadUnfinishedOrders
-    )
-}
-
-async function handleConfirmOrder(orderId: number) {
-    await useApiHandler<Order>(
-        () => confirmOrder(orderId),
-        {
-            loading: "Đang xác nhận đơn hàng",
-            error: "Lỗi xác nhận đơn hàng",
-            success: "Đơn hàng đã được xác nhận",
-        },
-        () => isStaffOrderModalVisible.value = false,
-        loadUnfinishedOrders
-    )
-}
-
-async function handleMarkDelivering(orderId: number) {
-    await useApiHandler<Order>(
-        () => markAsDelivering(orderId),
-        {
-            loading: "Đang đánh dấu đơn hàng",
-            error: "Lỗi đánh dấu đơn hàng",
-            success: "Đơn hàng đã được đánh dấu là đang giao hàng",
-        },
-        () => isStaffOrderModalVisible.value = false,
-        loadUnfinishedOrders
-    )
-}
-
-async function handleMarkDelivered(orderId: number) {
-    await useApiHandler<Order>(
-        () => markAsDelivered(orderId),
-        {
-            loading: "Đang đánh dấu đơn hàng",
-            error: "Lỗi đánh dấu đơn hàng",
-            success: "Đơn hàng đã được đánh dấu là đã giao thành công",
-        },
-        () => isStaffOrderModalVisible.value = false,
         loadUnfinishedOrders
     )
 }
@@ -103,7 +69,4 @@ async function handleMarkDelivered(orderId: number) {
         <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder"
             :handleCancelOrder="handleCancelOrder" />
     </div>
-    <StaffOrderModal v-if="isStaffOrderModalVisible && selectedOrder" :order="selectedOrder" :isStaff=true
-        :canCancelOrder="true" @close="isStaffOrderModalVisible = false" @confirm-order="handleConfirmOrder"
-        @mark-delivered="handleMarkDelivered" @mark-delivering="handleMarkDelivering" />
 </template>

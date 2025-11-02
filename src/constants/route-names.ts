@@ -48,7 +48,8 @@ export const ROUTE_NAMES = {
     ORDER_HISTORY_DETAIL: "StaffOrderHistoryDetail",
     PRODUCT_REVIEW: "StaffProductReview",
     ALL_PRODUCT_REVIEWS: "StaffAllProductReivews",
-    ORDER_MANAGEMENT: "StaffOrderDetail",
+    ORDER_MANAGEMENT: "StaffOrderManagement",
+    ORDER_DETAIL_MANAGEMENT: "StaffOrderDetailManagement",
   },
   ADMIN: {
     HOME: "AdminHome",

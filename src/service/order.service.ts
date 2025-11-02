@@ -13,8 +13,12 @@ export const getOrderById = (orderId: number) => {
   return api.get("/order/by-order-id", { params: { orderId } });
 };
 
-export const getUnfinishedOrderByStaff = () => {
-  return api.get("/order/unfinished-orders/by-staff");
+export const getAllUnfinishedOrders = () => {
+  return api.get("/order/staff/unfinished-orders/all");
+};
+
+export const getUnfinishedOrder = (orderId: number) => {
+  return api.get("/order/staff/unfinished-order", { params: { orderId } });
 };
 
 export const confirmOrder = (orderId: number) => {
