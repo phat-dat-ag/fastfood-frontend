@@ -17,6 +17,7 @@ import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vu
 import ProductReviewPage from "../../modules/review/ProductReviewPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
 import OrderHistoryDetail from "../../modules/order/OrderHistoryDetail.vue";
+import OrderTrackingDetail from "../../modules/order/OrderTrackingDetail.vue";
 
 export const staffRoutes = {
   path: "/staff",
@@ -79,6 +80,11 @@ export const staffRoutes = {
       path: "order-tracking",
       name: ROUTE_NAMES.STAFF.ORDER_TRACKING,
       component: OrderTrackingPage,
+    },
+    {
+      path: "order-tracking/:orderId",
+      name: ROUTE_NAMES.STAFF.ORDER_TRACKING_DETAIL,
+      component: OrderTrackingDetail,
     },
     {
       path: "order-history",

@@ -3,17 +3,20 @@ import { onMounted, ref } from 'vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_TRACKING_MESSAGE } from '../../constants/messages';
-import { cancelOrder, getUnfinishedOrderByUser } from '../../service/order.service';
+import { getAllActiveOrders } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
 import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
-import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
-import OrderTrackingModal from './components/modals/OrderTrackingModal.vue';
+import { useUserStore } from '../../store/useUserStore.store';
+import { useRouter } from 'vue-router';
+import { USER_ROLES } from '../../constants/user-roles';
+import { ROUTE_NAMES } from '../../constants/route-names';
+import { notifyError } from '../../utils/notification.utils';
 
 const orders = ref<Order[]>([]);
 
 async function loadTrackingOrders() {
     await useApiHandler<OrderResponse>(
-        getUnfinishedOrderByUser,
+        getAllActiveOrders,
         {
             loading: ORDER_TRACKING_MESSAGE.get,
             error: ORDER_TRACKING_MESSAGE.getError,
@@ -24,28 +27,16 @@ async function loadTrackingOrders() {
 
 onMounted(loadTrackingOrders);
 
-const isTrackingOrderModalVisible = ref<boolean>(false);
-
-const selectedOrder = ref<Order | null>(null);
+const userStore = useUserStore();
+const router = useRouter();
 
 function handleUpdateOrder(order: Order) {
-    isTrackingOrderModalVisible.value = true;
-    selectedOrder.value = order;
-}
-
-async function handleCancelOrder(order: Order) {
-    const reason: string | null = await openCancelOrderConfirm();
-    if (!reason) return;
-    await useApiHandler<Order>(
-        () => cancelOrder(order.id, reason),
-        {
-            loading: "Đang hủy đơn",
-            error: "Lỗi hủy đơn",
-            success: "Đã hủy đơn",
-        },
-        () => isTrackingOrderModalVisible.value = false,
-        loadTrackingOrders
-    )
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.USER)
+        router.push({ name: ROUTE_NAMES.USER.ORDER_TRACKING_DETAIL, params: { orderId: order.id } });
+    else if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.ORDER_TRACKING_DETAIL, params: { orderId: order.id } });
+    else notifyError("Tài khoản không đủ quyền để xem chi tiết đơn hàng");
 }
 </script>
 
@@ -63,6 +54,4 @@ async function handleCancelOrder(order: Order) {
         </div>
         <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
     </div>
-    <OrderTrackingModal v-if="isTrackingOrderModalVisible && selectedOrder" :order="selectedOrder"
-        @cancel-order="handleCancelOrder" @close="isTrackingOrderModalVisible = false" />
 </template>

@@ -45,8 +45,12 @@ export const cancelOrderByStaff = (orderId: number, reason: string) => {
   );
 };
 
-export const getUnfinishedOrderByUser = () => {
-  return api.get("/order/unfinished-orders/by-user");
+export const getAllActiveOrders = () => {
+  return api.get("/order/active-order/all");
+};
+
+export const getActiveOrder = (orderId: number) => {
+  return api.get("/order/active-order", { params: { orderId } });
 };
 
 export const getAllOrderHistory = () => {
