@@ -6,9 +6,13 @@ import { formatCurrencyVND } from '../../../../utils/currency.utils';
 import { getOrderTagType, getPaymentTagType, ORDER_STATUS_TEXT, PAYMENT_METHOD_TEXT, PAYMENT_STATUS_TEXT } from '../../../../utils/order-display.utils';
 import { getDetailAddress } from '../../../../utils/geocode.utils';
 import EditButton from '../../../../components/buttons/EditButton.vue';
+import { ORDER_STATUS } from '../../../../constants/order-status';
+import { PAYMENT_METHODS } from '../../../../constants/payment-methods';
+import { PAYMENT_STATUS } from '../../../../constants/payment-status';
 
 const props = defineProps<{
     orders: Order[];
+    handleCheckout: (orderId: number) => Promise<void>;
     handleUpdateOrder: (order: Order) => void;
 }>();
 </script>
@@ -60,6 +64,15 @@ const props = defineProps<{
                                 {{ scope.row.address.district }}, {{ scope.row.address.province }}
                             </span>
                         </ElTooltip>
+                    </template>
+                </ElTableColumn>
+
+                <ElTableColumn label="Thanh toán" width="160" fixed="right" align="center">
+                    <template #default="scope">
+                        <EditButton v-if="(scope.row.orderStatus === ORDER_STATUS.PENDING
+                            && scope.row.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER
+                            && scope.row.paymentStatus !== PAYMENT_STATUS.PAID)" label="Thanh toán ngay"
+                            :onClick="() => handleCheckout(scope.row.id)" />
                     </template>
                 </ElTableColumn>
 

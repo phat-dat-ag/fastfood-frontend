@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_TRACKING_MESSAGE } from '../../constants/messages';
-import { getAllActiveOrders } from '../../service/order.service';
+import { getAllActiveOrders, getPaymentIntent } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
 import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
 import { useUserStore } from '../../store/useUserStore.store';
@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router';
 import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
+import CheckoutModal from '../cart/components/CheckoutModal.vue';
 
 const orders = ref<Order[]>([]);
 
@@ -29,6 +30,29 @@ onMounted(loadTrackingOrders);
 
 const userStore = useUserStore();
 const router = useRouter();
+
+const isCheckoutModalVisible = ref<boolean>(false);
+const clientSecret = ref<string | null>(null);
+
+async function handleCheckout(orderId: number) {
+    isCheckoutModalVisible.value = true;
+    await useApiHandler<Order>(
+        () => getPaymentIntent(orderId),
+        {
+            loading: "Đang chuẩn bị thanh toán qua Stripe",
+            error: "Chuẩn bị thanh toán thất bại",
+        },
+        (data: Order) => clientSecret.value = data.clientSecret,
+    )
+}
+
+async function handleCloseCheckoutModal() {
+    isCheckoutModalVisible.value = false;
+    await nextTick();
+    // Wait a bit for Stripe webhook to update payment status in backend
+    await new Promise(res => setTimeout(res, 1500));
+    await loadTrackingOrders();
+}
 
 function handleUpdateOrder(order: Order) {
     const role = userStore.user?.role;
@@ -52,6 +76,7 @@ function handleUpdateOrder(order: Order) {
                 <PrimaryButton label="Làm mới" :onClick="loadTrackingOrders" />
             </div>
         </div>
-        <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleUpdateOrder" />
+        <OrderTrackingTable :orders="orders" :handleCheckout="handleCheckout" :handleUpdateOrder="handleUpdateOrder" />
     </div>
+    <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>

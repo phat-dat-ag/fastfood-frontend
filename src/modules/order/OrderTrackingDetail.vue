@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import type { Order } from '../../types/order.types';
-import { cancelOrder, getActiveOrder } from '../../service/order.service';
+import { cancelOrder, getActiveOrder, getPaymentIntent } from '../../service/order.service';
 import { ORDER_TRACKING_DETAIL_MESSAGE } from '../../constants/messages';
 import { PAYMENT_METHOD_TEXT } from '../../utils/order-display.utils';
 import { formatCurrencyVND } from '../../utils/currency.utils';
@@ -14,6 +14,9 @@ import { PAYMENT_METHODS } from '../../constants/payment-methods';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
 import OrderTimeline from './components/OrderTimeline.vue';
 import DeleteButton from '../../components/buttons/DeleteButton.vue';
+import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
+import { ORDER_STATUS } from '../../constants/order-status';
+import CheckoutModal from '../cart/components/CheckoutModal.vue';
 
 const order = ref<Order | null>(null);
 
@@ -39,6 +42,36 @@ async function loadActiveOrder() {
 const router = useRouter();
 
 onMounted(loadActiveOrder);
+
+const canCheckout = computed<boolean>(() => {
+    if (!order.value) return false;
+    return (order.value.orderStatus === ORDER_STATUS.PENDING
+        && order.value.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER
+        && order.value.paymentStatus !== PAYMENT_STATUS.PAID);
+})
+
+const isCheckoutModalVisible = ref<boolean>(false);
+const clientSecret = ref<string | null>(null);
+
+async function handleCheckout(orderId: number) {
+    isCheckoutModalVisible.value = true;
+    await useApiHandler<Order>(
+        () => getPaymentIntent(orderId),
+        {
+            loading: "Đang chuẩn bị thanh toán qua Stripe",
+            error: "Chuẩn bị thanh toán thất bại",
+        },
+        (data: Order) => clientSecret.value = data.clientSecret,
+    )
+}
+
+async function handleCloseCheckoutModal() {
+    isCheckoutModalVisible.value = false;
+    await nextTick();
+    // Wait a bit for Stripe webhook to update payment status in backend
+    await new Promise(res => setTimeout(res, 1500));
+    await loadActiveOrder();
+}
 
 async function handleCancelOrder(order: Order) {
     const reason: string | null = await openCancelOrderConfirm();
@@ -85,11 +118,15 @@ async function handleCancelOrder(order: Order) {
                 </div>
             </section>
 
-            <DeleteButton
-                v-if="!order.deliveringAt && !(order.paymentStatus === PAYMENT_STATUS.PAID && order.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER)"
-                label="Hủy đơn hàng" :onClick="() => handleCancelOrder(order!)" />
+            <section class="mt-5 flex flex-col gap-3">
+                <PrimaryButton v-if="canCheckout" label="Thanh toán ngay" :onClick="() => handleCheckout(order!.id)" />
+                <DeleteButton
+                    v-if="!order.deliveringAt && !(order.paymentStatus === PAYMENT_STATUS.PAID && order.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER)"
+                    label="Hủy đơn hàng" :onClick="() => handleCancelOrder(order!)" />
+            </section>
         </div>
     </div>
+    <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>
 
 <style lang="postcss" scoped src="../../styles/order-modal.css"></style>
