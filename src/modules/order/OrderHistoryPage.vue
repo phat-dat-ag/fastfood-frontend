@@ -5,12 +5,12 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_HISTORY_MESSAGE } from '../../constants/messages';
 import { getAllOrderHistory } from '../../service/order.service';
 import { type Order, type OrderResponse } from '../../types/order.types';
-import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
+import OrderHistoryTable from './components/tables/OrderHistoryTable.vue';
 
 const orders = ref<Order[]>([]);
 
@@ -52,6 +52,6 @@ function handleViewOrderHistoryDetail(order: Order) {
                 <PrimaryButton label="Làm mới" :onClick="loadOrders" />
             </div>
         </div>
-        <OrderTrackingTable :orders="orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
+        <OrderHistoryTable :orders="orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
     </div>
 </template>
