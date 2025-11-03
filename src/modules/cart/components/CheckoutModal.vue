@@ -4,7 +4,6 @@ import { ElDialog } from "element-plus";
 import { loadStripe, type Stripe, type StripeElements } from "@stripe/stripe-js";
 import { notifyError, notifySuccess } from "../../../utils/notification.utils";
 import { closeLoading, openLoading } from "../../../utils/loading.utils";
-import { useRouter } from "vue-router";
 
 const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
@@ -57,8 +56,6 @@ onBeforeUnmount(() => {
     });
 });
 
-const router = useRouter();
-
 async function handleSubmit() {
     if (!stripe.value || !elements.value || !props.clientSecret)
         return notifyError("Stripe chưa sẵn sàng!");
@@ -78,7 +75,6 @@ async function handleSubmit() {
         } else if (paymentIntent && paymentIntent.status === "succeeded") {
             notifySuccess("Thanh toán thành công, hãy theo dõi đơn hàng nhé!");
             isVisible.value = false;
-            router.back();
         }
     } catch (error: any) {
         notifyError("Lỗi thanh toán: ", error.messaage);
