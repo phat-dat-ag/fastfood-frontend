@@ -186,6 +186,11 @@ async function placeOrder(userNote: string) {
     }
 }
 
+async function handleCloseCheckoutModal() {
+    isCheckoutModalVisible.value = false;
+    await loadCarts();
+}
+
 </script>
 <template>
     <div v-if="cartDetail && cartDetail.carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
@@ -199,5 +204,5 @@ async function placeOrder(userNote: string) {
         Giỏ hàng trống, hãy mua sắm thôi nào
     </div>
 
-    <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="isCheckoutModalVisible = false" />
+    <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>
