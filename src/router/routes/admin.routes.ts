@@ -14,6 +14,7 @@ import PromotionOrderPage from "../../modules/promotion/PromotionOrderPage.vue";
 import AddPromotionOrderPage from "../../modules/promotion/AddPromotionOrderPage.vue";
 import StaffManagementPage from "../../modules/account/StaffManagementPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
+import TopicManagementPage from "../../modules/topic/TopicManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -86,6 +87,11 @@ export const adminRoutes = {
       path: "add-order-promotion",
       name: ROUTE_NAMES.ADMIN.PROMOTION_ORDER_ADD,
       component: AddPromotionOrderPage,
+    },
+    {
+      path: "manage-topic",
+      name: ROUTE_NAMES.ADMIN.TOPIC_MANAGEMENT,
+      component: TopicManagementPage,
     },
   ],
 };

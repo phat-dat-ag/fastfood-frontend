@@ -47,7 +47,9 @@ function signOut() {
                         Cho đơn hàng
                     </el-menu-item>
                 </el-sub-menu>
-                <el-menu-item index="5">Quản lý trò chơi</el-menu-item>
+                <el-menu-item index="5" @click="router.push({ name: ROUTE_NAMES.ADMIN.TOPIC_MANAGEMENT })">
+                    Quản lý chủ đề trò chơi
+                </el-menu-item>
                 <el-menu-item index="6">Quản lý đơn hàng</el-menu-item>
                 <el-menu-item index="7">Xem phản ánh khách hàng</el-menu-item>
             </el-menu>

@@ -65,5 +65,8 @@ export const ROUTE_NAMES = {
     PROMOTION_PRODUCT_ADD: "PromotionByProductAdd",
     PROMOTION_ORDER_MANAGEMENT: "PromotionOrderManagement",
     PROMOTION_ORDER_ADD: "PromotionOrderAdd",
+    TOPIC_MANAGEMENT: "TopicManagement",
+    TOPIC_DIFFICULTY_MANAGEMENT: "TopicDifficultyManagement",
+    AWARD_MANAGEMENT: "AwardManagement",
   },
 } as const;
