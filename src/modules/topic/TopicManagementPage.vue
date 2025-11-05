@@ -10,6 +10,8 @@ import { createTopic, deleteTopic, getAllTopics, updateTopic } from '../../servi
 import { TOPIC_MESSAGE } from '../../constants/messages';
 import { useTopicStore } from '../../store/useTopicStore.store';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
+import { useRouter } from 'vue-router';
+import { ROUTE_NAMES } from '../../constants/route-names';
 
 const topics = ref<Topic[]>([]);
 
@@ -101,6 +103,12 @@ async function handleDeleteTopic(topicId: number) {
         loadTopics,
     )
 }
+
+const router = useRouter();
+
+function goToTopicDifficultyManagementPage(slug: string) {
+    router.push({ name: ROUTE_NAMES.ADMIN.TOPIC_DIFFICULTY_MANAGEMENT, params: { slug } });
+}
 </script>
 
 <template>
@@ -112,7 +120,8 @@ async function handleDeleteTopic(topicId: number) {
             @update:filter="handleFilterChange" />
 
         <TopicTable :topics="topics" :openCreateTopicModal="openCreateTopicModal"
-            :openUpdateTopicModal="openUpdateTopicModal" :handleDeleteTopic="handleDeleteTopic" />
+            :openUpdateTopicModal="openUpdateTopicModal" :handleDeleteTopic="handleDeleteTopic"
+            :goToTopicDifficultyManagementPage="goToTopicDifficultyManagementPage" />
 
         <TopicModal v-if="isTopicModalVisible" :isCreatingTopic="isCreatingTopic" @create-topic="handleCreateTopic"
             @update-topic="handleUpdateTopic" @close="isTopicModalVisible = false" />

@@ -11,6 +11,7 @@ interface TopicTableProps {
     openCreateTopicModal: () => void;
     openUpdateTopicModal: (topic: Topic) => void;
     handleDeleteTopic: (topicId: number) => Promise<void>;
+    goToTopicDifficultyManagementPage: (slug: string) => void;
 }
 const props = defineProps<TopicTableProps>();
 </script>
@@ -48,7 +49,9 @@ const props = defineProps<TopicTableProps>();
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
                             <EditButton :onClick="() => props.openUpdateTopicModal(scope.row)" label="Cập nhật" />
-                            <DeleteButton :onClick="() => handleDeleteTopic(scope.row.id)" label="Xóa" />
+                            <DeleteButton :onClick="() => props.handleDeleteTopic(scope.row.id)" label="Xóa" />
+                            <AddButton label="Chi tiết"
+                                :onClick="() => props.goToTopicDifficultyManagementPage(scope.row.slug)" />
                         </div>
                     </template>
                 </ElTableColumn>

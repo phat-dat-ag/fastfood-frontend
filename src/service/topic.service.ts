@@ -13,6 +13,10 @@ export const updateTopic = (data: TopicUpdateRequest) => {
   return api.put("/topic", request, { params: { topicId: id } });
 };
 
+export const getTopicBySlug = (slug: string) => {
+  return api.get("/topic/by-slug", { params: { slug } });
+};
+
 export const getAllTopics = () => {
   return api.get("/topic");
 };

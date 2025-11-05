@@ -15,6 +15,7 @@ import AddPromotionOrderPage from "../../modules/promotion/AddPromotionOrderPage
 import StaffManagementPage from "../../modules/account/StaffManagementPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
 import TopicManagementPage from "../../modules/topic/TopicManagementPage.vue";
+import TopicDifficultyManagementPage from "../../modules/topic-difficulty/TopicDifficultyManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -92,6 +93,11 @@ export const adminRoutes = {
       path: "manage-topic",
       name: ROUTE_NAMES.ADMIN.TOPIC_MANAGEMENT,
       component: TopicManagementPage,
+    },
+    {
+      path: "manage-topic-difficulty/:slug",
+      name: ROUTE_NAMES.ADMIN.TOPIC_DIFFICULTY_MANAGEMENT,
+      component: TopicDifficultyManagementPage,
     },
   ],
 };

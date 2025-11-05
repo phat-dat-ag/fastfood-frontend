@@ -24,7 +24,7 @@ const schema = yup.object({
         const topicName = value.trim();
         return topicName.length > 2 && topicName.length <= 60;
     }),
-    description: yup.string().required("Vui lòng nhập mô tả chủ đề").test("check-topic-description", "Mô tả chủ từ 2 đến 2000 ký tự", function (value) {
+    description: yup.string().required("Vui lòng nhập mô tả chủ đề").test("check-topic-description", "Mô tả chủ đề từ 2 đến 2000 ký tự", function (value) {
         if (!value) return true;
         const topicDescription = value.trim();
         return topicDescription.length >= 2 && topicDescription.length <= 2000;
