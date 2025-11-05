@@ -18,6 +18,12 @@ export const updateTopicDifficulty = (data: TopicDifficultyUpdateRequest) => {
   });
 };
 
+export const getTopicDifficultyBySlug = (topicDifficultySlug: string) => {
+  return api.get("/topic-difficulty/by-slug", {
+    params: { topicDifficultySlug },
+  });
+};
+
 export const getAllTopicDifficultiesByTopic = (topicSlug: string) => {
   return api.get("/topic-difficulty/by-topic-slug", { params: { topicSlug } });
 };

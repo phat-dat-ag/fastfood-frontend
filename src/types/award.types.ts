@@ -1,3 +1,13 @@
+export interface AwardCreateRequest {
+  type: string;
+  minValue: number;
+  maxValue: number;
+  quantity: number;
+  maxDiscountAmount: number;
+  minSpendAmount: number;
+  isActivated: boolean;
+}
+
 export interface Award {
   id: number;
   type: string;
