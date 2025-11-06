@@ -8,5 +8,5 @@ export interface Answer {
   id: number;
   content: string;
   imageUrl: string | null;
-  isCorrect: boolean;
+  correct: boolean;
 }

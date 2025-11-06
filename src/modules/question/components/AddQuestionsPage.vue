@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ElSwitch } from "element-plus";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -10,7 +10,11 @@ import DeleteButton from "../../../components/buttons/DeleteButton.vue";
 import AddButton from "../../../components/buttons/AddButton.vue";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { QuestionCreateRequest, QuestionPrimaryData } from "../../../types/question.types";
+import { useApiHandler } from "../../../composables/useApiHandler";
+import { createQuestions } from "../../../service/question.service";
+import { QUESTION_MESSAGE } from "../../../constants/messages";
 
+const route = useRoute();
 const router = useRouter();
 
 function makeEmptyQuestion(): QuestionPrimaryData {
@@ -126,7 +130,18 @@ async function handleSubmitAll(): Promise<void> {
             isCorrect: a.isCorrect,
         })),
     }));
-    console.log(dataRequest);
+
+    const slug = route.params.slug.toString() || "";
+
+    await useApiHandler(
+        () => createQuestions(dataRequest, slug),
+        {
+            loading: QUESTION_MESSAGE.create,
+            success: QUESTION_MESSAGE.createSuccess,
+            error: QUESTION_MESSAGE.createError,
+        },
+        () => router.back(),
+    )
 }
 
 function getObjectURL(file: File | null): string | undefined {

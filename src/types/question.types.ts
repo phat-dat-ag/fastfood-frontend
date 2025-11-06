@@ -21,6 +21,6 @@ export interface Question {
   content: string;
   imageUrl: string | null;
   audioUrl: string | null;
-  isActivated: boolean;
+  activated: boolean;
   answers: Answer[];
 }
