@@ -132,6 +132,10 @@ const router = useRouter();
 function goToAwardManagementPage(slug: string) {
     router.push({ name: ROUTE_NAMES.ADMIN.AWARD_MANAGEMENT, params: { slug } });
 }
+
+function goToQuestionManagementPage(slug: string) {
+    router.push({ name: ROUTE_NAMES.ADMIN.QUESTION_MANAGEMENT, params: { slug } });
+}
 </script>
 <template>
     <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
@@ -166,7 +170,8 @@ function goToAwardManagementPage(slug: string) {
             :openCreateTopicDifficultyModal="openCreateTopicDifficultyModal"
             :openUpdateTopicDifficultyModal="openUpdateTopicDifficultyModal"
             :handleDeleteTopicDifficulty="handleDeleteTopicDifficulty"
-            :goToAwardManagementPage="goToAwardManagementPage" />
+            :goToAwardManagementPage="goToAwardManagementPage"
+            :goToQuestionManagementPage="goToQuestionManagementPage" />
 
         <TopicDifficultyModal v-if="isTopicDifficultyModalVisible"
             :isCreatingTopicDifficulty="isCreatingTopicDifficulty"

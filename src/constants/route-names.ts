@@ -68,5 +68,8 @@ export const ROUTE_NAMES = {
     TOPIC_MANAGEMENT: "TopicManagement",
     TOPIC_DIFFICULTY_MANAGEMENT: "TopicDifficultyManagement",
     AWARD_MANAGEMENT: "AwardManagement",
+    QUESTION_MANAGEMENT: "QuestionManagement",
+    SHOW_QUESTION_PAGE: "ShowQuestionPage",
+    ADD_QUESTION_PAGE: "AddQuestionPage",
   },
 } as const;

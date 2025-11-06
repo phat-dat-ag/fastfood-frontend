@@ -11,6 +11,7 @@ interface TopicTableProps {
     openUpdateTopicDifficultyModal: (topicDifficulty: TopicDifficulty) => void;
     handleDeleteTopicDifficulty: (topicDifficultyId: number) => Promise<void>;
     goToAwardManagementPage: (slug: string) => void;
+    goToQuestionManagementPage: (slug: string) => void;
 }
 const props = defineProps<TopicTableProps>();
 </script>
@@ -22,10 +23,9 @@ const props = defineProps<TopicTableProps>();
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-orange-100">
             <ElTable :data="props.topicDifficulties" border class="w-full">
                 <ElTableColumn label="Tên độ khó" prop="name" show-overflow-tooltip />
-                <ElTableColumn label="Mô tả" prop="description" show-overflow-tooltip />
-                <ElTableColumn label="Thời gian (giây)" prop="duration" />
-                <ElTableColumn label="Số câu hỏi" prop="questionCount" />
-                <ElTableColumn label="Điểm tối thiểu" prop="minCorrectToReward" />
+                <ElTableColumn label="Thời gian (giây)" prop="duration" width="140" />
+                <ElTableColumn label="Số câu hỏi" prop="questionCount" width="100" />
+                <ElTableColumn label="Điểm tối thiểu" prop="minCorrectToReward" width="120" />
                 <ElTableColumn width="100" label="Trạng thái" prop="activated">
                     <template #default="scope">
                         <span v-if="scope.row.activated" class="text-green-500 font-medium">
@@ -37,7 +37,7 @@ const props = defineProps<TopicTableProps>();
                     </template>
                 </ElTableColumn>
 
-                <ElTableColumn label="Thao tác" width="320">
+                <ElTableColumn label="Thao tác" width="360">
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
                             <EditButton :onClick="() => props.openUpdateTopicDifficultyModal(scope.row)"
@@ -46,6 +46,8 @@ const props = defineProps<TopicTableProps>();
                                 label="Xóa" />
                             <AddButton label="Chi tiết"
                                 :onClick="() => props.goToAwardManagementPage(scope.row.slug)" />
+                            <AddButton label="Câu hỏi"
+                                :onClick="() => props.goToQuestionManagementPage(scope.row.slug)" />
                         </div>
                     </template>
                 </ElTableColumn>

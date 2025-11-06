@@ -12,6 +12,7 @@
     "@goongmaps/goong-js": "^1.0.9",
     "@stripe/stripe-js": "^8.1.0",
     "@types/three": "^0.180.0",
+    "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.12.2",
     "element-plus": "^2.11.2",
     "pinia": "^3.0.3",

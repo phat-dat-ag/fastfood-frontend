@@ -17,6 +17,9 @@ import ProductPage from "../../modules/products/ProductPage.vue";
 import TopicManagementPage from "../../modules/topic/TopicManagementPage.vue";
 import TopicDifficultyManagementPage from "../../modules/topic-difficulty/TopicDifficultyManagementPage.vue";
 import AwardManagementPage from "../../modules/award/AwardManagementPage.vue";
+import QuestionManagementPage from "../../modules/question/QuestionManagementPage.vue";
+import ShowQuestionsPage from "../../modules/question/components/ShowQuestionsPage.vue";
+import AddQuestionsPage from "../../modules/question/components/AddQuestionsPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -104,6 +107,24 @@ export const adminRoutes = {
       path: "manage-award/:slug",
       name: ROUTE_NAMES.ADMIN.AWARD_MANAGEMENT,
       component: AwardManagementPage,
+    },
+    {
+      path: "manage-question/:slug",
+      name: ROUTE_NAMES.ADMIN.QUESTION_MANAGEMENT,
+      component: QuestionManagementPage,
+      redirect: { name: ROUTE_NAMES.ADMIN.SHOW_QUESTION_PAGE },
+      children: [
+        {
+          path: "",
+          name: ROUTE_NAMES.ADMIN.SHOW_QUESTION_PAGE,
+          component: ShowQuestionsPage,
+        },
+        {
+          path: "add",
+          name: ROUTE_NAMES.ADMIN.ADD_QUESTION_PAGE,
+          component: AddQuestionsPage,
+        },
+      ],
     },
   ],
 };
