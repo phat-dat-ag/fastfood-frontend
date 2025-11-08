@@ -79,3 +79,4 @@ export const TOPIC_DIFFICULTY_MESSAGE =
   createEntityMessages("độ khó của chủ đề");
 export const AWARD_MESSAGE = createEntityMessages("phần thưởng của độ khó");
 export const QUESTION_MESSAGE = createEntityMessages("câu hỏi");
+export const CHANLLENGE_MESSAGE = createEntityMessages("thử thách");

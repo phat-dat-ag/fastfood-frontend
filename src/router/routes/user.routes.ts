@@ -17,6 +17,7 @@ import ProductReviewPage from "../../modules/review/ProductReviewPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
 import OrderHistoryDetail from "../../modules/order/OrderHistoryDetail.vue";
 import OrderTrackingDetail from "../../modules/order/OrderTrackingDetail.vue";
+import QuizzPage from "../../modules/challenge/QuizzPage.vue";
 
 export const userRoutes = {
   path: "/user",
@@ -49,6 +50,11 @@ export const userRoutes = {
       path: "challenge",
       name: ROUTE_NAMES.USER.CHALLENGE,
       component: ChallengePage,
+    },
+    {
+      path: "challenge/:slug",
+      name: ROUTE_NAMES.USER.QUIZZ,
+      component: QuizzPage,
     },
     {
       path: "about",

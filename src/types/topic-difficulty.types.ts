@@ -26,3 +26,13 @@ export interface TopicDifficulty {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface TopicDifficultyDisplay {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  duration: number;
+  questionCount: number;
+  minCorrectToReward: number;
+}

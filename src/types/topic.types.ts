@@ -1,3 +1,5 @@
+import type { TopicDifficultyDisplay } from "./topic-difficulty.types";
+
 export interface TopicCreateRequest {
   name: string;
   description: string;
@@ -19,4 +21,12 @@ export interface Topic {
   activated: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface TopicDisplay {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  difficulties: TopicDifficultyDisplay[];
 }

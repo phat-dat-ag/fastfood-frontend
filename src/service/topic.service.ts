@@ -21,6 +21,10 @@ export const getAllTopics = () => {
   return api.get("/topic");
 };
 
+export const getAllDisplayableTopics = () => {
+  return api.get("/topic/display");
+};
+
 export const deleteTopic = (topicId: number) => {
   return api.delete("/topic", { params: { topicId } });
 };
