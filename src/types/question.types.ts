@@ -1,4 +1,4 @@
-import type { Answer, AnswerCreateRequest } from "./answer.types";
+import type { Answer, AnswerCreateRequest, AnswerInQuiz } from "./answer.types";
 
 export interface QuestionPrimaryData {
   content: string;
@@ -23,4 +23,13 @@ export interface Question {
   audioUrl: string | null;
   activated: boolean;
   answers: Answer[];
+}
+
+export interface QuestionInQuiz {
+  id: number;
+  content: string;
+  imageUrl: string;
+  audioUrl: string;
+  activated: boolean;
+  answers: AnswerInQuiz[];
 }
