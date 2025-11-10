@@ -3,7 +3,7 @@ import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApiHandler } from "../../composables/useApiHandler";
 import { getQuiz, submitQuiz } from "../../service/quiz.service";
-import { CHANLLENGE_MESSAGE } from "../../constants/messages";
+import { CHALLENGE_MESSAGE } from "../../constants/messages";
 import type { Quiz, QuizSubmitRequest } from "../../types/quiz.types";
 import QuizProgress from "./components/QuizProgress.vue";
 import QuizQuestion from "./components/QuizQuestion.vue";
@@ -21,8 +21,8 @@ async function loadQuiz() {
   await useApiHandler<Quiz>(
     () => getQuiz(slug),
     {
-      loading: CHANLLENGE_MESSAGE.get,
-      error: CHANLLENGE_MESSAGE.getError,
+      loading: CHALLENGE_MESSAGE.get,
+      error: CHALLENGE_MESSAGE.getError,
     },
     (data: Quiz) => {
       quiz.value = data;

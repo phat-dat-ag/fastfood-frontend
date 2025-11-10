@@ -87,6 +87,15 @@ function goToOrderHistoryPage() {
     else notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
 }
 
+function goToChallengeHistoryPage() {
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.USER)
+        router.push({ name: ROUTE_NAMES.USER.CHALLENGE_HISTORY });
+    else if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.CHALLENGE_HISTORY });
+    else notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
+}
+
 const goTo = (routeName: string) => router.push({ name: routeName });
 
 interface UserIcon {
@@ -168,7 +177,7 @@ const userIcons = computed<UserIcon[]>(() => {
 
                 <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
                     @go-to-profile-page="goToProfilePage" @go-to-order-history-page="goToOrderHistoryPage"
-                    @signOut="signOut"
+                    @go-to-challenge-history-page="goToChallengeHistoryPage" @signOut="signOut"
                     class="w-9 h-9 rounded-full ring-2 ring-white/70 hover:ring-white transition-all duration-300 shadow-md" />
             </template>
 

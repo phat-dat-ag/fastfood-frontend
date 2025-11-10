@@ -9,4 +9,5 @@ export interface Answer {
   content: string;
   imageUrl: string | null;
   correct: boolean;
+  selectedByUser: boolean;
 }

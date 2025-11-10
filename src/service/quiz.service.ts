@@ -8,3 +8,7 @@ export const getQuiz = (topicDifficultySlug: string) => {
 export const submitQuiz = (quizSubmitRequest: QuizSubmitRequest) => {
   return api.post("/quiz", quizSubmitRequest);
 };
+
+export const getAllReviewQuizzesByUser = () => {
+  return api.get("/quiz/by-user");
+};
