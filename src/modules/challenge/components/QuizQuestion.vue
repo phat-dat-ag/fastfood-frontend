@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ElCard } from 'element-plus';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
-import type { QuestionInQuiz } from '../../../types/question.types';
+import type { Question } from '../../../types/question.types';
 
 interface QuizPaginationProps {
-    currentQuestion: QuestionInQuiz | null;
+    currentQuestion: Question | null;
     currentIndex: number;
     questionCount: number;
     selectedAnswers: Record<number, number | null>;

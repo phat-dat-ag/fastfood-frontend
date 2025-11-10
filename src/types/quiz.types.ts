@@ -1,5 +1,5 @@
 import type { Promotion } from "./promotion.types";
-import type { QuestionInQuiz } from "./question.types";
+import type { Question } from "./question.types";
 import type { QuizQuestionSubmitRequest } from "./quiz-question.types";
 import type { TopicDifficulty } from "./topic-difficulty.types";
 
@@ -10,7 +10,7 @@ export interface Quiz {
   expiredAt: string;
   topicDifficulty: TopicDifficulty;
   promotion: Promotion;
-  questions: QuestionInQuiz[];
+  questions: Question[];
 }
 
 export interface QuizSubmitRequest {

@@ -7,7 +7,7 @@ import { CHANLLENGE_MESSAGE } from "../../constants/messages";
 import type { Quiz, QuizSubmitRequest } from "../../types/quiz.types";
 import QuizProgress from "./components/QuizProgress.vue";
 import QuizQuestion from "./components/QuizQuestion.vue";
-import type { QuestionInQuiz } from "../../types/question.types";
+import type { Question } from "../../types/question.types";
 import { notifyError } from "../../utils/notification.utils";
 import type { QuizQuestionSubmitRequest } from "../../types/quiz-question.types";
 
@@ -93,7 +93,7 @@ async function handleSubmitQuiz() {
 
 const currentIndex = ref<number>(0);
 
-const currentQuestion = computed<QuestionInQuiz | null>(() => {
+const currentQuestion = computed<Question | null>(() => {
   if (!quiz.value) return null;
   return quiz.value.questions[currentIndex.value];
 });

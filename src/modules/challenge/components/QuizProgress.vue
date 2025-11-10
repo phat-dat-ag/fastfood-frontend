@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ElCard } from 'element-plus';
-import type { QuestionInQuiz } from '../../../types/question.types';
+import type { Question } from '../../../types/question.types';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
 import { computed } from 'vue';
 
 interface QuizPogressPorps {
     selectedAnswers: Record<number, number | null>;
-    questions: QuestionInQuiz[];
+    questions: Question[];
     goToQuestion: (index: number) => void;
     handleSubmitQuiz: () => Promise<void>;
     remainingTime: number;

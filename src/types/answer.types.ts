@@ -10,9 +10,3 @@ export interface Answer {
   imageUrl: string | null;
   correct: boolean;
 }
-
-export interface AnswerInQuiz {
-  id: number;
-  content: string;
-  imageUrl: string;
-}
