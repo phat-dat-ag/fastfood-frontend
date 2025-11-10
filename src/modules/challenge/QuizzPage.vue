@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useApiHandler } from "../../composables/useApiHandler";
-import { getQuiz } from "../../service/quiz.service";
+import { getQuiz, submitQuiz } from "../../service/quiz.service";
 import { CHANLLENGE_MESSAGE } from "../../constants/messages";
-import type { Quiz } from "../../types/quiz.types";
+import type { Quiz, QuizSubmitRequest } from "../../types/quiz.types";
 import QuizProgress from "./components/QuizProgress.vue";
 import QuizQuestion from "./components/QuizQuestion.vue";
 import type { QuestionInQuiz } from "../../types/question.types";
+import { notifyError } from "../../utils/notification.utils";
+import type { QuizQuestionSubmitRequest } from "../../types/quiz-question.types";
 
 const route = useRoute();
 const quiz = ref<Quiz | null>(null);
@@ -61,11 +63,32 @@ function selectAnswer(questionId: number, answerId: number) {
     selectedAnswers.value[questionId] === answerId ? null : answerId;
 }
 
-async function submitQuiz() {
-  console.log("Kết quả nộp bài:");
-  for (const [questionId, answerId] of Object.entries(selectedAnswers.value)) {
-    console.log(`Question ${questionId}: Answer ${answerId}`);
+const router = useRouter();
+
+async function handleSubmitQuiz() {
+  if (!quiz.value) {
+    notifyError("Lỗi nộp bài: không thấy bài kiểm tra");
+    return;
   }
+  const slug = route.params.slug?.toString() || "";
+  const quizQuestions: QuizQuestionSubmitRequest[] = [];
+  for (const [questionId, answerId] of Object.entries(selectedAnswers.value)) {
+    quizQuestions.push({ questionId: Number(questionId), answerId });
+  }
+  const dataRequest: QuizSubmitRequest = {
+    quizId: quiz.value.id,
+    topicDifficultySlug: slug,
+    quizQuestions,
+  };
+
+  await useApiHandler(
+    () => submitQuiz(dataRequest),
+    {
+      loading: "Đang nộp bài",
+      error: "Lỗi nộp bài"
+    },
+    (data) => { console.log("Nộp bài thành công: ", data); router.back() },
+  )
 }
 
 const currentIndex = ref<number>(0);
@@ -82,6 +105,6 @@ const currentQuestion = computed<QuestionInQuiz | null>(() => {
       :selectedAnswers="selectedAnswers" :goToQuestion="goToQuestion" :selectAnswer="selectAnswer" />
 
     <QuizProgress :selectedAnswers="selectedAnswers" :questions="quiz.questions" :goToQuestion="goToQuestion"
-      :submitQuiz="submitQuiz" :remainingTime="remainingTime" />
+      :handleSubmitQuiz="handleSubmitQuiz" :remainingTime="remainingTime" />
   </div>
 </template>

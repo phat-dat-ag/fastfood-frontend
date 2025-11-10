@@ -8,7 +8,7 @@ interface QuizPogressPorps {
     selectedAnswers: Record<number, number | null>;
     questions: QuestionInQuiz[];
     goToQuestion: (index: number) => void;
-    submitQuiz: () => Promise<void>;
+    handleSubmitQuiz: () => Promise<void>;
     remainingTime: number;
 }
 const props = defineProps<QuizPogressPorps>();
@@ -37,6 +37,6 @@ const formattedTime = computed(() => {
         <h4 class="mt-2 font-semibold">Thời gian còn lại: </h4>
         <p class="my-2 text-xl font-bold text-red-600">{{ formattedTime }}</p>
 
-        <PrimaryButton label="Nộp bài" :onClick="props.submitQuiz" />
+        <PrimaryButton label="Nộp bài" :onClick="props.handleSubmitQuiz" />
     </ElCard>
 </template>

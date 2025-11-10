@@ -1,5 +1,10 @@
 import api from "../api/axios";
+import type { QuizSubmitRequest } from "../types/quiz.types";
 
 export const getQuiz = (topicDifficultySlug: string) => {
   return api.get("/quiz", { params: { topicDifficultySlug } });
+};
+
+export const submitQuiz = (quizSubmitRequest: QuizSubmitRequest) => {
+  return api.post("/quiz", quizSubmitRequest);
 };
