@@ -2,7 +2,6 @@ import { ROUTE_NAMES } from "../../constants/route-names";
 import { USER_ROLES } from "../../constants/user-roles";
 import AdminLayout from "../../layouts/AdminLayout.vue";
 import CategoryManagementPage from "../../modules/category/CategoryManagementPage.vue";
-import CategoryPage from "../../modules/products/CategoryPage.vue";
 import ProductManagementPage from "../../modules/products/ProductManagementPage.vue";
 import CustomerManagementPage from "../../modules/account/CustomerManagementPage.vue";
 import PromotionByCategoryPage from "../../modules/promotion/PromotionByCategoryPage.vue";
@@ -13,7 +12,6 @@ import ProductDetail from "../../modules/products/ProductDetail.vue";
 import PromotionOrderPage from "../../modules/promotion/PromotionOrderPage.vue";
 import AddPromotionOrderPage from "../../modules/promotion/AddPromotionOrderPage.vue";
 import StaffManagementPage from "../../modules/account/StaffManagementPage.vue";
-import ProductPage from "../../modules/products/ProductPage.vue";
 import TopicManagementPage from "../../modules/topic/TopicManagementPage.vue";
 import TopicDifficultyManagementPage from "../../modules/topic-difficulty/TopicDifficultyManagementPage.vue";
 import AwardManagementPage from "../../modules/award/AwardManagementPage.vue";
@@ -21,6 +19,7 @@ import QuestionManagementPage from "../../modules/question/QuestionManagementPag
 import ShowQuestionsPage from "../../modules/question/components/ShowQuestionsPage.vue";
 import AddQuestionsPage from "../../modules/question/components/AddQuestionsPage.vue";
 import AdminOrderManagementPage from "../../modules/order/AdminOrderManagementPage.vue";
+import AdminDashboard from "../../modules/dashboard/AdminDashboard.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -29,15 +28,8 @@ export const adminRoutes = {
   children: [
     {
       path: "",
-      name: ROUTE_NAMES.ADMIN.HOME,
-      component: CategoryPage,
-      children: [
-        {
-          path: "category/:slug",
-          name: ROUTE_NAMES.ADMIN.CATEGORY_DETAIL,
-          component: ProductPage,
-        },
-      ],
+      name: ROUTE_NAMES.ADMIN.DASHBOARD,
+      component: AdminDashboard,
     },
     {
       path: "product-detail/:slug",

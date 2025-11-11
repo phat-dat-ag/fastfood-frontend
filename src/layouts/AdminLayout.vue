@@ -16,7 +16,8 @@ function signOut() {
     <div class="flex">
         <div>
             <el-menu default-active="0">
-                <el-menu-item index="0">Xem thống kê</el-menu-item>
+                <el-menu-item index="0" @click="router.push({ name: ROUTE_NAMES.ADMIN.DASHBOARD })">Xem thống
+                    kê</el-menu-item>
                 <el-sub-menu index="1">
                     <template #title>Quản lý tài khoản</template>
                     <el-menu-item index="1-1" @click="router.push({ name: ROUTE_NAMES.ADMIN.CUSTOMER_MANAGEMENT })">

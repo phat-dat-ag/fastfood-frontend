@@ -49,7 +49,7 @@ const onSubmit = async (value: any) => {
         localStorage.setItem("token", dataResponse.data.token);
         switch (userStore.user?.role) {
             case USER_ROLES.ADMIN:
-                router.push({ name: ROUTE_NAMES.ADMIN.HOME });
+                router.push({ name: ROUTE_NAMES.ADMIN.DASHBOARD });
                 break;
             case USER_ROLES.STAFF:
                 router.push({ name: ROUTE_NAMES.STAFF.HOME });
