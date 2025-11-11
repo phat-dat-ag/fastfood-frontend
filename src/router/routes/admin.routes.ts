@@ -20,6 +20,7 @@ import AwardManagementPage from "../../modules/award/AwardManagementPage.vue";
 import QuestionManagementPage from "../../modules/question/QuestionManagementPage.vue";
 import ShowQuestionsPage from "../../modules/question/components/ShowQuestionsPage.vue";
 import AddQuestionsPage from "../../modules/question/components/AddQuestionsPage.vue";
+import AdminOrderManagementPage from "../../modules/order/AdminOrderManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -92,6 +93,11 @@ export const adminRoutes = {
       path: "add-order-promotion",
       name: ROUTE_NAMES.ADMIN.PROMOTION_ORDER_ADD,
       component: AddPromotionOrderPage,
+    },
+    {
+      path: "manage-orders",
+      name: ROUTE_NAMES.ADMIN.ORDER_MANAGEMENT,
+      component: AdminOrderManagementPage,
     },
     {
       path: "manage-topic",

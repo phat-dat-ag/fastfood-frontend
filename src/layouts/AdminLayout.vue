@@ -50,8 +50,11 @@ function signOut() {
                 <el-menu-item index="5" @click="router.push({ name: ROUTE_NAMES.ADMIN.TOPIC_MANAGEMENT })">
                     Quản lý chủ đề trò chơi
                 </el-menu-item>
-                <el-menu-item index="6">Quản lý đơn hàng</el-menu-item>
-                <el-menu-item index="7">Xem phản ánh khách hàng</el-menu-item>
+                <el-menu-item index="6" @click="router.push({ name: ROUTE_NAMES.ADMIN.ORDER_MANAGEMENT })">
+                    Quản lý đơn hàng
+                </el-menu-item>
+                <el-menu-item index="7">Quản lý các đánh giá</el-menu-item>
+                <el-menu-item index="8">Quản lý các góp ý trò chơi</el-menu-item>
             </el-menu>
             <div>
                 <button

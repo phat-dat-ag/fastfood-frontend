@@ -68,3 +68,7 @@ export const getAllOrderHistory = () => {
 export const getOrderHistory = (orderId: number) => {
   return api.get("/order/order-history", { params: { orderId } });
 };
+
+export const getAllOrdersByAdmin = () => {
+  return api.get("/order/admin/all");
+};

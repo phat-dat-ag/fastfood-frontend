@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElTable, ElTableColumn, ElTag, ElTooltip } from 'element-plus';
+import { ElTable, ElTableColumn, ElTag } from 'element-plus';
 import type { Order } from '../../../../types/order.types';
 import { formatDateTimeString } from '../../../../utils/time.utils';
 import { formatCurrencyVND } from '../../../../utils/currency.utils';
@@ -18,6 +18,7 @@ const props = defineProps<{
         <div class="bg-white/95 rounded-2xl shadow-lg border border-orange-100 overflow-hidden">
             <ElTable :data="props.orders" border stripe class="w-full"
                 :header-cell-style="{ background: '#FFF3E0', color: '#B45309', fontWeight: 600, fontSize: '14px' }">
+                <ElTableColumn label="Khách hàng" prop="user.name" show-overflow-tooltip />
                 <ElTableColumn label="Ngày đặt" width="160">
                     <template #default="scope">
                         <span class="text-gray-600">{{ formatDateTimeString(scope.row.placedAt) }}</span>
@@ -53,13 +54,9 @@ const props = defineProps<{
                     </template>
                 </ElTableColumn>
 
-                <ElTableColumn label="Địa chỉ" min-width="180">
+                <ElTableColumn label="Địa chỉ" min-width="180" show-overflow-tooltip>
                     <template #default="scope">
-                        <ElTooltip :content="getDetailAddress(scope.row.address)" placement="top">
-                            <span class="text-gray-600 truncate">
-                                {{ scope.row.address.district }}, {{ scope.row.address.province }}
-                            </span>
-                        </ElTooltip>
+                        {{ getDetailAddress(scope.row.address) }}
                     </template>
                 </ElTableColumn>
 
