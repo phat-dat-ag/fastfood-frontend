@@ -13,70 +13,68 @@ const heroImages = [
 ]
 
 const difficulties = [
-    { name: 'Tân binh', desc: 'Khởi động nhẹ nhàng, làm nóng chiến trường!', icon: '🥉', reward: 'Mã giảm 10%' },
-    { name: 'Chiến binh', desc: 'Thử thách tầm trung – không thể xem thường!', icon: '🥈', reward: 'Mã giảm 20%' },
-    { name: 'Đại cao thủ', desc: 'Vượt qua ranh giới giới hạn bản thân!', icon: '🥇', reward: 'Mã giảm 40%' },
+    { name: 'Dễ', desc: 'Khởi động nhẹ nhàng, vui vẻ.', icon: '🥪', reward: 'Mã giảm giá từ 10%' },
+    { name: 'Trung bình', desc: 'Thử thách vừa phải, thú vị.', icon: '🍟', reward: 'Mã giảm giá từ 20%' },
+    { name: 'Khó', desc: 'Đòi hỏi tốc độ và sự tập trung cao độ!', icon: '🍔', reward: 'Mã giảm giá từ 40%' },
 ]
-
 </script>
 
 <template>
-    <div class="min-h-screen text-gray-200 bg-gradient-to-b from-[#0f172a] to-[#1e293b]">
-        <section class="relative bg-white">
+    <div>
+        <section class="relative">
             <el-carousel :interval="4000" type="card" height="400px" indicator-position="outside" arrow="always"
                 class="transparent-carousel">
                 <el-carousel-item v-for="(img, index) in heroImages" :key="index" class="rounded-2xl overflow-hidden">
-                    <img :src="img" alt="Challenge slide" class="w-full h-full object-cover rounded-2xl" />
+                    <img :src="img" alt="Promo slide" class="w-full h-full object-cover rounded-2xl shadow-lg" />
                 </el-carousel-item>
             </el-carousel>
         </section>
 
-        <section class="max-w-5xl mx-auto px-6 py-16 text-center">
-            <h2 class="text-3xl font-bold mb-6 text-amber-400">🔥 Thức Tỉnh Bản Năng Anh Hùng 🔥</h2>
-            <p class="text-lg leading-relaxed text-gray-300">
-                Mỗi ngày, bạn chỉ có <span class="font-semibold text-amber-400">một cơ hội duy nhất</span> để bước vào
-                đấu trường thử thách của
-                <span class="font-bold text-amber-500">Aurelion Shop</span>.
-                Hãy chọn chủ đề bạn yêu thích, chọn độ khó bạn dám đối mặt — và thể hiện kỹ năng “<span
-                    class="text-amber-400">Tinh Hoa Trí Tuệ</span>”
-                như <span class="italic">Lux tung Cầu Ánh Sáng</span> hay <span class="italic">Yasuo lướt trong bão
-                    kiếm</span>!
+        <section class="mx-auto px-6 py-6 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-orange-600 uppercase tracking-wide">
+                🎉 Thử Thách Vui – Nhận Quà Ngon! 🎁
+            </h2>
+            <p class="text-lg leading-relaxed text-gray-700">
+                Tại <span class="font-semibold text-orange-600">Aurelion Shop</span>
+                , bạn không chỉ được thưởng thức món ăn ngon mà còn có thể
+                <span class="font-semibold text-red-500">nhận quà hấp dẫn</span>
+                qua các thử thách nhanh và thú vị.
             </p>
-            <p class="mt-4 text-gray-400">
-                Trả lời chính xác, giành chiến thắng, và nhận <span class="font-semibold text-amber-300">mã giảm giá
-                    ngẫu nhiên</span>
-                áp dụng lên toàn đơn hàng – phần thưởng dành cho những nhà vô địch thật sự 💫
+            <p class="text-lg leading-relaxed text-gray-700">
+                Trả lời đúng – nhận mã giảm giá – đặt món ngon liền tay! 🍔🍟🥤
+            </p>
+            <p class="mt-4 text-gray-600">
+                Mỗi độ khó mang đến cơ hội khác nhau. Càng thử sức cao, phần thưởng càng lớn!
+                Chọn cấp độ phù hợp và bắt đầu thôi!
             </p>
         </section>
 
-        <section class="max-w-6xl mx-auto px-6 pb-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section class="max-w-6xl mx-auto px-6 pb-10 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div v-for="(diff, i) in difficulties" :key="i"
-                class="bg-[#1e293b]/60 border border-amber-400/20 rounded-2xl shadow-lg p-8 text-center hover:scale-105 transition-transform duration-300">
-                <div class="text-5xl mb-4">{{ diff.icon }}</div>
-                <h3 class="text-2xl font-bold text-amber-400 mb-2">{{ diff.name }}</h3>
-                <p class="text-gray-300 mb-4">{{ diff.desc }}</p>
-                <p class="text-amber-300 font-semibold">🎁 Phần thưởng: {{ diff.reward }}</p>
+                class="bg-white rounded-2xl shadow-md border border-orange-200 p-8 text-center hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
+                <div class="text-6xl mb-4">{{ diff.icon }}</div>
+                <h3 class="text-2xl font-bold text-orange-600 mb-2">{{ diff.name }}</h3>
+                <p class="text-gray-700 mb-4">{{ diff.desc }}</p>
+                <p class="text-red-500 font-semibold">🎁 Phần thưởng:</p>
+                <p class="text-red-500 font-semibold">{{ diff.reward }}</p>
             </div>
         </section>
 
-        <section class="text-center pb-20 px-6">
-            <h3 class="text-2xl font-bold mb-4 text-amber-400">⚔️ Hãy sẵn sàng chiến đấu! ⚔️</h3>
-            <p class="text-gray-300 max-w-3xl mx-auto mb-8">
-                Chỉ cần một cú click – bạn có thể chọn chủ đề, độ khó, và bắt đầu hành trình khám phá kiến thức như đang
-                leo rank!
-                Mỗi trận chiến là một cơ hội, mỗi chiến thắng là một phần thưởng ngọt ngào 🍔✨
-                <span class="text-amber-300 font-semibold">Đừng chỉ đứng ngoài nhìn – những chiến binh thực thụ luôn
-                    hành động!</span>
-                Chiến trường đang mở ra trước mắt bạn... <span class="text-amber-400 font-bold">hãy đăng ký hoặc đăng
-                    nhập ngay</span> để bước vào trận chiến trí tuệ, nơi vinh quang và phần thưởng đang chờ đón 🏆🔥
+        <section
+            class="text-center py-10 px-6 bg-gradient-to-r from-orange-500 via-red-400 to-orange-600 text-white rounded-[2rem]">
+            <h3 class="text-3xl font-bold mb-4">🔥 Tham Gia Ngay – Nhận Ưu Đãi Hấp Dẫn 🔥</h3>
+            <p class="text-white/90 max-w-3xl mx-auto mb-8">
+                Hãy dành ít phút để vui chơi và nhận quà – đơn giản, nhanh chóng và cực kỳ hấp dẫn.
+                <span class="text-yellow-200 font-semibold">Đăng ký hoặc đăng nhập</span>
+                để bắt đầu thử thách hôm nay cùng Aurelion Shop!
             </p>
 
             <div class="flex flex-wrap justify-center gap-4">
-                <el-button type="warning" size="large" round
+                <el-button size="large" round style="background-color: #ffb800; color: white; border: none;"
                     @click="() => router.push({ name: ROUTE_NAMES.AUTH.SIGN_UP })">
                     Đăng ký ngay 🌟
                 </el-button>
-                <el-button type="primary" size="large" round
+                <el-button size="large" round style="background-color: white; color: #ff4d4d; border: none;"
                     @click="() => router.push({ name: ROUTE_NAMES.AUTH.SIGN_IN })">
                     Đăng nhập để chơi 🎮
                 </el-button>
@@ -90,29 +88,25 @@ const difficulties = [
     background-color: transparent !important;
 }
 
-.el-carousel__container {
-    background-color: transparent !important;
-}
-
-.el-carousel__item {
-    border-radius: 16px;
-    overflow: hidden;
-    background: transparent !important;
-    box-shadow: none !important;
-    transition: all 0.4s ease;
-}
-
 .el-carousel__arrow {
-    background-color: rgba(251, 191, 36, 0.9) !important;
+    background-color: rgba(255, 184, 0, 0.9) !important;
     color: white !important;
     border-radius: 9999px !important;
 }
 
 .el-carousel__arrow:hover {
-    background-color: rgba(245, 158, 11, 0.95) !important;
+    background-color: rgba(255, 102, 0, 0.95) !important;
 }
 
 .el-carousel__indicator {
     display: none;
+}
+
+.el-carousel__item {
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 </style>
