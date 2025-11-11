@@ -26,7 +26,7 @@ const props = defineProps<CategoryTableProps>();
                         <img :src="scope.row.imageUrl" alt="Ảnh danh mục" class="w-12 h-12 object-cover rounded-md" />
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="Tên danh mục" prop="name" />
+                <ElTableColumn label="Tên danh mục" prop="name" show-overflow-tooltip />
                 <ElTableColumn label="Ra mắt">
                     <template #default="scope">
                         {{ formatDateTimeString(scope.row.createdAt) }}

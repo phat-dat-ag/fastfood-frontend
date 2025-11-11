@@ -27,7 +27,7 @@ const props = defineProps<CategoryTableProps>();
                         <img :src="scope.row.imageUrl" alt="Ảnh sản phẩm" class="w-12 h-12 object-cover rounded-md" />
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="Tên sản phẩm" prop="name" />
+                <ElTableColumn label="Tên sản phẩm" prop="name" show-overflow-tooltip />
                 <ElTableColumn label="Danh mục" prop="categoryName" />
                 <ElTableColumn width="100" label="Giá">
                     <template #default="scope">

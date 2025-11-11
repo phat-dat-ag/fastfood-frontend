@@ -4,16 +4,26 @@ import AddButton from '../../../components/buttons/AddButton.vue';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
 import type { User } from '../../../types/user.types';
 import { formatDateString, formatDateTimeString } from '../../../utils/time.utils';
+import Switch from '../../../components/buttons/Switch.vue';
+import type { SwitchResponse } from '../../../types/switch-button.types';
 
 interface AccountTableProps {
     accounts: User[];
 }
 
 const props = defineProps<AccountTableProps>();
-const emit = defineEmits(["delete-account"]);
+const emit = defineEmits(["delete-account", "activate-account", "deactivate-account"]);
 
 function handleDeleteAccount(phone: string) {
     emit("delete-account", phone);
+}
+
+async function handleAccountStatusChange(payload: SwitchResponse) {
+    if (payload.isActive) {
+        emit("activate-account", payload.targetId);
+    } else {
+        emit("deactivate-account", payload.targetId);
+    }
 }
 </script>
 
@@ -29,7 +39,7 @@ function handleDeleteAccount(phone: string) {
                         <img :src="scope.row.avatarUrl" alt="Ảnh đại diện" class="w-12 h-12 object-cover rounded-md" />
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="Người dùng" prop="name" />
+                <ElTableColumn label="Người dùng" prop="name" show-overflow-tooltip />
                 <ElTableColumn label="Số điện thoại" prop="phone" />
                 <ElTableColumn width="100" label="Sinh nhật">
                     <template #default="scope">
@@ -50,8 +60,8 @@ function handleDeleteAccount(phone: string) {
 
                 <ElTableColumn label="Trạng thái">
                     <template #default="scope">
-                        <span v-if="scope.row.activated" class="text-green-500 font-medium">Đã kích hoạt</span>
-                        <span v-else class="text-red-500 font-medium">Chưa kích hoạt</span>
+                        <Switch :isActive="scope.row.activated" :targetId="scope.row.id"
+                            @status-change="handleAccountStatusChange" />
                     </template>
                 </ElTableColumn>
 

@@ -4,7 +4,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import type { User } from '../../types/user.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { deleteUser, getAllStaffAccounts } from '../../service/user.service';
+import { activateAccount, deactivateAccount, deleteUser, getAllStaffAccounts } from '../../service/user.service';
 import { STAFF_ACCOUNT_MESSAGES } from '../../constants/messages';
 import AccountTable from './components/AccountTable.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -45,7 +45,7 @@ function handleSearchChange(searchText: string) {
 }
 
 async function deleteStaffAccount(phone: string) {
-    const confirmed: boolean = await openConfirmDeleteMessage("Bạn muốn xóa tài khoản khách hàng này?");
+    const confirmed: boolean = await openConfirmDeleteMessage("Bạn muốn xóa tài khoản nhân viên này?");
     if (!confirmed) return;
 
     await useApiHandler(
@@ -59,6 +59,34 @@ async function deleteStaffAccount(phone: string) {
         loadStaffAccounts,
     )
 }
+
+async function handleActivateAccount(userId: number) {
+    const confirmed = await openConfirmDeleteMessage("Kích hoạt tài khoản nhân viên này?");
+    if (!confirmed) return;
+    await useApiHandler(
+        () => activateAccount(userId),
+        {
+            loading: "Đang kích hoạt tài khoản nhân viên",
+            error: "Lỗi kích hoạt tài khoản nhân viên",
+        },
+        () => { },
+        loadStaffAccounts
+    )
+}
+
+async function handleDeactivateAccount(userId: number) {
+    const confirmed = await openConfirmDeleteMessage("Vô hiệu hóa tài khoản nhân viên này?");
+    if (!confirmed) return;
+    await useApiHandler(
+        () => deactivateAccount(userId),
+        {
+            loading: "Đang vô hiệu hóa tài khoản nhân viên",
+            error: "Lỗi vô hiệu hóa tài khoản nhân viên",
+        },
+        () => { },
+        loadStaffAccounts
+    )
+}
 </script>
 
 <template>
@@ -69,6 +97,7 @@ async function deleteStaffAccount(phone: string) {
         <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
             @update:filter="handleFilterChange" />
 
-        <AccountTable :accounts="staffAccounts" @delete-account="deleteStaffAccount" />
+        <AccountTable :accounts="staffAccounts" @delete-account="deleteStaffAccount"
+            @activate-account="handleActivateAccount" @deactivate-account="handleDeactivateAccount" />
     </div>
 </template>

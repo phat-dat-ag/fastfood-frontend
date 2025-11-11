@@ -32,3 +32,13 @@ export const changePassword = (data: ChangePasswordRequest) => {
 export const deleteUser = (phone: string) => {
   return api.delete("/user", { params: { phone } });
 };
+
+export const activateAccount = (userId: number) => {
+  return api.put("/user/manage/activate-account", null, { params: { userId } });
+};
+
+export const deactivateAccount = (userId: number) => {
+  return api.put("/user/manage/deactivate-account", null, {
+    params: { userId },
+  });
+};

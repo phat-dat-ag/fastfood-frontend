@@ -23,8 +23,8 @@ const props = defineProps<{
     </div>
     <div class="bg-white rounded-xl shadow-md overflow-hidden border border-orange-100">
         <ElTable :data="props.promotions" border class="w-full">
-            <ElTableColumn label="Mã KM" prop="code" />
-            <ElTableColumn label="Áp dụng cho" prop="name" />
+            <ElTableColumn label="Mã KM" prop="code" show-overflow-tooltip />
+            <ElTableColumn label="Áp dụng cho" prop="name" show-overflow-tooltip />
             <ElTableColumn label="Từ ngày">
                 <template #default="scope">
                     {{ formatDateTimeString(scope.row.startAt) }}

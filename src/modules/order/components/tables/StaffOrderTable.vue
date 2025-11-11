@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElTable, ElTableColumn, ElTag, ElAvatar, ElTooltip } from 'element-plus';
+import { ElTable, ElTableColumn, ElTag, ElAvatar } from 'element-plus';
 import type { Order } from '../../../../types/order.types';
 import { formatDateTimeString } from '../../../../utils/time.utils';
 import { formatCurrencyVND } from '../../../../utils/currency.utils';
@@ -30,7 +30,7 @@ const props = defineProps<{
                     </template>
                 </ElTableColumn>
 
-                <ElTableColumn label="Khách hàng" min-width="180">
+                <ElTableColumn label="Khách hàng" min-width="180" show-overflow-tooltip>
                     <template #default="scope">
                         <div class="flex items-center space-x-2">
                             <ElAvatar :src="scope.row.user.avatarUrl" size="small">{{ scope.row.user.name[0] }}
@@ -78,13 +78,9 @@ const props = defineProps<{
                     </template>
                 </ElTableColumn>
 
-                <ElTableColumn label="Địa chỉ" min-width="180">
+                <ElTableColumn label="Địa chỉ" min-width="180" show-overflow-tooltip>
                     <template #default="scope">
-                        <ElTooltip :content="getDetailAddress(scope.row.address)" placement="top">
-                            <span class="text-gray-600 truncate">
-                                {{ scope.row.address.district }}, {{ scope.row.address.province }}
-                            </span>
-                        </ElTooltip>
+                        {{ getDetailAddress(scope.row.address) }}
                     </template>
                 </ElTableColumn>
 
