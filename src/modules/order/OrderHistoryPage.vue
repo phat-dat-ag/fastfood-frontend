@@ -11,17 +11,24 @@ import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
 import OrderHistoryTable from './components/tables/OrderHistoryTable.vue';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
-const orders = ref<Order[]>([]);
+const orderResponse = ref<OrderResponse | null>(null);
 
-async function loadOrders() {
+async function loadOrders(page: number = 0) {
+    const pageRequest: PageRequest = {
+        page,
+        size: PAGE_SIZE.ORDERS.HISTORY,
+    }
     await useApiHandler<OrderResponse>(
-        getAllOrderHistory,
+        () => getAllOrderHistory(pageRequest),
         {
             loading: ORDER_HISTORY_MESSAGE.get,
             error: ORDER_HISTORY_MESSAGE.getError,
         },
-        (data: OrderResponse) => orders.value = data.orders,
+        (data: OrderResponse) => orderResponse.value = data,
     )
 }
 
@@ -38,8 +45,11 @@ function handleViewOrderHistoryDetail(order: Order) {
         router.push({ name: ROUTE_NAMES.STAFF.ORDER_HISTORY_DETAIL, params: { orderId: order.id } });
     else notifyError("Tài khoản không đủ quyền để xem chi tiết đơn hàng");
 }
-</script>
 
+async function handlePageChange(page: number) {
+    await loadOrders(page);
+}
+</script>
 <template>
     <div class="mx-auto space-y-6">
         <div
@@ -52,6 +62,10 @@ function handleViewOrderHistoryDetail(order: Order) {
                 <PrimaryButton label="Làm mới" :onClick="loadOrders" />
             </div>
         </div>
-        <OrderHistoryTable :orders="orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
+        <div v-if="orderResponse">
+            <OrderHistoryTable :orders="orderResponse.orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
+            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
+                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+        </div>
     </div>
 </template>

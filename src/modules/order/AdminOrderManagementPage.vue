@@ -8,17 +8,24 @@ import { ADMIN_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
 import AdminOrderModal from './components/modals/AdminOrderModal.vue';
 import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
+import Pagination from '../../components/Pagination.vue';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
 
-const orders = ref<Order[]>([]);
+const orderResponse = ref<OrderResponse | null>(null);
 
-async function loadAllOrders() {
+async function loadAllOrders(page: number = 0) {
+    const pageRequest: PageRequest = {
+        page,
+        size: PAGE_SIZE.ORDERS.ADMIN,
+    }
     await useApiHandler<OrderResponse>(
-        getAllOrdersByAdmin,
+        () => getAllOrdersByAdmin(pageRequest),
         {
             loading: ADMIN_MANAGEMENT_ORDER_MESSAGE.get,
             error: ADMIN_MANAGEMENT_ORDER_MESSAGE.getError,
         },
-        (data: OrderResponse) => orders.value = data.orders,
+        (data: OrderResponse) => orderResponse.value = data,
     )
 }
 
@@ -56,19 +63,27 @@ function handleOpenOrderModal(order: Order) {
     selectedOrder.value = order;
 }
 
+async function handlePageChange(page: number) {
+    await loadAllOrders(page);
+}
+
 </script>
 <template>
     <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
         <h2 class="text-2xl font-semibold text-orange-500">
             Quản lý đơn hàng hệ thống
         </h2>
+        <div v-if="orderResponse">
+            <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+                @update:filter="handleFilterChange" />
 
-        <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-            @update:filter="handleFilterChange" />
+            <OrderHistoryTable :orders="orderResponse?.orders" :handleUpdateOrder="handleOpenOrderModal" />
 
-        <OrderHistoryTable :orders="orders" :handleUpdateOrder="handleOpenOrderModal" />
+            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
+                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
 
-        <AdminOrderModal v-if="selectedOrder && isOrderModalVisible" :order="selectedOrder"
-            @close="isOrderModalVisible = false" />
+            <AdminOrderModal v-if="selectedOrder && isOrderModalVisible" :order="selectedOrder"
+                @close="isOrderModalVisible = false" />
+        </div>
     </div>
 </template>

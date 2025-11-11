@@ -12,17 +12,24 @@ import { useRouter } from 'vue-router';
 import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
-const orders = ref<Order[]>([]);
+const orderResponse = ref<OrderResponse | null>(null);
 
-async function loadUnfinishedOrders() {
+async function loadUnfinishedOrders(page: number = 0) {
+    const pageRequest: PageRequest = {
+        page,
+        size: PAGE_SIZE.ORDERS.STAFF,
+    }
     await useApiHandler<OrderResponse>(
-        getAllUnfinishedOrders,
+        () => getAllUnfinishedOrders(pageRequest),
         {
             loading: STAFF_MANAGEMENT_ORDER_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_MESSAGE.getError,
         },
-        (data: OrderResponse) => orders.value = data.orders,
+        (data: OrderResponse) => orderResponse.value = data,
     )
 }
 
@@ -52,7 +59,9 @@ async function handleCancelOrder(order: Order) {
         loadUnfinishedOrders
     )
 }
-
+async function handlePageChange(page: number) {
+    await loadUnfinishedOrders(page);
+}
 </script>
 <template>
     <div class="mx-auto space-y-6">
@@ -66,7 +75,11 @@ async function handleCancelOrder(order: Order) {
                 <PrimaryButton label="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
             </div>
         </div>
-        <StaffOrderTable :orders="orders" :handleUpdateOrder="handleUpdateOrder"
-            :handleCancelOrder="handleCancelOrder" />
+        <div v-if="orderResponse">
+            <StaffOrderTable :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
+                :handleCancelOrder="handleCancelOrder" />
+            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
+                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+        </div>
     </div>
 </template>

@@ -12,17 +12,24 @@ import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
 import CheckoutModal from '../cart/components/CheckoutModal.vue';
+import Pagination from '../../components/Pagination.vue';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
 
-const orders = ref<Order[]>([]);
+const orderResponse = ref<OrderResponse | null>(null);
 
-async function loadTrackingOrders() {
+async function loadTrackingOrders(page: number = 0) {
+    const pageRequest: PageRequest = {
+        page,
+        size: PAGE_SIZE.ORDERS.TRACKING,
+    }
     await useApiHandler<OrderResponse>(
-        getAllActiveOrders,
+        () => getAllActiveOrders(pageRequest),
         {
             loading: ORDER_TRACKING_MESSAGE.get,
             error: ORDER_TRACKING_MESSAGE.getError,
         },
-        (data: OrderResponse) => orders.value = data.orders,
+        (data: OrderResponse) => orderResponse.value = data,
     )
 }
 
@@ -62,6 +69,10 @@ function handleUpdateOrder(order: Order) {
         router.push({ name: ROUTE_NAMES.STAFF.ORDER_TRACKING_DETAIL, params: { orderId: order.id } });
     else notifyError("Tài khoản không đủ quyền để xem chi tiết đơn hàng");
 }
+
+async function handlePageChange(page: number) {
+    await loadTrackingOrders(page);
+}
 </script>
 
 <template>
@@ -76,7 +87,12 @@ function handleUpdateOrder(order: Order) {
                 <PrimaryButton label="Làm mới" :onClick="loadTrackingOrders" />
             </div>
         </div>
-        <OrderTrackingTable :orders="orders" :handleCheckout="handleCheckout" :handleUpdateOrder="handleUpdateOrder" />
+        <div v-if="orderResponse">
+            <OrderTrackingTable :orders="orderResponse.orders" :handleCheckout="handleCheckout"
+                :handleUpdateOrder="handleUpdateOrder" />
+            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
+                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+        </div>
     </div>
     <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>

@@ -1,5 +1,6 @@
 import api from "../api/axios";
 import type { OrderCreateRequest } from "../types/order.types";
+import type { PageRequest } from "../types/pagination.types";
 
 export const createCashOnDeliveryOrder = (data: OrderCreateRequest) => {
   return api.post("/order/cash-on-delivery", data);
@@ -17,8 +18,8 @@ export const getOrderById = (orderId: number) => {
   return api.get("/order/by-order-id", { params: { orderId } });
 };
 
-export const getAllUnfinishedOrders = () => {
-  return api.get("/order/staff/unfinished-orders/all");
+export const getAllUnfinishedOrders = (pageRequest: PageRequest) => {
+  return api.get("/order/staff/unfinished-orders/all", { params: pageRequest });
 };
 
 export const getUnfinishedOrder = (orderId: number) => {
@@ -53,22 +54,22 @@ export const cancelOrderByStaff = (orderId: number, reason: string) => {
   );
 };
 
-export const getAllActiveOrders = () => {
-  return api.get("/order/active-order/all");
+export const getAllActiveOrders = (pageRequest: PageRequest) => {
+  return api.get("/order/active-order/all", { params: pageRequest });
 };
 
 export const getActiveOrder = (orderId: number) => {
   return api.get("/order/active-order", { params: { orderId } });
 };
 
-export const getAllOrderHistory = () => {
-  return api.get("/order/order-history/all");
+export const getAllOrderHistory = (pageRequest: PageRequest) => {
+  return api.get("/order/order-history/all", { params: pageRequest });
 };
 
 export const getOrderHistory = (orderId: number) => {
   return api.get("/order/order-history", { params: { orderId } });
 };
 
-export const getAllOrdersByAdmin = () => {
-  return api.get("/order/admin/all");
+export const getAllOrdersByAdmin = (pageRequest: PageRequest) => {
+  return api.get("/order/admin/all", { params: pageRequest });
 };
