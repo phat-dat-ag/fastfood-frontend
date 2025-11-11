@@ -12,3 +12,7 @@ export const submitQuiz = (quizSubmitRequest: QuizSubmitRequest) => {
 export const getAllReviewQuizzesByUser = () => {
   return api.get("/quiz/by-user");
 };
+
+export const getQuizHistoryDetailByUser = (quizId: number) => {
+  return api.get("/quiz/by-user/detail", { params: { quizId } });
+};

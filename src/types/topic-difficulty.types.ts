@@ -15,6 +15,7 @@ export interface TopicDifficultyUpdateRequest {
 }
 
 export interface TopicDifficulty {
+  topicName: string;
   id: number;
   name: string;
   slug: string;

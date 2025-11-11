@@ -6,6 +6,11 @@ import { getAllReviewQuizzesByUser } from '../../service/quiz.service';
 import { CHALLENGE_HISTORY_MESSAGE } from '../../constants/messages';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import ChallengeHistoryTable from './components/ChallengeHistoryTable.vue';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '../../store/useUserStore.store';
+import { USER_ROLES } from '../../constants/user-roles';
+import { ROUTE_NAMES } from '../../constants/route-names';
+import { notifyError } from '../../utils/notification.utils';
 
 const historyQuizzes = ref<Quiz[]>([]);
 async function loadHistoryQuizzes() {
@@ -17,6 +22,18 @@ async function loadHistoryQuizzes() {
         },
         (data: Quiz[]) => historyQuizzes.value = data,
     )
+}
+
+const router = useRouter();
+const userStore = useUserStore();
+
+function handleViewChallengeHistoryDetail(quizId: number) {
+    const role = userStore.user?.role;
+    if (role === USER_ROLES.USER)
+        router.push({ name: ROUTE_NAMES.USER.CHALLENGE_HISTORY_DETAIL, params: { quizId } });
+    else if (role === USER_ROLES.STAFF)
+        router.push({ name: ROUTE_NAMES.STAFF.CHALLENGE_HISTORY_DETAIL, params: { quizId } });
+    else notifyError("Tài khoản không đủ quyền để xem chi tiết tham gia thử thách");
 }
 
 onMounted(loadHistoryQuizzes);
@@ -33,6 +50,7 @@ onMounted(loadHistoryQuizzes);
                 <PrimaryButton label="Làm mới" :onClick="loadHistoryQuizzes" />
             </div>
         </div>
-        <ChallengeHistoryTable :quizzes="historyQuizzes" />
+        <ChallengeHistoryTable :quizzes="historyQuizzes"
+            :handleViewChallengeHistoryDetail="handleViewChallengeHistoryDetail" />
     </div>
 </template>

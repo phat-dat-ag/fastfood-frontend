@@ -6,6 +6,7 @@ import EditButton from '../../../components/buttons/EditButton.vue';
 
 const props = defineProps<{
     quizzes: Quiz[];
+    handleViewChallengeHistoryDetail: (quizId: number) => void;
 }>();
 </script>
 
@@ -14,7 +15,8 @@ const props = defineProps<{
         <div class="bg-white/95 rounded-2xl shadow-lg border border-orange-100 overflow-hidden">
             <ElTable :data="props.quizzes" border stripe class="w-full"
                 :header-cell-style="{ background: '#FFF3E0', color: '#B45309', fontWeight: 600, fontSize: '14px' }">
-                <ElTableColumn label="Độ khó" prop="topicDifficulty.name" />
+                <ElTableColumn label="Chủ đề" prop="topicDifficulty.topicName" show-overflow-tooltip />
+                <ElTableColumn label="Độ khó" prop="topicDifficulty.name" show-overflow-tooltip />
 
                 <ElTableColumn label="Bắt đầu">
                     <template #default="scope">
@@ -36,7 +38,7 @@ const props = defineProps<{
 
                 <ElTableColumn label="Hành động" width="120" fixed="right" align="center">
                     <template #default="scope">
-                        <EditButton label="Chi tiết" :onClick="() => { }" />
+                        <EditButton label="Chi tiết" :onClick="() => handleViewChallengeHistoryDetail(scope.row.id)" />
                     </template>
                 </ElTableColumn>
             </ElTable>

@@ -19,6 +19,7 @@ import OrderHistoryDetail from "../../modules/order/OrderHistoryDetail.vue";
 import OrderTrackingDetail from "../../modules/order/OrderTrackingDetail.vue";
 import QuizzPage from "../../modules/challenge/QuizzPage.vue";
 import ChallengeHistoryPage from "../../modules/challenge/ChallengeHistoryPage.vue";
+import ChallengeHistoryDetailPage from "../../modules/challenge/ChallengeHistoryDetailPage.vue";
 
 export const userRoutes = {
   path: "/user",
@@ -61,6 +62,11 @@ export const userRoutes = {
       path: "challenge-history",
       name: ROUTE_NAMES.USER.CHALLENGE_HISTORY,
       component: ChallengeHistoryPage,
+    },
+    {
+      path: "challenge-history/:quizId",
+      name: ROUTE_NAMES.USER.CHALLENGE_HISTORY_DETAIL,
+      component: ChallengeHistoryDetailPage,
     },
     {
       path: "about",

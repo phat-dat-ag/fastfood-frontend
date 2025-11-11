@@ -21,6 +21,7 @@ import OrderTrackingDetail from "../../modules/order/OrderTrackingDetail.vue";
 import StaffOrderDetail from "../../modules/order/StaffOrderDetail.vue";
 import QuizzPage from "../../modules/challenge/QuizzPage.vue";
 import ChallengeHistoryPage from "../../modules/challenge/ChallengeHistoryPage.vue";
+import ChallengeHistoryDetailPage from "../../modules/challenge/ChallengeHistoryDetailPage.vue";
 
 export const staffRoutes = {
   path: "/staff",
@@ -63,6 +64,11 @@ export const staffRoutes = {
       path: "challenge-history",
       name: ROUTE_NAMES.STAFF.CHALLENGE_HISTORY,
       component: ChallengeHistoryPage,
+    },
+    {
+      path: "challenge-history/:quizId",
+      name: ROUTE_NAMES.STAFF.CHALLENGE_HISTORY_DETAIL,
+      component: ChallengeHistoryDetailPage,
     },
     {
       path: "about",

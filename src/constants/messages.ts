@@ -83,3 +83,6 @@ export const CHALLENGE_MESSAGE = createEntityMessages("thử thách");
 export const CHALLENGE_HISTORY_MESSAGE = createEntityMessages(
   "lịch sử tham gia thử thách"
 );
+export const CHALLENGE_HISTORY_DETAIL_MESSAGE = createEntityMessages(
+  "chi tiết lịch sử tham gia thử thách"
+);
