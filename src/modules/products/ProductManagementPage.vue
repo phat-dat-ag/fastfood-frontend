@@ -4,21 +4,25 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import ProductTable from './components/ProductTable.vue';
 import ProductModal from './components/ProductModal.vue';
-import type { Product, ProductCreateRequest, ProductUpdateRequest } from '../../types/product.types';
+import type { Product, ProductCreateRequest, ProductResponse, ProductUpdateRequest } from '../../types/product.types';
 import type { Category } from '../../types/category.types';
-import { getCategories } from '../../service/category.service';
+import { getDisplayableCategories } from '../../service/category.service';
 import { createProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useProductStore } from '../../store/useProductStore.store';
 import { notifyError } from '../../utils/notification.utils';
+import { useRoute } from 'vue-router';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
 const categories = ref<Category[]>([]);
 
 async function loadCategories() {
   await useApiHandler<Category[]>(
-    getCategories,
+    getDisplayableCategories,
     {
       loading: CATEGORY_MESSAGES.get,
       error: CATEGORY_MESSAGES.getError,
@@ -27,16 +31,23 @@ async function loadCategories() {
   )
 }
 
-const products = ref<Product[]>([]);
+const route = useRoute();
 
-async function loadProducts() {
-  await useApiHandler<Product[]>(
-    getProducts,
+const productResponse = ref<ProductResponse | null>(null);
+
+async function loadProducts(page: number = 0) {
+  const request: PageRequest = {
+    page,
+    size: PAGE_SIZE.PRODUCT,
+  }
+  const categorySlug = String(route.params.categorySlug || "");
+  await useApiHandler<ProductResponse>(
+    () => getProducts(request, categorySlug),
     {
       loading: PRODUCT_MESSAGES.get,
       error: PRODUCT_MESSAGES.getError,
     },
-    (data: Product[]) => products.value = data,
+    (data: ProductResponse) => productResponse.value = data,
   )
 }
 
@@ -124,6 +135,10 @@ const handleDeleteProduct = async (id: number) => {
     loadProducts,
   )
 }
+
+async function handlePageChange(page: number) {
+  await loadProducts(page);
+}
 </script>
 
 <template>
@@ -134,11 +149,17 @@ const handleDeleteProduct = async (id: number) => {
     <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
       @update:filter="handleFilterChange" />
 
-    <ProductTable :products="products" :openCreateProductModal="openCreateProductModal"
-      :openUpdateProductModal="openUpdateProductModal" :handleDeleteProduct="handleDeleteProduct" />
+    <div v-if="productResponse">
 
-    <ProductModal v-if="isProductModalVisible" :isCreatingProduct="isCreatingProduct" :categories="categories"
-      @close="isProductModalVisible = false" @create-product="handleCreateProduct"
-      @update-product="handleUpdateProduct" />
+      <ProductTable :products="productResponse.products" :openCreateProductModal="openCreateProductModal"
+        :openUpdateProductModal="openUpdateProductModal" :handleDeleteProduct="handleDeleteProduct" />
+
+      <Pagination :totalItem="productResponse.totalItems" :pageSize="productResponse.pageSize"
+        :currentPage="productResponse.currentPage" @change-page="handlePageChange" />
+
+      <ProductModal v-if="isProductModalVisible" :isCreatingProduct="isCreatingProduct" :categories="categories"
+        @close="isProductModalVisible = false" @create-product="handleCreateProduct"
+        @update-product="handleUpdateProduct" />
+    </div>
   </div>
 </template>

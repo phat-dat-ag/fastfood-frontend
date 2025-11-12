@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { Category } from '../../types/category.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getCategories } from '../../service/category.service';
+import { getDisplayableCategories } from '../../service/category.service';
 import { CATEGORY_MESSAGES, PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
 import PromotionFormBase from './components/PromotionFormBase.vue';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
@@ -14,7 +14,7 @@ const categories = ref<Category[]>([]);
 
 async function loadCategories() {
     await useApiHandler<Category[]>(
-        getCategories,
+        getDisplayableCategories,
         {
             loading: CATEGORY_MESSAGES.get,
             error: CATEGORY_MESSAGES.getError,

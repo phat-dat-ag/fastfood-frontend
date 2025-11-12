@@ -4,6 +4,7 @@ export const PAGE_SIZE = {
     STAFF: 5,
   },
   CATEGORY: 5,
+  PRODUCT: 5,
   PROMOTION: {
     BY_CATEGORY: 5,
     BY_PRODUCT: 5,

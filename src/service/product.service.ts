@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import type { PageRequest } from "../types/pagination.types";
 import type {
   ProductCreateRequest,
   ProductUpdateRequest,
@@ -35,16 +36,24 @@ export const updateProduct = (data: ProductUpdateRequest) => {
   });
 };
 
-export const getProducts = () => {
-  return api.get("/admin/product");
+export const getProducts = (pageRequest: PageRequest, categorySlug: string) => {
+  return api.get("/admin/product", {
+    params: { ...pageRequest, categorySlug },
+  });
 };
 
-export const getProductsByCategory = (categorySlug: string) => {
-  return api.get("/admin/product/by-category", { params: { categorySlug } });
+export const getAllDisplayableProductsByCategory = (categorySlug: string) => {
+  return api.get("/admin/product/display/all/by-category", {
+    params: { categorySlug },
+  });
+};
+
+export const getAllDisplayableProducts = () => {
+  return api.get("/admin/product/display/all");
 };
 
 export const getProductBySlug = (slug: string) => {
-  return api.get("/admin/product/detail", { params: { slug } });
+  return api.get("/admin/product/display/detail", { params: { slug } });
 };
 
 export const deleteProduct = (id: number) => {

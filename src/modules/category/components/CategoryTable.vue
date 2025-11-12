@@ -11,6 +11,7 @@ interface CategoryTableProps {
     openCreateCategoryModal: () => void;
     openUpdateCategoryModal: (category: Category) => void;
     handleDeleteCategory: (id: number) => Promise<void>;
+    goToProductsManagementPage: (slug: string) => void;
 }
 const props = defineProps<CategoryTableProps>();
 </script>
@@ -52,6 +53,7 @@ const props = defineProps<CategoryTableProps>();
                     <template #default="scope">
                         <div class="flex gap-2 justify-evenly">
                             <EditButton :onClick="() => openUpdateCategoryModal(scope.row)" label="Cập nhật" />
+                            <AddButton :onClick="() => goToProductsManagementPage(scope.row.slug)" label="Sản phẩm" />
                             <DeleteButton :onClick="() => handleDeleteCategory(scope.row.id)" label="Xóa" />
                         </div>
                     </template>

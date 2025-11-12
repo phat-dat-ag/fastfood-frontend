@@ -47,7 +47,7 @@ export const adminRoutes = {
       component: CategoryManagementPage,
     },
     {
-      path: "manage-product",
+      path: "category/:categorySlug/manage-product",
       name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT,
       component: ProductManagementPage,
     },

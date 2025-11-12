@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { PRODUCT_MESSAGES, PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import type { Product } from '../../types/product.types';
-import { getProducts } from '../../service/product.service';
+import { getAllDisplayableProducts } from '../../service/product.service';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import type { PromotionProductCreateRequest } from '../../types/promotion.types';
 import { createPromotionProduct } from '../../service/promotion.service';
@@ -14,7 +14,7 @@ const products = ref<Product[]>([]);
 
 async function loadProducts() {
     await useApiHandler<Product[]>(
-        getProducts,
+        getAllDisplayableProducts,
         {
             loading: PRODUCT_MESSAGES.get,
             error: PRODUCT_MESSAGES.getError,

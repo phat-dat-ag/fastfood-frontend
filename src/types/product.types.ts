@@ -39,3 +39,11 @@ export interface Product {
   discountedPrice: string;
   promotionId: number;
 }
+
+export interface ProductResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  products: Product[];
+}

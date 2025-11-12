@@ -30,9 +30,6 @@ function signOut() {
                 <el-menu-item index="2" @click="router.push({ name: ROUTE_NAMES.ADMIN.CATEGORY_MANAGEMENT })">
                     Quản lý danh mục sản phẩm
                 </el-menu-item>
-                <el-menu-item index="3" @click="router.push({ name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT })">
-                    Quản lý sản phẩm
-                </el-menu-item>
                 <el-sub-menu index="4">
                     <template #title>Quản lý mã khuyến mãi</template>
                     <el-menu-item index="4-1"

@@ -13,6 +13,8 @@ import { CATEGORY_MESSAGES } from '../../constants/messages'
 import type { PageRequest } from '../../types/pagination.types'
 import { PAGE_SIZE } from '../../constants/pagination'
 import Pagination from '../../components/Pagination.vue'
+import { useRouter } from 'vue-router'
+import { ROUTE_NAMES } from '../../constants/route-names'
 
 
 const isCategoryModalVisible = ref(false);
@@ -112,6 +114,12 @@ const handleDeleteCategory = async (id: number) => {
   )
 }
 
+const router = useRouter();
+
+const goToProductsManagementPage = (categorySlug: string) => {
+  router.push({ name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT, params: { categorySlug } });
+}
+
 async function handlePageChange(page: number) {
   await loadCategories(page);
 }
@@ -129,7 +137,8 @@ async function handlePageChange(page: number) {
     <div v-if="categoryResponse">
 
       <CategoryTable :categories="categoryResponse.categories" :openCreateCategoryModal="openCreateCategoryModal"
-        :openUpdateCategoryModal="openUpdateCategoryModal" :handleDeleteCategory="handleDeleteCategory" />
+        :openUpdateCategoryModal="openUpdateCategoryModal" :handleDeleteCategory="handleDeleteCategory"
+        :goToProductsManagementPage="goToProductsManagementPage" />
 
       <Pagination :totalItem="categoryResponse.totalItems" :pageSize="categoryResponse.pageSize"
         :currentPage="categoryResponse.currentPage" @change-page="handlePageChange" />
