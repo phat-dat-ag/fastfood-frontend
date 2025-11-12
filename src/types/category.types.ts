@@ -23,3 +23,11 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CategoryResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  categories: Category[];
+}

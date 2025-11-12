@@ -3,6 +3,7 @@ import type {
   CategoryCreateRequest,
   CategoryUpdateRequest,
 } from "../types/category.types";
+import type { PageRequest } from "../types/pagination.types";
 
 function buildCategoryFormData(
   data: CategoryCreateRequest | CategoryUpdateRequest
@@ -31,8 +32,8 @@ export const createCategory = (data: CategoryCreateRequest) => {
   });
 };
 
-export const getCategories = () => {
-  return api.get("/admin/category");
+export const getCategories = (pageRequest: PageRequest) => {
+  return api.get("/admin/category", { params: pageRequest });
 };
 
 export const updateCategory = (data: CategoryUpdateRequest) => {
