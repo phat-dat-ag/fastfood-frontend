@@ -4,6 +4,7 @@ import type {
   PromotionProductCreateRequest,
 } from "../types/promotion.types";
 import api from "../api/axios";
+import type { PageRequest } from "../types/pagination.types";
 
 export const createPromotionCategory = (
   data: PromotionCategoryCreateRequest
@@ -11,24 +12,24 @@ export const createPromotionCategory = (
   return api.post("/admin/promotion/category", data);
 };
 
-export const getPromotionCategory = () => {
-  return api.get("/admin/promotion/category");
+export const getPromotionCategory = (pageRequest: PageRequest) => {
+  return api.get("/admin/promotion/category", { params: pageRequest });
 };
 
 export const createPromotionProduct = (data: PromotionProductCreateRequest) => {
   return api.post("/admin/promotion/product", data);
 };
 
-export const getPromotionProduct = () => {
-  return api.get("/admin/promotion/product");
+export const getPromotionProduct = (pageRequest: PageRequest) => {
+  return api.get("/admin/promotion/product", { params: pageRequest });
 };
 
 export const createPromotionOrder = (data: PromotionOrderCreateRequest) => {
   return api.post("/admin/promotion/order", data);
 };
 
-export const getPromotionOrder = () => {
-  return api.get("/admin/promotion/order");
+export const getPromotionOrder = (pageRequest: PageRequest) => {
+  return api.get("/admin/promotion/order", { params: pageRequest });
 };
 
 export const getValidPromotionOrder = () => {

@@ -3,6 +3,11 @@ export const PAGE_SIZE = {
     CUSTOMER: 5,
     STAFF: 5,
   },
+  PROMOTION: {
+    BY_CATEGORY: 5,
+    BY_PRODUCT: 5,
+    BY_ORDER: 5,
+  },
   ORDERS: {
     ADMIN: 7,
     HISTORY: 5,

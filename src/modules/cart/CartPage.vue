@@ -8,7 +8,7 @@ import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
 import { getValidPromotionOrder } from '../../service/promotion.service';
-import type { Promotion, PromotionResponse } from '../../types/promotion.types';
+import type { Promotion } from '../../types/promotion.types';
 import { notifyError, notifySuccess } from '../../utils/notification.utils';
 import type { Address, AddressResponse } from '../../types/geocode.types';
 import { getAddresses } from '../../service/address.service';
@@ -61,13 +61,13 @@ onMounted(loadCarts);
 
 const promotions = ref<Promotion[]>([]);
 async function loadPromotions() {
-    await useApiHandler<PromotionResponse>(
+    await useApiHandler<Promotion[]>(
         getValidPromotionOrder,
         {
             loading: PROMOTION_ORDER_MESSAGE.get,
             error: PROMOTION_ORDER_MESSAGE.getError,
         },
-        (data: PromotionResponse) => promotions.value = data.promotions,
+        (data: Promotion[]) => promotions.value = data,
     )
 }
 onMounted(loadPromotions);

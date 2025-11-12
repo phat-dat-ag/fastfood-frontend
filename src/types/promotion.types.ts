@@ -58,5 +58,9 @@ export interface Promotion {
 }
 
 export interface PromotionResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
   promotions: Promotion[];
 }

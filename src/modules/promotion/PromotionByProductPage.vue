@@ -2,12 +2,15 @@
 import { onMounted, ref } from 'vue';
 import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
-import type { Promotion, PromotionResponse } from '../../types/promotion.types';
+import type { PromotionResponse } from '../../types/promotion.types';
 import { PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deletePromotion, getPromotionProduct } from '../../service/promotion.service';
 import PromotionByProductTable from './components/tables/PromotionByProductTable.vue';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
 const filterOptions: Filter[] = [
   { label: 'Thêm gần đây', value: 'recently-added' },
@@ -30,16 +33,20 @@ function handleSearchChange(searchText: string) {
   console.log(search.value);
 }
 
-const promotions = ref<Promotion[]>([]);
+const promotionResponse = ref<PromotionResponse | null>(null);
 
-async function loadPromotions() {
+async function loadPromotions(page: number = 0) {
+  const request: PageRequest = {
+    page,
+    size: PAGE_SIZE.PROMOTION.BY_PRODUCT,
+  }
   await useApiHandler<PromotionResponse>(
-    getPromotionProduct,
+    () => getPromotionProduct(request),
     {
       loading: PROMOTION_PRODUCT_MESSAGE.get,
       error: PROMOTION_PRODUCT_MESSAGE.getError,
     },
-    (data: PromotionResponse) => promotions.value = data.promotions,
+    (data: PromotionResponse) => promotionResponse.value = data,
   )
 }
 onMounted(loadPromotions);
@@ -59,6 +66,10 @@ async function handleDeletePromotionProduct(promotionId: number) {
   )
 }
 
+async function handlePageChange(page: number) {
+  await loadPromotions(page);
+}
+
 </script>
 <template>
   <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
@@ -68,6 +79,11 @@ async function handleDeletePromotionProduct(promotionId: number) {
     <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
       @update:filter="handleFilterChange" />
 
-    <PromotionByProductTable :promotions="promotions" :handleDeletePromotionProduct="handleDeletePromotionProduct" />
+    <div v-if="promotionResponse">
+      <PromotionByProductTable :promotions="promotionResponse.promotions"
+        :handleDeletePromotionProduct="handleDeletePromotionProduct" />
+      <Pagination :totalItem="promotionResponse.totalItems" :pageSize="promotionResponse.pageSize"
+        :currentPage="promotionResponse.currentPage" @change-page="handlePageChange" />
+    </div>
   </div>
 </template>
