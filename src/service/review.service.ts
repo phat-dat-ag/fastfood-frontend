@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import type { PageRequest } from "../types/pagination.types";
 import type { ReviewCreateRequest } from "../types/review.types";
 
 export const createProductReview = (
@@ -29,4 +30,12 @@ export const createProductReview = (
 
 export const getAllReviewsByProduct = (productId: number) => {
   return api.get("/review", { params: { productId } });
+};
+
+export const getAllReviewsByAdmin = (pageRequest: PageRequest) => {
+  return api.get("/review/manage", { params: pageRequest });
+};
+
+export const deleteReview = (reviewId: number) => {
+  return api.delete("/review/manage", { params: { reviewId } });
 };

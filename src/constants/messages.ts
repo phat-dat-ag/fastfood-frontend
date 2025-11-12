@@ -77,6 +77,9 @@ export const REVIEW_MESSAGE = createEntityMessages("đánh giá");
 export const ALL_PRODUCT_REVIEW_MESSAGE = createEntityMessages(
   "các đánh giá của sản phẩm"
 );
+export const ADMIN_MANAGEMENT_REVIEW_MESSAGE = createEntityMessages(
+  "đánh giá sản phẩm trên hệ thống"
+);
 export const TOPIC_MESSAGE = createEntityMessages("chủ đề trò chơi");
 export const TOPIC_DIFFICULTY_MESSAGE =
   createEntityMessages("độ khó của chủ đề");

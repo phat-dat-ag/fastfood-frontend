@@ -13,6 +13,14 @@ export interface Review {
   createdAt: string;
 }
 
+export interface ReviewResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  reviews: Review[];
+}
+
 export interface ReviewImageCreateRequest {
   imageFile: File;
   previewUrl?: string;

@@ -5,4 +5,7 @@ export const PAGE_SIZE = {
     TRACKING: 5,
     STAFF: 4,
   },
+  REIVEWS: {
+    ADMIN: 4,
+  },
 } as const;

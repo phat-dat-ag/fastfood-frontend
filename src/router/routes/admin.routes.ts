@@ -20,6 +20,7 @@ import ShowQuestionsPage from "../../modules/question/components/ShowQuestionsPa
 import AddQuestionsPage from "../../modules/question/components/AddQuestionsPage.vue";
 import AdminOrderManagementPage from "../../modules/order/AdminOrderManagementPage.vue";
 import AdminDashboard from "../../modules/dashboard/AdminDashboard.vue";
+import ReviewManagementPage from "../../modules/review/ReviewManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -90,6 +91,11 @@ export const adminRoutes = {
       path: "manage-orders",
       name: ROUTE_NAMES.ADMIN.ORDER_MANAGEMENT,
       component: AdminOrderManagementPage,
+    },
+    {
+      path: "management-review",
+      name: ROUTE_NAMES.ADMIN.REVIEW_MANAGEMENT,
+      component: ReviewManagementPage,
     },
     {
       path: "manage-topic",
