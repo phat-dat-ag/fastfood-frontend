@@ -1,4 +1,8 @@
 export const PAGE_SIZE = {
+  ACCOUNTS: {
+    CUSTOMER: 5,
+    STAFF: 5,
+  },
   ORDERS: {
     ADMIN: 7,
     HISTORY: 5,

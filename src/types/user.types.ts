@@ -12,6 +12,14 @@ export interface User {
   delete: boolean;
 }
 
+export interface UserResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  users: User[];
+}
+
 export interface EidtUserRequest {
   name: string;
   email: string;

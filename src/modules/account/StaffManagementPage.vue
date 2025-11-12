@@ -2,23 +2,30 @@
 import { onMounted, ref } from 'vue';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
-import type { User } from '../../types/user.types';
+import type { UserResponse } from '../../types/user.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { activateAccount, deactivateAccount, deleteUser, getAllStaffAccounts } from '../../service/user.service';
 import { STAFF_ACCOUNT_MESSAGES } from '../../constants/messages';
 import AccountTable from './components/AccountTable.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
-const staffAccounts = ref<User[]>([]);
+const userReponse = ref<UserResponse | null>(null);
 
-async function loadStaffAccounts() {
-    await useApiHandler<User[]>(
-        getAllStaffAccounts,
+async function loadStaffAccounts(page: number = 0) {
+    const pageRequest: PageRequest = {
+        page,
+        size: PAGE_SIZE.ACCOUNTS.STAFF,
+    }
+    await useApiHandler<UserResponse>(
+        () => getAllStaffAccounts(pageRequest),
         {
             loading: STAFF_ACCOUNT_MESSAGES.get,
             error: STAFF_ACCOUNT_MESSAGES.getError,
         },
-        (data: User[]) => staffAccounts.value = data,
+        (data: UserResponse) => userReponse.value = data,
     )
 }
 
@@ -87,8 +94,10 @@ async function handleDeactivateAccount(userId: number) {
         loadStaffAccounts
     )
 }
+async function handlePageChange(page: number) {
+    await loadStaffAccounts(page);
+}
 </script>
-
 <template>
     <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
         <h2 class="text-2xl font-semibold text-orange-500">
@@ -97,7 +106,11 @@ async function handleDeactivateAccount(userId: number) {
         <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
             @update:filter="handleFilterChange" />
 
-        <AccountTable :accounts="staffAccounts" @delete-account="deleteStaffAccount"
-            @activate-account="handleActivateAccount" @deactivate-account="handleDeactivateAccount" />
+        <div v-if="userReponse">
+            <AccountTable :accounts="userReponse.users" @delete-account="deleteStaffAccount"
+                @activate-account="handleActivateAccount" @deactivate-account="handleDeactivateAccount" />
+            <Pagination :totalItem="userReponse.totalItems" :pageSize="userReponse.pageSize"
+                :currentPage="userReponse.currentPage" @change-page="handlePageChange" />
+        </div>
     </div>
 </template>
