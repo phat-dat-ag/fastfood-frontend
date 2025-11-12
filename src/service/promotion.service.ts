@@ -36,6 +36,18 @@ export const getValidPromotionOrder = () => {
   return api.get("/admin/promotion/order/valid");
 };
 
+export const activatePromotion = (promotionId: number) => {
+  return api.put("/admin/promotion/activate", null, {
+    params: { promotionId },
+  });
+};
+
+export const deactivatePromotion = (promotionId: number) => {
+  return api.put("/admin/promotion/deactivate", null, {
+    params: { promotionId },
+  });
+};
+
 export const deletePromotion = (promotionId: number) => {
   return api.delete("/admin/promotion", { params: { promotionId } });
 };

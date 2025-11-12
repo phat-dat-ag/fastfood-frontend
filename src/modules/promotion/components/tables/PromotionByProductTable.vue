@@ -7,6 +7,8 @@ import { formatDateTimeString } from '../../../../utils/time.utils';
 import { formatCurrencyVND } from '../../../../utils/currency.utils';
 import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
 import { ElTable, ElTableColumn } from 'element-plus';
+import type { SwitchResponse } from '../../../../types/switch-button.types';
+import Switch from '../../../../components/buttons/Switch.vue';
 
 const router = useRouter();
 
@@ -14,6 +16,19 @@ const props = defineProps<{
     promotions: Array<Promotion>;
     handleDeletePromotionProduct: (promotionId: number) => Promise<void>;
 }>();
+const emit = defineEmits(["activate-promotion", "deactivate-promotion"]);
+
+async function handleActivateAccount(payload: SwitchResponse) {
+    if (payload.isActive) {
+        emit("activate-promotion", payload.targetId);
+    }
+}
+
+async function handleDeactivateAccount(payload: SwitchResponse) {
+    if (!payload.isActive) {
+        emit("deactivate-promotion", payload.targetId);
+    }
+}
 </script>
 
 <template>
@@ -59,12 +74,8 @@ const props = defineProps<{
             </ElTableColumn>
             <ElTableColumn width="100" label="Trạng thái" prop="activated">
                 <template #default="scope">
-                    <span v-if="scope.row.activated" class="text-green-500 font-medium">
-                        Hoạt động
-                    </span>
-                    <span v-else class="text-red-500 font-medium">
-                        Tạm dừng
-                    </span>
+                    <Switch :isActive="scope.row.activated" :targetId="scope.row.id" @activate="handleActivateAccount"
+                        @deactivate="handleDeactivateAccount" />
                 </template>
             </ElTableColumn>
             <ElTableColumn label="Thao tác">

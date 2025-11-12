@@ -4,7 +4,7 @@ import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionOrderTable from './components/tables/PromotionOrderTable.vue';
 import type { PromotionResponse } from '../../types/promotion.types';
-import { deletePromotion, getPromotionOrder } from '../../service/promotion.service';
+import { activatePromotion, deactivatePromotion, deletePromotion, getPromotionOrder } from '../../service/promotion.service';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -70,6 +70,32 @@ async function handlePageChange(page: number) {
     await loadPromotions(page);
 }
 
+async function handleActivatePromotion(promotionId: number) {
+    await useApiHandler(
+        () => activatePromotion(promotionId),
+        {
+            loading: "Đang kích hoạt mã khuyến mãi cho đơn hàng",
+            error: "Lỗi kích hoạt mã khuyến mãi cho đơn hàng",
+            success: "Đã kích hoạt mã khuyến mãi cho đơn hàng",
+        },
+        () => { },
+        loadPromotions
+    )
+}
+
+async function handleDeactivatePromotion(promotionId: number) {
+    await useApiHandler(
+        () => deactivatePromotion(promotionId),
+        {
+            loading: "Đang hủy kích hoạt mã khuyến mãi cho đơn hàng",
+            error: "Lỗi hủy kích hoạt mã khuyến mãi cho đơn hàng",
+            success: "Đã hủy kích hoạt mã khuyến mãi cho đơn hàng",
+        },
+        () => { },
+        loadPromotions
+    )
+}
+
 </script>
 <template>
     <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
@@ -81,7 +107,8 @@ async function handlePageChange(page: number) {
 
         <div v-if="promotionResponse">
             <PromotionOrderTable :promotions="promotionResponse.promotions"
-                :handleDeletePromotionOrder="handleDeletePromotionOrder" />
+                :handleDeletePromotionOrder="handleDeletePromotionOrder" @activate-promotion="handleActivatePromotion"
+                @deactivate-promotion="handleDeactivatePromotion" />
             <Pagination :totalItem="promotionResponse.totalItems" :pageSize="promotionResponse.pageSize"
                 :currentPage="promotionResponse.currentPage" @change-page="handlePageChange" />
         </div>
