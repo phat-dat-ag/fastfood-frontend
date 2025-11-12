@@ -7,10 +7,10 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { activateAccount, deactivateAccount, deleteUser, getAllCustomerAccounts } from '../../service/user.service';
 import { CUSTOMER_ACCOUNT_MESSAGES } from '../../constants/messages';
 import AccountTable from './components/AccountTable.vue';
-import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 
 const userReponse = ref<UserResponse | null>(null);
 
@@ -68,8 +68,6 @@ async function deleteCustomerAccount(phone: string) {
 }
 
 async function handleActivateAccount(userId: number) {
-    const confirmed = await openConfirmDeleteMessage("Kích hoạt tài khoản khách hàng này?");
-    if (!confirmed) return;
     await useApiHandler(
         () => activateAccount(userId),
         {
@@ -82,8 +80,6 @@ async function handleActivateAccount(userId: number) {
 }
 
 async function handleDeactivateAccount(userId: number) {
-    const confirmed = await openConfirmDeleteMessage("Vô hiệu hóa tài khoản khách hàng này?");
-    if (!confirmed) return;
     await useApiHandler(
         () => deactivateAccount(userId),
         {

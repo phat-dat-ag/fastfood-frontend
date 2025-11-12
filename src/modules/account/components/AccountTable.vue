@@ -17,10 +17,14 @@ function handleDeleteAccount(phone: string) {
     emit("delete-account", phone);
 }
 
-async function handleAccountStatusChange(payload: SwitchResponse) {
+async function handleActivateAccount(payload: SwitchResponse) {
     if (payload.isActive) {
         emit("activate-account", payload.targetId);
-    } else {
+    }
+}
+
+async function handleDeactivateAccount(payload: SwitchResponse) {
+    if (!payload.isActive) {
         emit("deactivate-account", payload.targetId);
     }
 }
@@ -55,8 +59,8 @@ async function handleAccountStatusChange(payload: SwitchResponse) {
 
             <ElTableColumn label="Trạng thái">
                 <template #default="scope">
-                    <Switch :isActive="scope.row.activated" :targetId="scope.row.id"
-                        @status-change="handleAccountStatusChange" />
+                    <Switch :isActive="scope.row.activated" :targetId="scope.row.id" @activate="handleActivateAccount"
+                        @deactivate="handleDeactivateAccount" />
                 </template>
             </ElTableColumn>
 
