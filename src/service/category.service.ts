@@ -36,6 +36,10 @@ export const getCategories = (pageRequest: PageRequest) => {
   return api.get("/admin/category", { params: pageRequest });
 };
 
+export const getDisplayableCategories = () => {
+  return api.get("/admin/category/display");
+};
+
 export const updateCategory = (data: CategoryUpdateRequest) => {
   const formData = buildCategoryFormData(data);
   return api.put("/admin/category", formData, {
