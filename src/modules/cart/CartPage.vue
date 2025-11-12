@@ -18,6 +18,8 @@ import CheckoutModal from './components/CheckoutModal.vue';
 import type { Order, OrderCreateRequest } from '../../types/order.types';
 import { createCashOnDeliveryOrder, createStripePaymentOrder } from '../../service/order.service';
 import { useRouter } from 'vue-router';
+import { CART_AMOUNT_LIMIT } from '../../constants/cart';
+import { formatCurrencyVND } from '../../utils/currency.utils';
 
 const router = useRouter();
 
@@ -157,12 +159,24 @@ async function placeOrder(userNote: string) {
         notifyError("Vui lòng chọn hình thức thanh toán!");
         return;
     }
+    if (!cartDetail.value) {
+        notifyError("Không tìm thấy giỏ hàng để thanh toán");
+        return;
+    }
+    if (Number(cartDetail.value.totalPrice) > CART_AMOUNT_LIMIT.MAX_TOTAL_AMOUNT) {
+        notifyError(`Tổng đơn hàng không vượt quá ${formatCurrencyVND(CART_AMOUNT_LIMIT.MAX_TOTAL_AMOUNT.toString())}`);
+        return;
+    }
     const dataRequest: OrderCreateRequest = {
         promotionCode: selectedPromotionCode.value,
         addressId: deliveryRequest.value.addressId,
         userNote,
     }
     if (selectedPaymentMethod.value == PAYMENT_METHODS.CASH_ON_DELIVERY) {
+        if (Number(cartDetail.value.totalPrice) > CART_AMOUNT_LIMIT.MAX_CASH_ON_DELIVERY_AMOUNT) {
+            notifyError(`Tổng đơn từ từ từ ${formatCurrencyVND(CART_AMOUNT_LIMIT.MAX_CASH_ON_DELIVERY_AMOUNT.toString())} phải thanh toán trước`);
+            return;
+        }
         await useApiHandler<Order>(
             () => createCashOnDeliveryOrder(dataRequest),
             {
