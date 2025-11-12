@@ -59,8 +59,6 @@ export const ROUTE_NAMES = {
   },
   ADMIN: {
     DASHBOARD: "AdminDashboard",
-    CATEGORY_DETAIL: "AdminCategoryDetail",
-    PRODUCT_DETAIL: "AdminProductDetail",
     CUSTOMER_MANAGEMENT: "CustomerManagement",
     STAFF_MANAGEMENT: "StaffManagement",
     CATEGORY_MANAGEMENT: "CategoryManagement",

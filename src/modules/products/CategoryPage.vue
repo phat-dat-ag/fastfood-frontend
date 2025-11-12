@@ -31,9 +31,7 @@ const selectedCategory = ref<Category>();
 function handleSelect(category: Category) {
   selectedCategory.value = category;
   const role = userStore.user?.role;
-  if (role === USER_ROLES.ADMIN)
-    router.push({ name: ROUTE_NAMES.ADMIN.CATEGORY_DETAIL, params: { slug: category.slug } })
-  else if (role === USER_ROLES.USER)
+  if (role === USER_ROLES.USER)
     router.push({ name: ROUTE_NAMES.USER.CATEGORY_DETAIL, params: { slug: category.slug } });
   else if (role === USER_ROLES.STAFF)
     router.push({ name: ROUTE_NAMES.STAFF.CATEGORY_DETAIL, params: { slug: category.slug } });

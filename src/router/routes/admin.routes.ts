@@ -8,7 +8,6 @@ import PromotionByCategoryPage from "../../modules/promotion/PromotionByCategory
 import PromotionByProductPage from "../../modules/promotion/PromotionByProductPage.vue";
 import AddPromotionByCategoryPage from "../../modules/promotion/AddPromotionByCategoryPage.vue";
 import AddPromotionByProductPage from "../../modules/promotion/AddPromotionByProductPage.vue";
-import ProductDetail from "../../modules/products/ProductDetail.vue";
 import PromotionOrderPage from "../../modules/promotion/PromotionOrderPage.vue";
 import AddPromotionOrderPage from "../../modules/promotion/AddPromotionOrderPage.vue";
 import StaffManagementPage from "../../modules/account/StaffManagementPage.vue";
@@ -31,11 +30,6 @@ export const adminRoutes = {
       path: "",
       name: ROUTE_NAMES.ADMIN.DASHBOARD,
       component: AdminDashboard,
-    },
-    {
-      path: "product-detail/:slug",
-      name: ROUTE_NAMES.ADMIN.PRODUCT_DETAIL,
-      component: ProductDetail,
     },
     {
       path: "manage-customer",
