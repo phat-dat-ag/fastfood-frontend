@@ -1,225 +1,271 @@
-<template>
-  <el-container style="padding:24px;">
-    <el-header style="background:transparent; padding-bottom:16px">
-      <h2 style="margin:0; color:#e74c3c">Admin Dashboard — Fast Food & Rewards</h2>
-      <p style="margin:4px 0 0 0; color:#7f8c8d">Bảng tổng hợp thống kê, báo cáo, trò chơi.</p>
-    </el-header>
-
-    <div v-if="userStats">
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-card>
-            <h4>Tổng nhân viên</h4>
-            <p>{{ userStats.totalStaff }}</p>
-          </el-card>
-        </el-col>
-
-        <el-col :span="8">
-          <el-card>
-            <h4>Nhân viên đã kích hoạt</h4>
-            <p>{{ userStats.totalActivatedStaff }}</p>
-          </el-card>
-        </el-col>
-
-        <el-col :span="8">
-          <el-card>
-            <h4>Nhân viên tham gia tháng này</h4>
-            <p>{{ userStats.staffJoinedThisMonth }}</p>
-          </el-card>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20" style="margin-top: 20px;">
-        <el-col :span="8">
-          <el-card>
-            <h4>Tổng khách hàng</h4>
-            <p>{{ userStats.totalUser }}</p>
-          </el-card>
-        </el-col>
-
-        <el-col :span="8">
-          <el-card>
-            <h4>Khách hàng đã kích hoạt</h4>
-            <p>{{ userStats.totalActivatedUser }}</p>
-          </el-card>
-        </el-col>
-
-        <el-col :span="8">
-          <el-card>
-            <h4>Khách hàng tham gia tháng này</h4>
-            <p>{{ userStats.userJoinedThisMonth }}</p>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <el-main>
-      <!-- KPI Cards -->
-      <el-row :gutter="20">
-        <el-col :span="6" v-for="card in kpiCards" :key="card.label">
-          <el-card shadow="hover" style="text-align:center; padding:16px">
-            <div style="font-size:28px; font-weight:700; color:#e67e22">{{ card.value }}</div>
-            <div style="font-size:14px; color:#7f8c8d">{{ card.label }}</div>
-          </el-card>
-        </el-col>
-      </el-row>
-
-      <el-divider />
-
-      <!-- Charts Section -->
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-card shadow="hover">
-            <h4>Doanh thu theo tuần</h4>
-            <div ref="weeklyRevenueChart" style="height:150px"></div>
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card shadow="hover">
-            <h4>Top sản phẩm bán chạy</h4>
-            <div ref="topProductChart" style="height:250px"></div>
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card shadow="hover">
-            <h4>Tỷ lệ trạng thái đơn hàng</h4>
-            <div ref="orderStatusChart" style="height:250px"></div>
-          </el-card>
-        </el-col>
-      </el-row>
-
-      <el-divider />
-
-      <!-- Game & Rewards -->
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-card shadow="hover">
-            <h4>Người chơi & Phần thưởng</h4>
-            <el-progress :percentage="gameStats.claimRate" status="success" />
-            <p>Đã đổi: {{ gameStats.claimed }} / Phát: {{ gameStats.issued }}</p>
-            <el-table :data="recentGames" style="width:100%; margin-top:12px">
-              <el-table-column prop="player" label="Người chơi" />
-              <el-table-column prop="prize" label="Phần thưởng" />
-              <el-table-column prop="issuedAt" label="Thời gian" width="160" />
-            </el-table>
-          </el-card>
-        </el-col>
-
-        <el-col :span="12">
-          <el-card shadow="hover">
-            <h4>Doanh thu & Lợi nhuận (Tháng)</h4>
-            <div ref="monthlyRevenueChart" style="height:300px"></div>
-          </el-card>
-        </el-col>
-      </el-row>
-
-      <el-divider />
-
-      <!-- Orders Table -->
-      <el-card shadow="hover">
-        <h4>Báo cáo đơn hàng chi tiết</h4>
-        <el-table :data="orders" style="width:100%">
-          <el-table-column prop="id" label="#" width="80" />
-          <el-table-column prop="customer" label="Khách hàng" />
-          <el-table-column prop="total" label="Tổng tiền" />
-          <el-table-column prop="status" label="Trạng thái" />
-          <el-table-column prop="date" label="Ngày" width="160" />
-        </el-table>
-      </el-card>
-    </el-main>
-  </el-container>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import * as echarts from 'echarts'
-import { useApiHandler } from '../../composables/useApiHandler'
-import { STATS_USER } from '../../constants/messages'
-import { getUserStats } from '../../service/dashboard.service'
-import type { UserStats } from '../../types/stats.types'
+import { ref, onMounted, computed, type Ref } from 'vue';
+import { useApiHandler } from '../../composables/useApiHandler';
+import { STATS_CATEGORY, STATS_ORDER, STATS_PRODUCT, STATS_USER } from '../../constants/messages';
+import { getCategoryStats, getOrderStats, getProductStats, getUserStats } from '../../service/dashboard.service';
+import type { CategoryStats, OrderStats, ProductStats, UserStats } from '../../types/stats.types';
+import { ORDER_STATUS_TEXT } from '../../utils/order-display.utils';
+import { formatCurrencyVND } from '../../utils/currency.utils';
 
-const kpiCards = [
-  { label: 'Doanh thu hôm nay', value: '₫12,500,000' },
-  { label: 'Đơn hàng hôm nay', value: 342 },
-  { label: 'Người chơi hôm nay', value: 128 },
-  { label: 'Mã khuyến mãi phát', value: 24 }
-]
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  type ChartData,
+  type TooltipItem,
+} from 'chart.js';
+import { Pie, Bar } from 'vue-chartjs';
 
-const gameStats = { issued: 124, claimed: 87, claimRate: 70 }
-
-const recentGames = ref([
-  { player: 'Nguyen A', prize: '10% OFF', issuedAt: '2025-11-10 14:10' },
-  { player: 'Tran B', prize: 'Free Fries', issuedAt: '2025-11-10 13:44' },
-  { player: 'Le C', prize: '₫20,000', issuedAt: '2025-11-09 09:12' }
-])
-
-const orders = ref(Array.from({ length: 20 }).map((_, i) => ({
-  id: 1000 + i,
-  customer: `Customer ${i + 1}`,
-  total: `₫${(Math.round(Math.random() * 100) + 20).toLocaleString()}000`,
-  status: ['Pending', 'Preparing', 'Delivered', 'Refunded'][Math.floor(Math.random() * 4)],
-  date: new Date(Date.now() - i * 86400000).toLocaleDateString()
-})))
-
-const weeklyRevenueChart = ref<HTMLDivElement | null>(null)
-const topProductChart = ref<HTMLDivElement | null>(null)
-const orderStatusChart = ref<HTMLDivElement | null>(null)
-const monthlyRevenueChart = ref<HTMLDivElement | null>(null)
-
-onMounted(() => {
-  if (weeklyRevenueChart.value) {
-    const chart = echarts.init(weeklyRevenueChart.value)
-    chart.setOption({
-      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-      yAxis: { type: 'value' },
-      series: [{ type: 'line', data: [1200, 2000, 1500, 3000, 2800, 3500, 4000], smooth: true, areaStyle: {} }]
-    })
-  }
-
-  if (topProductChart.value) {
-    const chart = echarts.init(topProductChart.value)
-    chart.setOption({
-      xAxis: { type: 'category', data: ['Burger', 'Wrap', 'Fries', 'Combo'] },
-      yAxis: { type: 'value' },
-      series: [{ type: 'bar', data: [1240, 980, 860, 340] }]
-    })
-  }
-
-  if (orderStatusChart.value) {
-    const chart = echarts.init(orderStatusChart.value)
-    chart.setOption({
-      series: [{
-        type: 'pie', radius: '60%', data: [
-          { value: 40, name: 'Pending' }, { value: 30, name: 'Preparing' }, { value: 25, name: 'Delivered' }, { value: 5, name: 'Refunded' }
-        ]
-      }]
-    })
-  }
-
-  if (monthlyRevenueChart.value) {
-    const chart = echarts.init(monthlyRevenueChart.value)
-    chart.setOption({
-      xAxis: { type: 'category', data: ['W1', 'W2', 'W3', 'W4'] },
-      yAxis: { type: 'value' },
-      series: [
-        { name: 'Revenue', type: 'bar', data: [12000, 15000, 18000, 22000] },
-        { name: 'Profit', type: 'line', data: [4000, 5000, 6000, 8000] }
-      ]
-    })
-  }
-})
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, BarElement);
 
 const userStats = ref<UserStats | null>(null);
+const orderStats = ref<OrderStats | null>(null);
+const productStats = ref<ProductStats[] | null>(null);
+const categoryStats = ref<CategoryStats[] | null>(null);
+
+const animatedCOD: Ref<number> = ref(0);
+const animatedBank: Ref<number> = ref(0);
+const animatedTotal: Ref<number> = ref(0);
+
+function animateRevenue(target: number, setter: Ref<number>) {
+  let current = 0;
+  const step = Math.ceil(target / 50);
+  const interval = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      setter.value = target;
+      clearInterval(interval);
+    } else {
+      setter.value = current;
+    }
+  }, 20);
+}
+
+const orderChartData = ref<ChartData<'pie', number[], string>>({
+  labels: [],
+  datasets: [{
+    data: [],
+    backgroundColor: [],
+  }],
+});
+
+const productChartData = ref<ChartData<'bar', number[], string>>({
+  labels: [],
+  datasets: [{
+    label: 'Doanh thu',
+    data: [],
+    backgroundColor: '#FFA500',
+  }],
+});
+
+const categoryChartData = ref<ChartData<'bar', number[], string>>({
+  labels: [],
+  datasets: [{
+    label: 'Doanh thu',
+    data: [],
+    backgroundColor: '#4CAF50',
+  }],
+});
+
+const showOrderChart = computed(() => orderStats.value !== null);
+const showCategoryChart = computed(() => categoryStats.value && categoryStats.value.length > 0);
+const showProductChart = computed(() => productStats.value && productStats.value.length > 0);
+
 async function loadUserStats() {
   await useApiHandler<UserStats>(
     getUserStats,
-    {
-      loading: STATS_USER.get,
-      error: STATS_USER.getError,
-    },
-    (data: UserStats) => userStats.value = data,
-  )
+    { loading: STATS_USER.get, error: STATS_USER.getError },
+    data => userStats.value = data
+  );
 }
 
-onMounted(loadUserStats);
+async function loadOrderStats() {
+  await useApiHandler<OrderStats>(
+    getOrderStats,
+    { loading: STATS_ORDER.get, error: STATS_ORDER.getError },
+    data => {
+      orderStats.value = data;
+
+      animateRevenue(Number(data.cashOnDeliveryRevenue), animatedCOD);
+      animateRevenue(Number(data.bankTransferRevenue), animatedBank);
+      animateRevenue(Number(data.totalRevenue), animatedTotal);
+
+      orderChartData.value = {
+        labels: [
+          ORDER_STATUS_TEXT.PENDING,
+          ORDER_STATUS_TEXT.CONFIRMED,
+          ORDER_STATUS_TEXT.DELIVERING,
+          ORDER_STATUS_TEXT.DELIVERED,
+          ORDER_STATUS_TEXT.CANCELLED,
+        ],
+        datasets: [{
+          data: [
+            data.pendingOrderAmount,
+            data.confirmedOrderAmount,
+            data.deliveringOrderAmount,
+            data.deliveredOrderAmount,
+            data.cancelledOrderAmount,
+          ],
+          backgroundColor: ['#FFA500', '#1E90FF', '#00CED1', '#32CD32', '#FF6347']
+        }]
+      };
+    }
+  );
+}
+
+async function loadCategoryStats() {
+  await useApiHandler<CategoryStats[]>(
+    getCategoryStats,
+    { loading: STATS_CATEGORY.get, error: STATS_CATEGORY.getError },
+    data => {
+      categoryStats.value = data;
+      categoryChartData.value = {
+        labels: data.map(c => c.name),
+        datasets: [{
+          label: 'Doanh thu',
+          data: data.map(c => c.totalRevenue),
+          backgroundColor: '#4CAF50'
+        }]
+      };
+    }
+  );
+}
+
+async function loadProductStats() {
+  await useApiHandler<ProductStats[]>(
+    getProductStats,
+    { loading: STATS_PRODUCT.get, error: STATS_PRODUCT.getError },
+    data => {
+      productStats.value = data;
+      productChartData.value = {
+        labels: data.map(p => p.name),
+        datasets: [{
+          label: 'Doanh thu',
+          data: data.map(p => p.totalRevenue),
+          backgroundColor: '#FFA500'
+        }]
+      };
+    }
+  );
+}
+
+const categoryChartOptions = computed(() => ({
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      callbacks: {
+        label: (ctx: TooltipItem<'bar'>) => {
+          const index = ctx.dataIndex;
+          const value = ctx.raw as number;
+          const quantity = categoryStats.value?.[index]?.totalQuantitySold ?? 0;
+          return `Doanh thu: ${formatCurrencyVND(value.toString())}\nSố lượng: ${quantity}`;
+        }
+      }
+    }
+  },
+  scales: { x: { ticks: { display: false } } }
+}));
+
+const productChartOptions = computed(() => ({
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      callbacks: {
+        label: (ctx: TooltipItem<'bar'>) => {
+          const index = ctx.dataIndex;
+          const value = ctx.raw as number;
+          const quantity = productStats.value?.[index]?.totalQuantitySold ?? 0;
+          return `Doanh thu: ${formatCurrencyVND(value.toString())}\nSố lượng: ${quantity}`;
+        }
+      }
+    }
+  },
+  scales: { x: { ticks: { display: false } } }
+}));
+
+onMounted(async () => {
+  await loadUserStats();
+  await loadOrderStats();
+  await loadProductStats();
+  await loadCategoryStats();
+});
 </script>
+
+<template>
+  <div v-if="userStats" class="p-6 space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Nhân viên</div>
+        <div class="text-2xl font-bold">{{ userStats.totalStaff }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Nhân viên đã kích hoạt</div>
+        <div class="text-2xl font-bold">{{ userStats.totalActivatedStaff }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Nhân viên mới</div>
+        <div class="text-2xl font-bold">{{ userStats.staffJoinedThisMonth }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Tổng khách hàng</div>
+        <div class="text-2xl font-bold">{{ userStats.totalUser }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Khách hàng đã kích hoạt</div>
+        <div class="text-2xl font-bold">{{ userStats.totalActivatedUser }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Khách hàng tháng này</div>
+        <div class="text-2xl font-bold">{{ userStats.userJoinedThisMonth }}</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Doanh thu COD</div>
+        <div class="text-2xl font-bold text-orange-500">{{ formatCurrencyVND(animatedCOD.toString()) }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Doanh thu Chuyển khoản</div>
+        <div class="text-2xl font-bold text-blue-500">{{ formatCurrencyVND(animatedBank.toString()) }}</div>
+      </div>
+      <div class="bg-white shadow rounded p-4 text-center">
+        <div class="text-gray-500">Tổng doanh thu</div>
+        <div class="text-2xl font-bold text-green-500">{{ formatCurrencyVND(animatedTotal.toString()) }}</div>
+      </div>
+    </div>
+
+    <div v-if="showOrderChart" class="bg-white shadow rounded p-4 flex flex-col items-center">
+      <h3 class="text-lg md:text-xl font-semibold mb-2 text-center">Trạng thái đơn hàng</h3>
+      <div class="w-full max-w-xl h-64 md:h-72 lg:h-80">
+        <Pie :data="orderChartData" :chart-options="{
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 14 } } }
+          }
+        }" />
+      </div>
+    </div>
+
+    <div v-if="showCategoryChart && categoryStats" class="bg-white shadow rounded p-4 flex flex-col items-center">
+      <h3 class="text-lg md:text-xl font-semibold mb-2 text-center">Doanh thu theo danh mục</h3>
+      <div class="w-full max-w-3xl h-72 md:h-80 lg:h-96">
+        <Bar :data="categoryChartData" :options="categoryChartOptions" />
+      </div>
+    </div>
+
+    <div v-if="showProductChart && productStats" class="bg-white shadow rounded p-4 flex flex-col items-center">
+      <h3 class="text-lg md:text-xl font-semibold mb-2 text-center">Top sản phẩm theo doanh thu</h3>
+      <div class="w-full max-w-3xl h-72 md:h-80 lg:h-96">
+        <Bar :data="productChartData" :options="productChartOptions" />
+      </div>
+    </div>
+  </div>
+</template>

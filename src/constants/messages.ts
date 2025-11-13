@@ -99,3 +99,12 @@ export const ABOUT_US_PAGE_IMAGE_MESSAGE = createEntityMessages(
 export const STATS_USER = createEntityMessages(
   "thống kê các tài khoản trên hệ thống"
 );
+export const STATS_ORDER = createEntityMessages(
+  "thống kê các đơn hàng trên hệ thống"
+);
+export const STATS_CATEGORY = createEntityMessages(
+  "thống kê các danh mục trên hệ thống"
+);
+export const STATS_PRODUCT = createEntityMessages(
+  "thống kê các sản phẩm trên hệ thống"
+);

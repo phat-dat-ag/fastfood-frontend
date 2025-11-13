@@ -6,3 +6,32 @@ export interface UserStats {
   staffJoinedThisMonth: number;
   userJoinedThisMonth: number;
 }
+
+export interface OrderStats {
+  pendingOrderAmount: number;
+  confirmedOrderAmount: number;
+  deliveringOrderAmount: number;
+  deliveredOrderAmount: number;
+  cancelledOrderAmount: number;
+
+  cashOnDeliveryOrderAmount: number;
+  bankTransferOrderAmount: number;
+
+  discountedOrderAmount: number;
+
+  cashOnDeliveryRevenue: number;
+  bankTransferRevenue: number;
+  totalRevenue: number;
+}
+
+export interface CategoryStats {
+  name: string;
+  totalRevenue: number;
+  totalQuantitySold: number;
+}
+
+export interface ProductStats {
+  name: string;
+  totalRevenue: number;
+  totalQuantitySold: number;
+}
