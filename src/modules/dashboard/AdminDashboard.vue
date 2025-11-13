@@ -5,6 +5,54 @@
       <p style="margin:4px 0 0 0; color:#7f8c8d">Bảng tổng hợp thống kê, báo cáo, trò chơi.</p>
     </el-header>
 
+    <div v-if="userStats">
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-card>
+            <h4>Tổng nhân viên</h4>
+            <p>{{ userStats.totalStaff }}</p>
+          </el-card>
+        </el-col>
+
+        <el-col :span="8">
+          <el-card>
+            <h4>Nhân viên đã kích hoạt</h4>
+            <p>{{ userStats.totalActivatedStaff }}</p>
+          </el-card>
+        </el-col>
+
+        <el-col :span="8">
+          <el-card>
+            <h4>Nhân viên tham gia tháng này</h4>
+            <p>{{ userStats.staffJoinedThisMonth }}</p>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col :span="8">
+          <el-card>
+            <h4>Tổng khách hàng</h4>
+            <p>{{ userStats.totalUser }}</p>
+          </el-card>
+        </el-col>
+
+        <el-col :span="8">
+          <el-card>
+            <h4>Khách hàng đã kích hoạt</h4>
+            <p>{{ userStats.totalActivatedUser }}</p>
+          </el-card>
+        </el-col>
+
+        <el-col :span="8">
+          <el-card>
+            <h4>Khách hàng tham gia tháng này</h4>
+            <p>{{ userStats.userJoinedThisMonth }}</p>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+
     <el-main>
       <!-- KPI Cards -->
       <el-row :gutter="20">
@@ -85,6 +133,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import * as echarts from 'echarts'
+import { useApiHandler } from '../../composables/useApiHandler'
+import { STATS_USER } from '../../constants/messages'
+import { getUserStats } from '../../service/dashboard.service'
+import type { UserStats } from '../../types/stats.types'
 
 const kpiCards = [
   { label: 'Doanh thu hôm nay', value: '₫12,500,000' },
@@ -156,4 +208,18 @@ onMounted(() => {
     })
   }
 })
+
+const userStats = ref<UserStats | null>(null);
+async function loadUserStats() {
+  await useApiHandler<UserStats>(
+    getUserStats,
+    {
+      loading: STATS_USER.get,
+      error: STATS_USER.getError,
+    },
+    (data: UserStats) => userStats.value = data,
+  )
+}
+
+onMounted(loadUserStats);
 </script>

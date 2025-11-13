@@ -96,3 +96,6 @@ export const ADMIN_DASHBOARD_MESSAGE = createEntityMessages("thống kê báo c�
 export const ABOUT_US_PAGE_IMAGE_MESSAGE = createEntityMessages(
   "ảnh của trang Về chúng tôi"
 );
+export const STATS_USER = createEntityMessages(
+  "thống kê các tài khoản trên hệ thống"
+);

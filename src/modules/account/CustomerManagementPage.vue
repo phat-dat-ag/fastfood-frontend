@@ -25,7 +25,7 @@ async function loadCustomerAccounts(page: number = 0) {
             loading: CUSTOMER_ACCOUNT_MESSAGES.get,
             error: CUSTOMER_ACCOUNT_MESSAGES.getError,
         },
-        (data: UserResponse) => { userReponse.value = data; console.log(userReponse.value.users) },
+        (data: UserResponse) => userReponse.value = data,
     )
 }
 
