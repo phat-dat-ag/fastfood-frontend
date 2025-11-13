@@ -25,7 +25,7 @@ async function loadCustomerAccounts(page: number = 0) {
             loading: CUSTOMER_ACCOUNT_MESSAGES.get,
             error: CUSTOMER_ACCOUNT_MESSAGES.getError,
         },
-        (data: UserResponse) => userReponse.value = data,
+        (data: UserResponse) => { userReponse.value = data; console.log(userReponse.value.users) },
     )
 }
 
@@ -68,6 +68,7 @@ async function deleteCustomerAccount(phone: string) {
 }
 
 async function handleActivateAccount(userId: number) {
+    const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
         () => activateAccount(userId),
         {
@@ -75,11 +76,12 @@ async function handleActivateAccount(userId: number) {
             error: "Lỗi kích hoạt tài khoản khách hàng",
         },
         () => { },
-        loadCustomerAccounts
+        () => loadCustomerAccounts(page),
     )
 }
 
 async function handleDeactivateAccount(userId: number) {
+    const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
         () => deactivateAccount(userId),
         {
@@ -87,7 +89,7 @@ async function handleDeactivateAccount(userId: number) {
             error: "Lỗi vô hiệu hóa tài khoản khách hàng",
         },
         () => { },
-        loadCustomerAccounts
+        () => loadCustomerAccounts(page),
     )
 }
 async function handlePageChange(page: number) {

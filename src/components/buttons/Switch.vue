@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElSwitch } from 'element-plus';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type { SwitchResponse } from '../../types/switch-button.types';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 
@@ -11,6 +11,10 @@ const props = defineProps<{
 const emit = defineEmits(["activate", "deactivate"]);
 
 const isActiveValue = ref<boolean>(props.isActive);
+
+watch(() => props.isActive, (newVal) => {
+    isActiveValue.value = newVal;
+});
 
 async function onToggle() {
     const nextState = !isActiveValue.value;
@@ -33,5 +37,5 @@ async function onToggle() {
 <template>
     <ElSwitch :model-value="isActiveValue" class="ml-2"
         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" active-text="Kích hoạt"
-        @click="onToggle" />
+        @change="onToggle" />
 </template>

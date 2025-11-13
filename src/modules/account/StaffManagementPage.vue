@@ -68,6 +68,7 @@ async function deleteStaffAccount(phone: string) {
 }
 
 async function handleActivateAccount(userId: number) {
+    const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
         () => activateAccount(userId),
         {
@@ -75,11 +76,12 @@ async function handleActivateAccount(userId: number) {
             error: "Lỗi kích hoạt tài khoản nhân viên",
         },
         () => { },
-        loadStaffAccounts
+        () => loadStaffAccounts(page,)
     )
 }
 
 async function handleDeactivateAccount(userId: number) {
+    const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
         () => deactivateAccount(userId),
         {
@@ -87,7 +89,7 @@ async function handleDeactivateAccount(userId: number) {
             error: "Lỗi vô hiệu hóa tài khoản nhân viên",
         },
         () => { },
-        loadStaffAccounts
+        () => loadStaffAccounts(page),
     )
 }
 async function handlePageChange(page: number) {
