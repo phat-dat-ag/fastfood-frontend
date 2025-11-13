@@ -15,6 +15,7 @@ import {
     Document,
     DataAnalysis,
     SwitchButton,
+    PictureFilled,
 } from "@element-plus/icons-vue";
 
 const router = useRouter();
@@ -132,6 +133,27 @@ function signOut() {
                         </el-icon>
                         <template #title>Góp ý trò chơi</template>
                     </el-menu-item>
+
+                    <el-sub-menu index="9">
+                        <template #title>
+                            <el-icon>
+                                <PictureFilled />
+                            </el-icon>
+                            <span>Ảnh trên hệ thống</span>
+                        </template>
+                        <el-menu-item index="9-1"
+                            @click="router.push({ name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT })">
+                            Trang Về chúng tôi
+                        </el-menu-item>
+                        <el-menu-item index="9-2"
+                            @click="router.push({ name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT })">
+                            Trang Thử thách
+                        </el-menu-item>
+                        <el-menu-item index="9-3"
+                            @click="router.push({ name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT })">
+                            Trang hợp tác
+                        </el-menu-item>
+                    </el-sub-menu>
                 </el-menu>
             </div>
 

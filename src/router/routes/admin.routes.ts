@@ -20,6 +20,7 @@ import AddQuestionsPage from "../../modules/question/components/AddQuestionsPage
 import AdminOrderManagementPage from "../../modules/order/AdminOrderManagementPage.vue";
 import AdminDashboard from "../../modules/dashboard/AdminDashboard.vue";
 import ReviewManagementPage from "../../modules/review/ReviewManagementPage.vue";
+import AboutUseImageManagement from "../../modules/image/AboutUseImageManagement.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -123,6 +124,11 @@ export const adminRoutes = {
           component: AddQuestionsPage,
         },
       ],
+    },
+    {
+      path: "manage-image",
+      name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT,
+      component: AboutUseImageManagement,
     },
   ],
 };

@@ -1,0 +1,5 @@
+export const SECTION_TYPE = {
+  CAROUSEL: "CAROUSEL",
+  SHOWCASE: "SHOWCASE",
+  MISSION: "MISSION",
+} as const;

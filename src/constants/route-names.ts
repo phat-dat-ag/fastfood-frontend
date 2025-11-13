@@ -77,5 +77,6 @@ export const ROUTE_NAMES = {
     QUESTION_MANAGEMENT: "QuestionManagement",
     SHOW_QUESTION_PAGE: "ShowQuestionPage",
     ADD_QUESTION_PAGE: "AddQuestionPage",
+    ABOUT_US_IMAGE_MANAGEMENT: "AboutUsImageManagement",
   },
 } as const;

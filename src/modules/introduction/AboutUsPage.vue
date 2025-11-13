@@ -1,40 +1,44 @@
 <script setup lang="ts">
-const heroImages = [
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760621763/2_ly_tt_lsehtt.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760621637/combo_burger_cpyory.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760617724/product/lexmgdvga1hr5grhage1.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760617346/product/od7yswu9qk8jxvosqtmr.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760363466/product/a5ysdjld6ipzrlsmmprw.webp',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760363323/product/pzfzpykn19f5wmljicz2.webp',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760616478/category/pj5yhctaxkfge7hvfkuw.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760616584/category/yuvdent5gheuqkeh9m7b.webp',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760617822/product/e6oiizjat3evk2s0hlm4.webp',
-]
+import { onMounted, ref } from 'vue';
+import { useApiHandler } from '../../composables/useApiHandler';
+import type { AboutUsPageImage, Image } from '../../types/image.types';
+import { getAboutUsPageImages } from '../../service/image.service';
+import { ABOUT_US_PAGE_IMAGE_MESSAGE } from '../../constants/messages';
 
-const foodImages = [
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760621763/2_ly_tt_lsehtt.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760621637/combo_burger_cpyory.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760617724/product/lexmgdvga1hr5grhage1.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760617346/product/od7yswu9qk8jxvosqtmr.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760363466/product/a5ysdjld6ipzrlsmmprw.webp',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760363323/product/pzfzpykn19f5wmljicz2.webp',
-]
+const carouselImages = ref<Image[]>([]);
+const showcaseImages = ref<Image[]>([]);
+const missionImages = ref<Image[]>([]);
 
-const urlQuality = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619235/hai_san_tuoi_song_wniqmo.jpg';
-const urlSpeed = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619251/khong_gian_quan_ihc0e6.jpg';
-const urlFriendly = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619256/phuc_vu_chuyen_nghiep_mpjuml.jpg';
+async function loadAboutUsImages() {
+    await useApiHandler<AboutUsPageImage>(
+        getAboutUsPageImages,
+        {
+            loading: ABOUT_US_PAGE_IMAGE_MESSAGE.get,
+            error: ABOUT_US_PAGE_IMAGE_MESSAGE.getError,
+        },
+        (data: AboutUsPageImage) => {
+            carouselImages.value = data.carouselImages;
+            showcaseImages.value = data.showcaseImages;
+            missionImages.value = data.missionImages;
+        }
+    );
+}
+
+onMounted(loadAboutUsImages);
 </script>
+
 <template>
-    <div class="min-h-screen text-gray-800">
-        <section class="relative">
+    <div class="space-y-16">
+        <section v-if="carouselImages.length > 0" class="relative">
             <el-carousel :interval="4000" type="card" height="400px" indicator-position="outside" arrow="always">
-                <el-carousel-item v-for="(img, index) in heroImages" :key="index" class="rounded-2xl overflow-hidden">
-                    <img :src="img" alt="Aurelion Shop slide" class="w-full h-full object-cover rounded-2xl" />
+                <el-carousel-item v-for="(img, index) in carouselImages" :key="index"
+                    class="rounded-2xl overflow-hidden">
+                    <img :src="img.url" :alt="img.alternativeText" class="w-full h-full object-cover rounded-2xl" />
                 </el-carousel-item>
             </el-carousel>
         </section>
 
-        <section class="max-w-6xl mx-auto px-4 py-16 text-center">
+        <section class="max-w-6xl mx-auto text-center">
             <h2 class="text-3xl font-bold mb-6 text-amber-600">Giới thiệu cửa hàng chúng tôi</h2>
             <p class="text-lg text-gray-600 leading-relaxed">
                 Tọa lạc tại trung tâm <strong>Phường Ninh Kiều, Cần Thơ</strong>,
@@ -45,17 +49,17 @@ const urlFriendly = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v17606192
             </p>
         </section>
 
-        <section class="py-12">
-            <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div v-for="(img, i) in foodImages" :key="i"
+        <section v-if="showcaseImages.length > 0">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div v-for="(img, i) in showcaseImages" :key="i"
                     class="overflow-hidden rounded-2xl shadow hover:shadow-lg transition">
-                    <img :src="img" alt="Food image"
+                    <img :src="img.url" :alt="img.alternativeText"
                         class="w-full h-72 object-cover hover:scale-105 transition-transform" />
                 </div>
             </div>
         </section>
 
-        <section class="max-w-6xl mx-auto px-4 py-16 text-center">
+        <section class="max-w-6xl mx-auto text-center">
             <h2 class="text-3xl font-bold mb-6 text-amber-600">Sứ mệnh & Cam kết</h2>
             <p class="text-lg text-gray-600 mb-10 leading-relaxed">
                 Chúng tôi không chỉ phục vụ món ăn nhanh, mà còn mang đến sự tận tâm và chất lượng trong từng phần ăn.
@@ -63,26 +67,16 @@ const urlFriendly = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v17606192
                 Aurelion Shop cam kết mang lại <strong>dịch vụ nhanh chóng – hương vị khó quên</strong>.
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 bg-white rounded-2xl shadow hover:shadow-lg transition">
-                    <img :src="urlQuality" alt="Chất lượng" class="w-24 h-24 mx-auto mb-4 object-cover rounded-full" />
-                    <h3 class="font-semibold text-xl mb-2 text-amber-700">Chất lượng hàng đầu</h3>
-                    <p class="text-gray-600">Từng món ăn được chuẩn bị kỹ lưỡng với nguyên liệu chọn lọc.</p>
-                </div>
-                <div class="p-8 bg-white rounded-2xl shadow hover:shadow-lg transition">
-                    <img :src="urlSpeed" alt="Nhanh chóng" class="w-24 h-24 mx-auto mb-4 object-cover rounded-full" />
-                    <h3 class="font-semibold text-xl mb-2 text-amber-700">Phục vụ nhanh</h3>
-                    <p class="text-gray-600">Đặt món, nhận hàng – chỉ trong vài phút, mọi thứ đã sẵn sàng!</p>
-                </div>
-                <div class="p-8 bg-white rounded-2xl shadow hover:shadow-lg transition">
-                    <img :src="urlFriendly" alt="Thân thiện" class="w-24 h-24 mx-auto mb-4 object-cover rounded-full" />
-                    <h3 class="font-semibold text-xl mb-2 text-amber-700">Thân thiện & vui vẻ</h3>
-                    <p class="text-gray-600">Luôn mỉm cười và tận tâm trong từng cuộc trò chuyện.</p>
+            <div v-if="missionImages.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div v-for="(img, i) in missionImages" :key="i"
+                    class="overflow-hidden rounded-2xl shadow hover:shadow-lg transition">
+                    <img :src="img.url" :alt="img.alternativeText"
+                        class="w-full h-64 object-cover hover:scale-105 transition-transform" />
                 </div>
             </div>
         </section>
 
-        <section class="py-12">
+        <section>
             <div class="max-w-4xl mx-auto text-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-700">Liên hệ với chúng tôi</h2>
                 <p class="text-gray-700 mb-6">
@@ -97,6 +91,7 @@ const urlFriendly = 'https://res.cloudinary.com/dfsdlsfbv/image/upload/v17606192
         </section>
     </div>
 </template>
+
 <style scoped>
 .el-carousel__item {
     border-radius: 16px;
