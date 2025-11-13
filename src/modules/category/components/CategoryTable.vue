@@ -28,17 +28,17 @@ const props = defineProps<CategoryTableProps>();
                     </template>
                 </ElTableColumn>
                 <ElTableColumn label="Tên danh mục" prop="name" show-overflow-tooltip />
-                <ElTableColumn label="Ra mắt">
+                <ElTableColumn label="Ra mắt" width="160">
                     <template #default="scope">
                         {{ formatDateTimeString(scope.row.createdAt) }}
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="Cập nhật">
+                <ElTableColumn label="Cập nhật" width="160">
                     <template #default="scope">
                         {{ formatDateTimeString(scope.row.updatedAt) }}
                     </template>
                 </ElTableColumn>
-                <ElTableColumn width="100" label="Trạng thái" prop="activated">
+                <ElTableColumn width="160" label="Trạng thái" prop="activated">
                     <template #default="scope">
                         <span v-if="scope.row.activated" class="text-green-500 font-medium">
                             Hoạt động

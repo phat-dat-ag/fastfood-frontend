@@ -26,7 +26,7 @@ const props = defineProps<TopicTableProps>();
                 <ElTableColumn label="Thời gian (giây)" prop="duration" width="140" />
                 <ElTableColumn label="Số câu hỏi" prop="questionCount" width="100" />
                 <ElTableColumn label="Điểm tối thiểu" prop="minCorrectToReward" width="120" />
-                <ElTableColumn width="100" label="Trạng thái" prop="activated">
+                <ElTableColumn width="160" label="Trạng thái" prop="activated">
                     <template #default="scope">
                         <span v-if="scope.row.activated" class="text-green-500 font-medium">
                             Hoạt động

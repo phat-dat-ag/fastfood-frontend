@@ -50,7 +50,7 @@ async function handleDeactivateAccount(payload: SwitchResponse) {
                     {{ formatDateTimeString(scope.row.endAt) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Giá trị" header-align="left" align="right">
+            <ElTableColumn label="Giá trị" header-align="left" align="right" width="100">
                 <template #default="scope">
                     <span v-if="scope.row.type === 'FIXED_AMOUNT'">
                         {{ formatCurrencyVND(scope.row.value) }}
@@ -60,19 +60,19 @@ async function handleDeactivateAccount(payload: SwitchResponse) {
                     </span>
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Giảm tối đa" header-align="left" align="right">
+            <ElTableColumn label="Giảm tối đa" header-align="left" align="right" width="120">
                 <template #default="scope">
                     {{ formatCurrencyVND(scope.row.maxDiscountAmount) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Đã áp dụng" header-align="left" align="right">
+            <ElTableColumn label="Áp dụng" header-align="left" align="right" width="100">
                 <template #default="scope">
                     <span>
                         {{ scope.row.usedQuantity }} / {{ scope.row.quantity }}
                     </span>
                 </template>
             </ElTableColumn>
-            <ElTableColumn width="100" label="Trạng thái" prop="activated">
+            <ElTableColumn width="160" label="Trạng thái">
                 <template #default="scope">
                     <Switch :isActive="scope.row.activated" :targetId="scope.row.id" @activate="handleActivateAccount"
                         @deactivate="handleDeactivateAccount" />

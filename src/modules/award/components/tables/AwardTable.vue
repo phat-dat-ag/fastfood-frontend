@@ -49,9 +49,9 @@ const props = defineProps<AwardTableProps>();
                         {{ formatCurrencyVND(scope.row.minSpendAmount) }}
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="Đã thưởng" prop="usedQuantity" />
+                <ElTableColumn label="Đã thưởng" prop="usedQuantity" width="100" />
                 <ElTableColumn label="Số phần thưởng" prop="quantity" />
-                <ElTableColumn width="100" label="Trạng thái" prop="activated">
+                <ElTableColumn width="160" label="Trạng thái" prop="activated">
                     <template #default="scope">
                         <span v-if="scope.row.activated" class="text-green-500 font-medium">
                             Hoạt động

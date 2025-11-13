@@ -49,7 +49,7 @@ async function handleDeactivateAccount(payload: SwitchResponse) {
                     {{ formatDateTimeString(scope.row.endAt) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Giá trị" header-align="left" align="right">
+            <ElTableColumn label="Giá trị" header-align="left" align="right" width="100">
                 <template #default="scope">
                     <span v-if="scope.row.type === 'FIXED_AMOUNT'">
                         {{ formatCurrencyVND(scope.row.value) }}
@@ -59,20 +59,22 @@ async function handleDeactivateAccount(payload: SwitchResponse) {
                     </span>
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Giảm tối đa" header-align="left" align="right">
+            <ElTableColumn label="Giảm tối đa" header-align="left" align="right" width="120">
                 <template #default="scope">
                     {{ formatCurrencyVND(scope.row.maxDiscountAmount) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="Cho đơn từ" prop="minSpendAmount" header-align="left" align="right" />
-            <ElTableColumn label="Đã áp dụng" header-align="left" align="right">
+            <ElTableColumn label="Cho đơn từ" header-align="left" align="right" width="120">
                 <template #default="scope">
-                    <span>
-                        {{ scope.row.usedQuantity }} / {{ scope.row.quantity }}
-                    </span>
+                    {{ formatCurrencyVND(scope.row.minSpendAmount) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn width="100" label="Trạng thái" prop="activated">
+            <ElTableColumn label="Áp dụng" header-align="left" align="right" width="100">
+                <template #default="scope">
+                    {{ scope.row.usedQuantity }} / {{ scope.row.quantity }}
+                </template>
+            </ElTableColumn>
+            <ElTableColumn width="160" label="Trạng thái" prop="activated">
                 <template #default="scope">
                     <Switch :isActive="scope.row.activated" :targetId="scope.row.id" @activate="handleActivateAccount"
                         @deactivate="handleDeactivateAccount" />

@@ -46,7 +46,7 @@ const props = defineProps<{
                     </template>
                 </ElTableColumn>
 
-                <ElTableColumn label="Tổng tiền" width="140">
+                <ElTableColumn label="Tổng tiền" width="140" header-align="left" align="right">
                     <template #default="scope">
                         <span class="font-semibold text-orange-600">
                             {{ formatCurrencyVND(scope.row.totalPrice) }}

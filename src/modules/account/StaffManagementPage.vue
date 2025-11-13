@@ -95,7 +95,7 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
+    <div class="p-6">
         <h2 class="text-2xl font-semibold text-orange-500">
             Quản lý nhân viên
         </h2>

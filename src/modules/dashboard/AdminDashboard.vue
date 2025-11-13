@@ -1,5 +1,5 @@
 <template>
-  <el-container style="padding:24px; background:#fff">
+  <el-container style="padding:24px;">
     <el-header style="background:transparent; padding-bottom:16px">
       <h2 style="margin:0; color:#e74c3c">Admin Dashboard — Fast Food & Rewards</h2>
       <p style="margin:4px 0 0 0; color:#7f8c8d">Bảng tổng hợp thống kê, báo cáo, trò chơi.</p>
