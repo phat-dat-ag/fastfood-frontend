@@ -38,6 +38,10 @@ export interface Product {
   reviews: Review[];
   discountedPrice: string;
   promotionId: number;
+
+  averageRating: number;
+  reviewCount: number;
+  soldCount: number;
 }
 
 export interface ProductResponse {

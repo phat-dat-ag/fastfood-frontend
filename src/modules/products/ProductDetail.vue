@@ -109,7 +109,21 @@ function goToAllReviewsPage() {
                 </span>
             </div>
 
-            <div class="w-[50%]">
+            <div class="flex items-center gap-6 mt-4">
+                <template v-if="product.reviewCount > 0">
+                    <div class="flex items-center gap-2">
+                        <ElRate :model-value="product.averageRating" disabled :precision="0.25" show-score />
+                        <span class="text-gray-600 text-sm">({{ product.reviewCount }} đánh giá)</span>
+                    </div>
+                </template>
+                <div class="flex items-center gap-2">
+                    <span class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-full">
+                        Đã bán: {{ product.soldCount }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="w-[50%] mt-6">
                 <label class="block text-gray-600 font-medium mb-2">Số lượng:</label>
                 <NumberInput :value="quantity" :min="0" :max="99" :step="1" @quantity-change="onQuantityChange" />
                 <PrimaryButton label="Thêm vào giỏ hàng" :onClick="() => handleAddToCart()" class="mt-4" />

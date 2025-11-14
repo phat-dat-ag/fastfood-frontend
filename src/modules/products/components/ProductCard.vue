@@ -45,14 +45,15 @@ function showProductDetail() {
 <template>
   <ElCard shadow="hover"
     class="w-full h-full flex flex-col justify-between transition-transform hover:scale-[1.02] rounded-2xl overflow-hidden">
-    <img :src="props.product.imageUrl" alt="product" class="w-full h-44 object-cover" @click="showProductDetail" />
+    <img :src="props.product.imageUrl" alt="product" class="w-full h-44 object-cover cursor-pointer"
+      @click="showProductDetail" />
 
-    <div class="flex flex-col flex-1 justify-between p-3" @click="showProductDetail">
+    <div class="flex flex-col flex-1 justify-between p-3 cursor-pointer" @click="showProductDetail">
       <h3 class="text-base font-semibold line-clamp-1 mb-2 text-gray-800">
         {{ props.product.name }}
       </h3>
 
-      <div class="flex items-center gap-2 mb-3">
+      <div class="flex items-center gap-2 mb-2">
         <template v-if="props.product.price !== props.product.discountedPrice">
           <span class="text-red-600 font-bold text-lg">
             {{ formatCurrencyVND(props.product.discountedPrice) }}
@@ -65,20 +66,41 @@ function showProductDetail() {
               Number(props.product.price)) * 100) }}%
           </span>
         </template>
-
         <template v-else>
           <span class="text-blue-600 font-semibold text-lg">
             {{ formatCurrencyVND(props.product.price) }}
           </span>
         </template>
       </div>
+
+      <div class="flex items-center gap-2 mb-3 min-h-[28px]">
+        <template v-if="props.product.reviewCount > 0">
+          <el-rate v-model="props.product.averageRating" :disabled="true" :allow-half="true" :show-score="false"
+            :max="5" class="text-yellow-500 text-sm" />
+          <span class="text-gray-500 text-xs">({{ props.product.reviewCount }})</span>
+        </template>
+        <template v-else>
+          <div class="h-6"></div>
+        </template>
+
+        <template v-if="props.product.soldCount > 0">
+          <span class="ml-auto text-gray-500 text-xs">Đã bán: {{ props.product.soldCount }}</span>
+        </template>
+        <template v-else>
+          <div class="ml-auto h-6"></div>
+        </template>
+      </div>
+
+      <p class="text-gray-600 text-sm line-clamp-2 mb-3">
+        {{ props.product.description }}
+      </p>
     </div>
-    <div class="flex items-center justify-between gap-2">
+
+    <div class="flex items-center justify-between gap-2 p-3 pt-0">
       <NumberInput :value="quantity" :min="0" :max="100" :step="1" @quantity-change="onQuantityChange" />
       <PrimaryButton label="Thêm" :onClick="onClickAddButton" class="flex-1" />
     </div>
   </ElCard>
-
 </template>
 <style scoped>
 .line-clamp-1 {
