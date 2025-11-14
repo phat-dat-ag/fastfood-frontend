@@ -10,6 +10,10 @@ import QuizQuestion from "./components/QuizQuestion.vue";
 import type { Question } from "../../types/question.types";
 import { notifyError } from "../../utils/notification.utils";
 import type { QuizQuestionSubmitRequest } from "../../types/quiz-question.types";
+import QuizResultModal from "./components/QuizResultModal.vue";
+import { useUserStore } from "../../store/useUserStore.store";
+import { USER_ROLES } from "../../constants/user-roles";
+import { ROUTE_NAMES } from "../../constants/route-names";
 
 const route = useRoute();
 const quiz = ref<Quiz | null>(null);
@@ -39,10 +43,22 @@ async function loadQuiz() {
   );
 }
 
+let timer: number | null = null;
+
 onMounted(() => {
   loadQuiz();
-  setInterval(() => {
-    if (remainingTime.value > 0) remainingTime.value--;
+  timer = setInterval(async () => {
+    if (remainingTime.value === 0) {
+      if (timer) clearInterval(timer);
+      await handleSubmitQuiz();
+      return;
+    }
+    if (remainingTime.value === 10)
+      notifyError(
+        "Hệ thống sẽ tự nộp bài khi hết giờ nha cưng ơi cưng!",
+        "Sắp hết giờ rồi nhé cưng"
+      );
+    remainingTime.value--;
   }, 1000);
 });
 
@@ -65,6 +81,14 @@ function selectAnswer(questionId: number, answerId: number) {
 
 const router = useRouter();
 
+const isResultModalVisible = ref(false);
+const quizResult = ref<Quiz | null>(null);
+
+function handleQuizResult(result: Quiz) {
+  quizResult.value = result;
+  isResultModalVisible.value = true;
+}
+
 async function handleSubmitQuiz() {
   if (!quiz.value) {
     notifyError("Lỗi nộp bài: không thấy bài kiểm tra");
@@ -81,14 +105,35 @@ async function handleSubmitQuiz() {
     quizQuestions,
   };
 
-  await useApiHandler(
+  await useApiHandler<Quiz>(
     () => submitQuiz(dataRequest),
     {
       loading: "Đang nộp bài",
       error: "Lỗi nộp bài"
     },
-    (data) => { console.log("Nộp bài thành công: ", data); router.back() },
+    (data: Quiz) => handleQuizResult(data),
   )
+}
+
+const userStore = useUserStore();
+
+function goToReviewQuizPage(quizId: number) {
+  const role = userStore.user?.role;
+  if (role === USER_ROLES.USER)
+    router.push({ name: ROUTE_NAMES.USER.CHALLENGE_HISTORY_DETAIL, params: { quizId } });
+  else if (role === USER_ROLES.STAFF)
+    router.push({ name: ROUTE_NAMES.STAFF.CHALLENGE_HISTORY_DETAIL, params: { quizId } });
+  else notifyError("Tài khoản không đủ quyền để xem lại thử thách đã tham gia");
+}
+
+function handleCloseResultModal() {
+  isResultModalVisible.value = false;
+  const role = userStore.user?.role;
+  if (role === USER_ROLES.USER)
+    router.push({ name: ROUTE_NAMES.USER.CHALLENGE });
+  else if (role === USER_ROLES.STAFF)
+    router.push({ name: ROUTE_NAMES.STAFF.CHALLENGE });
+  else router.back();
 }
 
 const currentIndex = ref<number>(0);
@@ -107,4 +152,7 @@ const currentQuestion = computed<Question | null>(() => {
     <QuizProgress :selectedAnswers="selectedAnswers" :questions="quiz.questions" :goToQuestion="goToQuestion"
       :handleSubmitQuiz="handleSubmitQuiz" :remainingTime="remainingTime" />
   </div>
+
+  <QuizResultModal v-if="isResultModalVisible" :quiz="quizResult" @close="handleCloseResultModal"
+    @review-quiz="goToReviewQuizPage" />
 </template>

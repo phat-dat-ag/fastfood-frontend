@@ -7,11 +7,11 @@ import type { User } from "./user.types";
 export interface Quiz {
   id: number;
   startedAt: string;
-  completedAt: string;
+  completedAt: string | null;
   expiredAt: string;
   user: User;
   topicDifficulty: TopicDifficulty;
-  promotion: Promotion;
+  promotion: Promotion | null;
   questions: Question[];
 }
 
