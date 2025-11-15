@@ -25,63 +25,69 @@ const cancelReason: ComputedRef<OrderNote | undefined> = computed(() => {
 </script>
 
 <template>
-    <ElTimeline class="custom-timeline">
-        <ElTimelineItem :timestamp="formatDateTimeString(props.order.placedAt)" placement="top">
-            <ElCard class="timeline-card">
-                <h4 class="timeline-title">Đã đặt hàng</h4>
-                <p><span class="customer-name">{{ props.order.user.name }}</span> đã đặt hàng và đang chờ xác nhận.</p>
-                <p v-if="userNote" class="user-note">
-                    <span class="note-label">Lưu ý:</span> {{ userNote.message }}
-                </p>
-            </ElCard>
-        </ElTimelineItem>
-
-        <ElTimelineItem v-if="props.order.confirmedAt" :timestamp="formatDateTimeString(props.order.confirmedAt)"
-            placement="top">
-            <ElCard class="timeline-card">
-                <h4 class="timeline-title">Đã duyệt</h4>
-                <p>
-                    Đơn hàng đã được duyệt, nhân viên đang chuẩn bị giao cho
-                    <span class="customer-name">{{ props.order.user.name }}</span>.
-                </p>
-            </ElCard>
-        </ElTimelineItem>
-
-        <ElTimelineItem v-if="props.order.deliveringAt" :timestamp="formatDateTimeString(props.order.deliveringAt)"
-            placement="top">
-            <ElCard class="timeline-card">
-                <h4 class="timeline-title">Đang giao</h4>
-                <p>Đơn hàng đang trên đường giao đến <span class="customer-name">{{ props.order.user.name }}</span>.</p>
-            </ElCard>
-        </ElTimelineItem>
-
-        <ElTimelineItem v-if="props.order.deliveredAt" :timestamp="formatDateTimeString(props.order.deliveredAt)"
-            placement="top">
-            <ElCard class="timeline-card">
-                <h4 class="timeline-title">Đã nhận</h4>
-                <p><span class="customer-name">{{ props.order.user.name }}</span>. đã nhận hàng thành công</p>
-            </ElCard>
-        </ElTimelineItem>
-
-        <ElTimelineItem v-if="props.order.cancelledAt" :timestamp="formatDateTimeString(props.order.cancelledAt)"
-            placement="top" color="#dc2626">
-            <ElCard class="timeline-card cancelled">
-                <h4 class="timeline-title">Đã hủy</h4>
-                <template v-if="cancelReason">
-                    <p v-if="cancelReason.authorType === ORDER_NOTE_AUTHOR.USER" class="user-note">
-                        <span class="customer-name">{{ props.order.user.name }}: </span>
-                        {{ cancelReason.message }}
+    <div>
+        <h3 class="section-title">Hành trình đơn hàng</h3>
+        <ElTimeline class="custom-timeline">
+            <ElTimelineItem :timestamp="formatDateTimeString(props.order.placedAt)" placement="top">
+                <ElCard class="timeline-card">
+                    <h4 class="timeline-title">Đã đặt hàng</h4>
+                    <p><span class="customer-name">{{ props.order.user.name }}</span> đã đặt hàng và đang chờ xác nhận.
                     </p>
-                    <p v-else class="user-note">
-                        <span class="note-label">Lý do:</span> {{ cancelReason.message }}
+                    <p v-if="userNote" class="user-note">
+                        <span class="note-label">Lưu ý:</span> {{ userNote.message }}
                     </p>
-                </template>
-                <p v-else>Đơn hàng này đã bị hủy</p>
-            </ElCard>
-        </ElTimelineItem>
-    </ElTimeline>
+                </ElCard>
+            </ElTimelineItem>
+
+            <ElTimelineItem v-if="props.order.confirmedAt" :timestamp="formatDateTimeString(props.order.confirmedAt)"
+                placement="top">
+                <ElCard class="timeline-card">
+                    <h4 class="timeline-title">Đã duyệt</h4>
+                    <p>
+                        Đơn hàng đã được duyệt, nhân viên đang chuẩn bị giao cho
+                        <span class="customer-name">{{ props.order.user.name }}</span>.
+                    </p>
+                </ElCard>
+            </ElTimelineItem>
+
+            <ElTimelineItem v-if="props.order.deliveringAt" :timestamp="formatDateTimeString(props.order.deliveringAt)"
+                placement="top">
+                <ElCard class="timeline-card">
+                    <h4 class="timeline-title">Đang giao</h4>
+                    <p>Đơn hàng đang trên đường giao đến <span class="customer-name">{{ props.order.user.name }}</span>.
+                    </p>
+                </ElCard>
+            </ElTimelineItem>
+
+            <ElTimelineItem v-if="props.order.deliveredAt" :timestamp="formatDateTimeString(props.order.deliveredAt)"
+                placement="top">
+                <ElCard class="timeline-card">
+                    <h4 class="timeline-title">Đã nhận</h4>
+                    <p><span class="customer-name">{{ props.order.user.name }}</span>. đã nhận hàng thành công</p>
+                </ElCard>
+            </ElTimelineItem>
+
+            <ElTimelineItem v-if="props.order.cancelledAt" :timestamp="formatDateTimeString(props.order.cancelledAt)"
+                placement="top" color="#dc2626">
+                <ElCard class="timeline-card cancelled">
+                    <h4 class="timeline-title">Đã hủy</h4>
+                    <template v-if="cancelReason">
+                        <p v-if="cancelReason.authorType === ORDER_NOTE_AUTHOR.USER" class="user-note">
+                            <span class="customer-name">{{ props.order.user.name }}: </span>
+                            {{ cancelReason.message }}
+                        </p>
+                        <p v-else class="user-note">
+                            <span class="note-label">Lý do:</span> {{ cancelReason.message }}
+                        </p>
+                    </template>
+                    <p v-else>Đơn hàng này đã bị hủy</p>
+                </ElCard>
+            </ElTimelineItem>
+        </ElTimeline>
+    </div>
 </template>
 
+<style lang="postcss" scoped src="../../../styles/order-modal.css"></style>
 <style lang="postcss" scoped>
 .custom-timeline {
     --el-timeline-node-color: #fb923c;

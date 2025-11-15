@@ -6,13 +6,13 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { getOrderHistory } from '../../service/order.service';
 import { ORDER_HISTORY_DETAIL_MESSAGE } from '../../constants/messages';
 import type { Order } from '../../types/order.types';
-import { getDetailAddress } from '../../utils/geocode.utils';
 import OrderInvoiceSummary from './components/OrderInvoiceSummary.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import OrderTimeline from './components/OrderTimeline.vue';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
+import OrderCustomerInformation from './components/OrderCustomerInformation.vue';
 
 const order = ref<Order | null>(null);
 
@@ -69,25 +69,11 @@ function handleReviewOrder(orderId: number) {
 <template>
     <div v-if="order" class="grid grid-cols-2 gap-8 text-gray-700">
         <div class="space-y-6">
-            <section>
-                <h3 class="section-title">Thông tin đơn hàng</h3>
-                <div class="section-content">
-                    <p><span class="label">Khách hàng:</span> {{ order.user.name }}</p>
-                    <p><span class="label">SĐT:</span> {{ order.user.phone }}</p>
-                    <p><span class="label">Địa chỉ:</span> {{ getDetailAddress(order.address) }}</p>
-                </div>
-            </section>
-
-            <section v-if="order.orderDetails.length > 0">
-                <h3 class="section-title">Sản phẩm đã mua</h3>
-                <OrderInvoiceSummary :order="order" />
-            </section>
+            <OrderCustomerInformation :order="order" />
+            <OrderInvoiceSummary :order="order" />
         </div>
         <section>
-            <h3 class="section-title">Hành trình đơn hàng</h3>
-            <div class="p-2">
-                <OrderTimeline :order="order" />
-            </div>
+            <OrderTimeline :order="order" />
             <div v-if="isReviewAllowed">
                 <PrimaryButton label="Đánh giá ngay" :onClick="() => handleReviewOrder(order!.id)" />
             </div>

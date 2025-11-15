@@ -6,9 +6,6 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import type { Order } from '../../types/order.types';
 import { cancelOrder, getActiveOrder, getPaymentIntent } from '../../service/order.service';
 import { ORDER_TRACKING_DETAIL_MESSAGE } from '../../constants/messages';
-import { PAYMENT_METHOD_TEXT } from '../../utils/order-display.utils';
-import { formatCurrencyVND } from '../../utils/currency.utils';
-import { getDetailAddress } from '../../utils/geocode.utils';
 import { PAYMENT_STATUS } from '../../constants/payment-status';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
@@ -17,6 +14,8 @@ import DeleteButton from '../../components/buttons/DeleteButton.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { ORDER_STATUS } from '../../constants/order-status';
 import CheckoutModal from '../cart/components/CheckoutModal.vue';
+import OrderCustomerInformation from './components/OrderCustomerInformation.vue';
+import OrderInvoiceSummary from './components/OrderInvoiceSummary.vue';
 
 const order = ref<Order | null>(null);
 
@@ -90,34 +89,11 @@ async function handleCancelOrder(order: Order) {
 <template>
     <div v-if="order" class="grid grid-cols-2 gap-8 text-gray-700">
         <div class="space-y-6">
-            <section>
-                <h3 class="section-title">Thông tin đơn hàng</h3>
-                <div class="section-content">
-                    <p>
-                        <span class="label">Phương thức thanh toán: </span>
-                        {{ PAYMENT_METHOD_TEXT[order.paymentMethod] }}
-                    </p>
-                    <p>
-                        <span class="label">Tổng tiền: </span>
-                        <span class="text-orange-600 font-bold">
-                            {{ formatCurrencyVND(order.totalPrice) }}
-                        </span>
-                    </p>
-                    <p><span class="label">Khách hàng:</span> {{ order.user.name }}</p>
-                    <p><span class="label">SĐT:</span> {{ order.user.phone }}</p>
-                    <p><span class="label">Địa chỉ:</span> {{ getDetailAddress(order.address) }}</p>
-                </div>
-            </section>
+            <OrderCustomerInformation :order="order" />
+            <OrderInvoiceSummary :order="order" />
         </div>
-
         <div class="flex flex-col justify-between">
-            <section>
-                <h3 class="section-title">Hành trình đơn hàng</h3>
-                <div class="p-2">
-                    <OrderTimeline :order="order" />
-                </div>
-            </section>
-
+            <OrderTimeline :order="order" />
             <section class="mt-5 flex flex-col gap-3">
                 <PrimaryButton v-if="canCheckout" label="Thanh toán ngay" :onClick="() => handleCheckout(order!.id)" />
                 <DeleteButton

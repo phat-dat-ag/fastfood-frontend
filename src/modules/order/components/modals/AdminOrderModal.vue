@@ -15,7 +15,7 @@ const emit = defineEmits(["close"]);
 const isVisible = ref<boolean>(true);
 </script>
 <template>
-    <ElDialog v-model="isVisible" title="Thông tin đơn hàng" class="min-w-[900px] rounded-2xl" @close="emit('close')">
+    <ElDialog v-model="isVisible" class="min-w-[900px] rounded-2xl" @close="emit('close')">
         <div v-if="props.order" class="grid grid-cols-2 gap-4 p-4">
             <section>
                 <h3 class="section-title">Thông tin khách hàng</h3>
@@ -37,10 +37,7 @@ const isVisible = ref<boolean>(true);
                     </p>
                 </div>
             </section>
-            <section v-if="props.order.orderDetails.length > 0">
-                <h3 class="section-title">Sản phẩm đã mua</h3>
-                <OrderInvoiceSummary :order="props.order" />
-            </section>
+            <OrderInvoiceSummary :order="props.order" />
         </div>
     </ElDialog>
 </template>
