@@ -196,7 +196,8 @@ async function placeOrder(userNote: string) {
             },
             (data: Order) => { clientSecret.value = data.clientSecret },
         )
-        isCheckoutModalVisible.value = true;
+        if (clientSecret.value)
+            isCheckoutModalVisible.value = true;
     }
 }
 
