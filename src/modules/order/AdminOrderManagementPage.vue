@@ -3,7 +3,6 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { getAllOrdersByAdmin } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
-import OrderHistoryTable from './components/tables/OrderHistoryTable.vue';
 import { ADMIN_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
 import AdminOrderModal from './components/modals/AdminOrderModal.vue';
 import type { Filter } from '../../types/filter.types';
@@ -11,6 +10,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import Pagination from '../../components/Pagination.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
+import AdminOrdertable from './components/tables/AdminOrdertable.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -77,7 +77,7 @@ async function handlePageChange(page: number) {
             <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
                 @update:filter="handleFilterChange" />
 
-            <OrderHistoryTable :orders="orderResponse?.orders" :handleUpdateOrder="handleOpenOrderModal" />
+            <AdminOrdertable :orders="orderResponse.orders" :handleUpdateOrder="handleOpenOrderModal" />
 
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
