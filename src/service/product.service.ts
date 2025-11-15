@@ -56,6 +56,14 @@ export const getProductBySlug = (slug: string) => {
   return api.get("/admin/product/display/detail", { params: { slug } });
 };
 
+export const activateProduct = (id: number) => {
+  return api.put("/admin/product/activate", null, { params: { id } });
+};
+
+export const deactivateProduct = (id: number) => {
+  return api.put("/admin/product/deactivate", null, { params: { id } });
+};
+
 export const deleteProduct = (id: number) => {
   return api.delete("/admin/product", { params: { id } });
 };

@@ -6,6 +6,8 @@ import { formatDateTimeString } from '../../../utils/time.utils';
 import EditButton from '../../../components/buttons/EditButton.vue';
 import DeleteButton from '../../../components/buttons/DeleteButton.vue';
 import { formatCurrencyVND } from '../../../utils/currency.utils';
+import Switch from '../../../components/buttons/Switch.vue';
+import type { SwitchResponse } from '../../../types/switch-button.types';
 
 interface CategoryTableProps {
     products: Array<Product>;
@@ -14,6 +16,19 @@ interface CategoryTableProps {
     handleDeleteProduct: (id: number) => Promise<void>;
 }
 const props = defineProps<CategoryTableProps>();
+const emit = defineEmits(["activate-product", "deactivate-product"]);
+
+async function handleActivateProduct(payload: SwitchResponse) {
+    if (payload.isActive) {
+        emit("activate-product", payload.targetId);
+    }
+}
+
+async function handleDeactivateProduct(payload: SwitchResponse) {
+    if (!payload.isActive) {
+        emit("deactivate-product", payload.targetId);
+    }
+}
 </script>
 <template>
     <div>
@@ -46,12 +61,8 @@ const props = defineProps<CategoryTableProps>();
                 </ElTableColumn>
                 <ElTableColumn width="160" label="Trạng thái" prop="activated">
                     <template #default="scope">
-                        <span v-if="scope.row.activated" class="text-green-500 font-medium">
-                            Hoạt động
-                        </span>
-                        <span v-else class="text-red-500 font-medium">
-                            Đã ẩn
-                        </span>
+                        <Switch :isActive="scope.row.activated" :targetId="scope.row.id"
+                            @activate="handleActivateProduct" @deactivate="handleDeactivateProduct" />
                     </template>
                 </ElTableColumn>
 

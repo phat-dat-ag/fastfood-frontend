@@ -129,7 +129,7 @@ async function handleActivateCategory(categoryId: number) {
       error: "Lỗi kích hoạt danh mục",
     },
     () => { },
-    () => loadCategories(page,)
+    () => loadCategories(page),
   )
 }
 

@@ -7,7 +7,7 @@ import ProductModal from './components/ProductModal.vue';
 import type { Product, ProductCreateRequest, ProductResponse, ProductUpdateRequest } from '../../types/product.types';
 import type { Category } from '../../types/category.types';
 import { getDisplayableCategories } from '../../service/category.service';
-import { createProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
+import { activateProduct, createProduct, deactivateProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -136,6 +136,32 @@ const handleDeleteProduct = async (id: number) => {
   )
 }
 
+async function handleActivateProduct(productId: number) {
+  const page: number = productResponse.value?.currentPage || 0;
+  await useApiHandler(
+    () => activateProduct(productId),
+    {
+      loading: "Đang kích hoạt sản phẩm",
+      error: "Lỗi kích hoạt sản phẩm",
+    },
+    () => { },
+    () => loadProducts(page),
+  )
+}
+
+async function handleDeactivateProduct(productId: number) {
+  const page: number = productResponse.value?.currentPage || 0;
+  await useApiHandler(
+    () => deactivateProduct(productId),
+    {
+      loading: "Đang vô hiệu hóa sản phẩm",
+      error: "Lỗi vô hiệu hóa sản phẩm",
+    },
+    () => { },
+    () => loadProducts(page),
+  )
+}
+
 async function handlePageChange(page: number) {
   await loadProducts(page);
 }
@@ -152,7 +178,8 @@ async function handlePageChange(page: number) {
     <div v-if="productResponse">
 
       <ProductTable :products="productResponse.products" :openCreateProductModal="openCreateProductModal"
-        :openUpdateProductModal="openUpdateProductModal" :handleDeleteProduct="handleDeleteProduct" />
+        :openUpdateProductModal="openUpdateProductModal" :handleDeleteProduct="handleDeleteProduct"
+        @activate-product="handleActivateProduct" @deactivate-product="handleDeactivateProduct" />
 
       <Pagination :totalItem="productResponse.totalItems" :pageSize="productResponse.pageSize"
         :currentPage="productResponse.currentPage" @change-page="handlePageChange" />
