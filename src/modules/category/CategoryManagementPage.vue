@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import CategoryModal from './components/CategoryModal.vue'
-import { createCategory, deleteCategory, getCategories, updateCategory } from '../../service/category.service'
+import { activateCategory, createCategory, deactivateCategory, deleteCategory, getCategories, updateCategory } from '../../service/category.service'
 import type { Category, CategoryCreateRequest, CategoryResponse, CategoryUpdateRequest } from '../../types/category.types'
 import { useCategoryStore } from '../../store/useCategoryStore.store'
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils'
@@ -120,6 +120,32 @@ const goToProductsManagementPage = (categorySlug: string) => {
   router.push({ name: ROUTE_NAMES.ADMIN.PRODUCT_MANAGEMENT, params: { categorySlug } });
 }
 
+async function handleActivateCategory(categoryId: number) {
+  const page: number = categoryResponse.value?.currentPage || 0;
+  await useApiHandler(
+    () => activateCategory(categoryId),
+    {
+      loading: "Đang kích hoạt danh mục",
+      error: "Lỗi kích hoạt danh mục",
+    },
+    () => { },
+    () => loadCategories(page,)
+  )
+}
+
+async function handleDeactivateCategory(categoryId: number) {
+  const page: number = categoryResponse.value?.currentPage || 0;
+  await useApiHandler(
+    () => deactivateCategory(categoryId),
+    {
+      loading: "Đang vô hiệu hóa danh mục",
+      error: "Lỗi vô hiệu hóa danh mục",
+    },
+    () => { },
+    () => loadCategories(page),
+  )
+}
+
 async function handlePageChange(page: number) {
   await loadCategories(page);
 }
@@ -138,7 +164,8 @@ async function handlePageChange(page: number) {
 
       <CategoryTable :categories="categoryResponse.categories" :openCreateCategoryModal="openCreateCategoryModal"
         :openUpdateCategoryModal="openUpdateCategoryModal" :handleDeleteCategory="handleDeleteCategory"
-        :goToProductsManagementPage="goToProductsManagementPage" />
+        :goToProductsManagementPage="goToProductsManagementPage" @activate-category="handleActivateCategory"
+        @deactivate-category="handleDeactivateCategory" />
 
       <Pagination :totalItem="categoryResponse.totalItems" :pageSize="categoryResponse.pageSize"
         :currentPage="categoryResponse.currentPage" @change-page="handlePageChange" />

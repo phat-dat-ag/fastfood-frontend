@@ -76,7 +76,7 @@ async function handleActivateAccount(userId: number) {
             error: "Lỗi kích hoạt tài khoản nhân viên",
         },
         () => { },
-        () => loadStaffAccounts(page,)
+        () => loadStaffAccounts(page),
     )
 }
 

@@ -49,6 +49,14 @@ export const updateCategory = (data: CategoryUpdateRequest) => {
   });
 };
 
+export const activateCategory = (id: number) => {
+  return api.put("/admin/category/activate", null, { params: { id } });
+};
+
+export const deactivateCategory = (id: number) => {
+  return api.put("/admin/category/deactivate", null, { params: { id } });
+};
+
 export const deleteCategory = (id: number) => {
   return api.delete("/admin/category", { params: { id } });
 };
