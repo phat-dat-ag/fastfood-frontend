@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onBeforeUnmount } from "vue";
+import { ref, watch, onBeforeUnmount, onMounted } from "vue";
 import { ElDialog } from "element-plus";
 import { loadStripe, type Stripe, type StripeElements } from "@stripe/stripe-js";
 import { notifyError, notifySuccess } from "../../../utils/notification.utils";
@@ -14,8 +14,25 @@ const props = defineProps<{
 const emit = defineEmits(["close"]);
 
 const isVisible = ref(true);
+const dialogWidth = ref("480px");
 const stripe = ref<Stripe | null>(null);
 const elements = ref<StripeElements | null>(null);
+
+function updateDialogWidth() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth <= 640) {
+        dialogWidth.value = "90%";
+    } else if (screenWidth <= 1024) {
+        dialogWidth.value = "70%";
+    } else {
+        dialogWidth.value = "480px";
+    }
+}
+
+onMounted(() => {
+    updateDialogWidth();
+    window.addEventListener("resize", updateDialogWidth);
+});
 
 watch(
     () => props.clientSecret,
@@ -85,27 +102,28 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <ElDialog v-model="isVisible" title="Thanh toán đơn hàng" width="480px" class="rounded-2xl" @close="emit('close')">
+    <ElDialog v-model="isVisible" title="Thanh toán đơn hàng" :width="dialogWidth" class="custom-dialog rounded-2xl"
+        @close="emit('close')">
         <form id="payment-form" @submit.prevent="handleSubmit" class="space-y-6">
-            <div class="bg-white/90 border rounded-2xl shadow-sm p-6">
+            <div class="bg-white/90 border rounded-2xl shadow-sm p-4 sm:p-6">
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">Thông tin thẻ</h3>
 
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-600">Số thẻ</label>
                     <div id="card-number"
-                        class="p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition focus-within:ring-2 ring-blue-500" />
+                        class="p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition focus-within:ring-2 ring-blue-500 w-full" />
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="grid grid-cols-2 gap-4 mt-4 sm:grid-cols-1">
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-600">Ngày hết hạn</label>
                         <div id="card-expiry"
-                            class="p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition focus-within:ring-2 ring-blue-500" />
+                            class="p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition focus-within:ring-2 ring-blue-500 w-full" />
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-600">Mã CVC</label>
                         <div id="card-cvc"
-                            class="p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition focus-within:ring-2 ring-blue-500" />
+                            class="p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition focus-within:ring-2 ring-blue-500 w-full" />
                     </div>
                 </div>
             </div>
@@ -117,10 +135,3 @@ async function handleSubmit() {
         </form>
     </ElDialog>
 </template>
-
-<style scoped>
-:deep(.el-dialog) {
-    border-radius: 20px;
-    overflow: hidden;
-}
-</style>

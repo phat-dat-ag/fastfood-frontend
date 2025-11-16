@@ -13,8 +13,8 @@ function handleDeleteProduct(productId: number) {
 }
 </script>
 <template>
-  <div class="p-6 bg-gray-50 rounded-2xl shadow-sm">
-    <h2 class="text-2xl font-semibold mb-4"> Giỏ hàng của bạn</h2>
+  <div class="p-4 sm:p-6 bg-gray-50 rounded-2xl shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4">Giỏ hàng của bạn</h2>
     <div v-if="props.carts.length > 0" class="space-y-4">
       <CartItem v-for="cart in props.carts" :key="cart.product.id" :cart="cart"
         @quantity-change-from-cart="handleQuantityChange" @delete-product-from-cart="handleDeleteProduct" />
@@ -24,3 +24,10 @@ function handleDeleteProduct(productId: number) {
     </div>
   </div>
 </template>
+<style scoped>
+@media (max-width: 640px) {
+  .p-4 {
+    padding: 1rem;
+  }
+}
+</style>

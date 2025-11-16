@@ -208,16 +208,32 @@ async function handleCloseCheckoutModal() {
 
 </script>
 <template>
-    <div v-if="cartDetail && cartDetail.carts.length > 0" class="grid grid-cols-[6fr_4fr] gap-4">
+    <div v-if="cartDetail && cartDetail.carts.length > 0" class="grid grid-cols-1 lg:grid-cols-[6fr_4fr] gap-4">
         <CartList :carts="cartDetail.carts" @delete-product="handleDeleteProduct"
-            @quantity-change="handleQuantityChange" />
+            @quantity-change="handleQuantityChange" class="w-full" />
+
         <CheckoutSummary :cartDetail="cartDetail" :promotions="promotions" :addresses="addresses"
             @change-promotion="onPromotionCodeChange" @change-address="onAddressChange"
-            @change-payment-method="onPaymentMethodChange" @place-order="placeOrder" />
+            @change-payment-method="onPaymentMethodChange" @place-order="placeOrder"
+            class="w-full lg:w-auto mt-6 lg:mt-0" />
     </div>
-    <div v-else>
+
+    <div v-else class="text-center py-10 text-gray-500">
         Giỏ hàng trống, hãy mua sắm thôi nào
     </div>
 
     <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>
+<style scoped>
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        gap: 1.5rem;
+    }
+}
+</style>

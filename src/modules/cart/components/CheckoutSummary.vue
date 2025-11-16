@@ -38,7 +38,7 @@ function placeOrder() {
 </script>
 
 <template>
-  <div class="bg-white p-6 rounded-2xl shadow-md space-y-6">
+  <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-md space-y-6">
     <h2 class="text-2xl font-semibold">Tóm tắt đơn hàng</h2>
 
     <div v-if="props.promotions.length > 0" class="space-y-2">
@@ -109,3 +109,10 @@ function placeOrder() {
     <PrimaryButton label="Đặt hàng" :onClick="placeOrder" />
   </div>
 </template>
+<style scoped>
+@media (max-width: 640px) {
+  .p-4 {
+    padding: 1rem;
+  }
+}
+</style>

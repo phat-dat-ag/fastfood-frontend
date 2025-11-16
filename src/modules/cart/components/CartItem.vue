@@ -12,7 +12,7 @@ function onQuantityChange(newQuantity: number) {
 }
 </script>
 <template>
-    <div class="grid grid-cols-[5fr_2fr_2fr_1fr] gap-2 bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+    <div class="cart-item-grid bg-white p-4 rounded-xl shadow hover:shadow-md transition">
         <div class="flex items-center gap-4">
             <img :src="props.cart.product.imageUrl" alt="product image" class="w-16 h-16 object-cover rounded-lg" />
             <div>
@@ -64,3 +64,23 @@ function onQuantityChange(newQuantity: number) {
         </div>
     </div>
 </template>
+
+<style scoped>
+.cart-item-grid {
+    display: grid;
+    grid-template-columns: 5fr 2fr 2fr 1fr;
+    gap: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+    .cart-item-grid {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .cart-item-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
