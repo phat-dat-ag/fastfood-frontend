@@ -137,62 +137,96 @@ const userIcons = computed<UserIcon[]>(() => {
     return icons;
 });
 
+const isMobileMenuOpen = ref(false);
+const toggleMobileMenu = () => { isMobileMenuOpen.value = !isMobileMenuOpen.value };
 </script>
 
 <template>
-    <header class="sticky top-0 z-50 w-full mx-auto flex items-center justify-between py-3 px-6
-           bg-gradient-to-r from-orange-500 via-red-400 to-orange-600
-           shadow-lg shadow-orange-300/40 backdrop-blur-sm
-           transition-all duration-300 hover:shadow-orange-400/60">
+    <header class="sticky top-0 z-50 w-full flex items-center justify-between py-3 px-6
+         bg-gradient-to-r from-orange-500 via-red-400 to-orange-600
+         shadow-lg shadow-orange-300/40 backdrop-blur-sm">
 
-        <div class="flex items-center gap-2 w-[15%]">
-            <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo cửa hàng"
-                class="w-9 h-9 object-contain rounded-full ring-2 ring-white/70 shadow-md hover:scale-105 transition-transform duration-300" />
-            <h1 class="text-lg font-bold text-white tracking-wide uppercase drop-shadow-sm">
-                Aurelion
-            </h1>
+        <div class="flex items-center gap-3">
+            <button @click="toggleMobileMenu" class="p-2 text-white hover:text-gray-200 sm:hidden">
+                <svg v-if="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+
+                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <img src="../assets/img/Aurelion_Shop_Logo.png" alt="Logo"
+                class="w-9 h-9 rounded-full ring-2 ring-white/70 shadow-md" />
         </div>
 
-        <nav class="flex-1 flex justify-center gap-10 text-base font-semibold tracking-wide">
-            <div v-for="item in menuItems" :key="item.id" :id="item.id" @click="navigateMenu(item.id, item.key)" :class="[
-                'cursor-pointer relative transition-all duration-300 px-2 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10',
-                selectedMenu === item.id ? 'text-white font-bold bg-white/15 shadow-md' : ''
-            ]">
+        <nav class="hidden sm:flex flex-1 justify-center gap-10 text-base font-semibold">
+            <div v-for="item in menuItems" :key="item.id" @click="navigateMenu(item.id, item.key)" class="cursor-pointer px-2 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10
+                    transition-all duration-300"
+                :class="[selectedMenu === item.id ? 'text-white font-bold bg-white/15 shadow-md' : '']">
                 {{ item.label }}
-                <span v-if="selectedMenu === item.id"
-                    class="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-[40%] h-[2px] bg-white rounded-full"></span>
             </div>
         </nav>
 
-        <div class="flex items-center justify-end gap-6 w-[20%]">
+        <div class="flex items-center gap-5">
             <template v-if="props.role === USER_ROLES.USER || props.role === USER_ROLES.STAFF">
-                <template v-for="(item) in userIcons" :key="item.route">
-                    <ElTooltip :content="item.tooltip" placement="bottom">
-                        <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white transition-colors"
-                            @click="() => goTo(item.route)">
-                            <component :is="item.icon" />
-                        </el-icon>
-                    </ElTooltip>
-                </template>
+                <div class="hidden sm:flex items-center gap-5">
+                    <template v-for="item in userIcons" :key="item.route">
+                        <ElTooltip :content="item.tooltip" placement="bottom">
+                            <el-icon :size="26" class="cursor-pointer text-white/90 hover:text-white"
+                                @click="() => goTo(item.route)">
+                                <component :is="item.icon" />
+                            </el-icon>
+                        </ElTooltip>
+                    </template>
+                </div>
 
                 <AvatarDropdown :avatarUrl="userStore.user?.avatarUrl || defaultAvatarUrl"
                     @go-to-profile-page="goToProfilePage" @go-to-order-history-page="goToOrderHistoryPage"
                     @go-to-challenge-history-page="goToChallengeHistoryPage" @signOut="signOut"
-                    class="w-9 h-9 rounded-full ring-2 ring-white/70 hover:ring-white transition-all duration-300 shadow-md" />
+                    class="w-9 h-9 rounded-full ring-2 ring-white/70 shadow-md cursor-pointer" />
             </template>
 
             <template v-else>
-                <button class="px-4 py-1.5 border border-white/70 text-white font-semibold rounded-lg
-               hover:bg-white hover:text-orange-600 transition-all duration-300 shadow-sm hover:shadow-md"
-                    @click="() => goTo(ROUTE_NAMES.AUTH.SIGN_UP)">
-                    Đăng ký
-                </button>
-                <button class="px-4 py-1.5 bg-white text-orange-600 font-semibold rounded-lg
-               hover:bg-orange-100 transition-all duration-300 shadow-sm hover:shadow-md"
-                    @click="() => goTo(ROUTE_NAMES.AUTH.SIGN_IN)">
-                    Đăng nhập
-                </button>
+                <div class="hidden sm:flex flex-col lg:flex-row gap-2">
+                    <button @click="() => goTo(ROUTE_NAMES.AUTH.SIGN_UP)"
+                        class="hidden sm:block px-4 py-1.5 border border-white/70 text-white rounded-lg hover:bg-white hover:text-orange-600">
+                        Đăng ký
+                    </button>
+                    <button @click="() => goTo(ROUTE_NAMES.AUTH.SIGN_IN)"
+                        class="hidden sm:block px-4 py-1.5 bg-white text-orange-600 rounded-lg hover:bg-orange-100">
+                        Đăng nhập
+                    </button>
+                </div>
             </template>
         </div>
     </header>
+
+    <div v-if="isMobileMenuOpen" class="sm:hidden w-full bg-orange-600/95 shadow-lg flex flex-col gap-2 px-4 py-3">
+        <div v-for="item in menuItems" :key="item.id" @click="navigateMenu(item.id, item.key)"
+            class="text-white font-semibold py-2 px-3 rounded hover:bg-white/10">
+            {{ item.label }}
+        </div>
+
+        <template v-if="props.role === USER_ROLES.USER || props.role === USER_ROLES.STAFF">
+            <div class="flex items-center gap-4 mt-3">
+                <component v-for="item in userIcons" :is="item.icon" :key="item.route" class="text-white h-7 w-7"
+                    @click="() => goTo(item.route)" />
+            </div>
+        </template>
+
+        <template v-else>
+            <button @click="() => goTo(ROUTE_NAMES.AUTH.SIGN_UP)"
+                class="w-full bg-white text-orange-600 py-2 rounded-lg font-bold mt-2">
+                Đăng ký
+            </button>
+            <button @click="() => goTo(ROUTE_NAMES.AUTH.SIGN_IN)"
+                class="w-full bg-orange-100 text-orange-700 py-2 rounded-lg font-bold">
+                Đăng nhập
+            </button>
+        </template>
+    </div>
 </template>
