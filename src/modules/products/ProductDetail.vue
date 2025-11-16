@@ -80,13 +80,15 @@ function goToAllReviewsPage() {
 </script>
 
 <template>
-    <div v-if="product" class="container mx-auto p-8 space-y-16">
+    <div v-if="product" class="container mx-auto p-2 space-y-16">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white shadow rounded-2xl p-4 flex items-center justify-center">
-                <img :src="product.imageUrl" alt="Product image" class="w-full h-[400px] object-contain rounded-xl" />
+            <div
+                class="h-[200px] sm:h-[300px] lg:h-[400px] bg-white shadow rounded-2xl p-4 flex items-center justify-center">
+                <img :src="product.imageUrl" alt="Product image" class="w-full h-full object-contain rounded-xl" />
             </div>
 
-            <div v-if="product.modelUrl" class="bg-white shadow rounded-2xl p-4 flex items-center justify-center">
+            <div v-if="product.modelUrl"
+                class="h-[200px] sm:h-[300px] lg:h-[400px] bg-white shadow rounded-2xl p-4 flex items-center justify-center">
                 <Container3D :modelUrl="product.modelUrl" />
             </div>
             <div v-else
