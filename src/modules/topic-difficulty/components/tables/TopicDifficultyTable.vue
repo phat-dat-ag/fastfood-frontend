@@ -4,6 +4,8 @@ import AddButton from '../../../../components/buttons/AddButton.vue';
 import EditButton from '../../../../components/buttons/EditButton.vue';
 import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
 import type { TopicDifficulty } from '../../../../types/topic-difficulty.types';
+import type { SwitchResponse } from '../../../../types/switch-button.types';
+import Switch from '../../../../components/buttons/Switch.vue';
 
 interface TopicTableProps {
     topicDifficulties: Array<TopicDifficulty>;
@@ -14,6 +16,19 @@ interface TopicTableProps {
     goToQuestionManagementPage: (slug: string) => void;
 }
 const props = defineProps<TopicTableProps>();
+const emit = defineEmits(["activate-topic-difficulty", "deactivate-topic-difficulty"]);
+
+async function handleActivateTopicDifficulty(payload: SwitchResponse) {
+    if (payload.isActive) {
+        emit("activate-topic-difficulty", payload.targetId);
+    }
+}
+
+async function handleDeactivateTopicDifficulty(payload: SwitchResponse) {
+    if (!payload.isActive) {
+        emit("deactivate-topic-difficulty", payload.targetId);
+    }
+}
 </script>
 <template>
     <div>
@@ -28,12 +43,8 @@ const props = defineProps<TopicTableProps>();
                 <ElTableColumn label="Điểm tối thiểu" prop="minCorrectToReward" width="120" />
                 <ElTableColumn width="160" label="Trạng thái" prop="activated">
                     <template #default="scope">
-                        <span v-if="scope.row.activated" class="text-green-500 font-medium">
-                            Hoạt động
-                        </span>
-                        <span v-else class="text-red-500 font-medium">
-                            Đã ẩn
-                        </span>
+                        <Switch :isActive="scope.row.activated" :targetId="scope.row.id"
+                            @activate="handleActivateTopicDifficulty" @deactivate="handleDeactivateTopicDifficulty" />
                     </template>
                 </ElTableColumn>
 

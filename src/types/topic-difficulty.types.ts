@@ -37,3 +37,11 @@ export interface TopicDifficultyDisplay {
   questionCount: number;
   minCorrectToReward: number;
 }
+
+export interface TopicDifficultyResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  topicDifficulties: TopicDifficulty[];
+}

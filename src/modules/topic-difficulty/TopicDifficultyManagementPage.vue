@@ -3,17 +3,20 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
-import type { TopicDifficulty, TopicDifficultyCreateRequest, TopicDifficultyUpdateRequest } from '../../types/topic-difficulty.types';
+import { type TopicDifficulty, type TopicDifficultyCreateRequest, type TopicDifficultyResponse, type TopicDifficultyUpdateRequest } from '../../types/topic-difficulty.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { TOPIC_DIFFICULTY_MESSAGE, TOPIC_MESSAGE } from '../../constants/messages';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import TopicDifficultyTable from './components/tables/TopicDifficultyTable.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
-import { createTopicDifficulty, deleteTopicDifficulty, getAllTopicDifficultiesByTopic, updateTopicDifficulty } from '../../service/topic-difficulty.service';
+import { activateTopicDifficulty, createTopicDifficulty, deactivateTopicDifficulty, deleteTopicDifficulty, getAllTopicDifficultiesByTopic, updateTopicDifficulty } from '../../service/topic-difficulty.service';
 import { useTopicDifficultyStore } from '../../store/useTopicDifficultyStore.store';
 import TopicDifficultyModal from './components/modals/TopicDifficultyModal.vue';
 import type { Topic } from '../../types/topic.types';
 import { getTopicBySlug } from '../../service/topic.service';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
 const route = useRoute();
 
@@ -31,17 +34,21 @@ async function loadTopicBySlug() {
     )
 }
 
-const topicDifficulties = ref<TopicDifficulty[]>([]);
+const topicDifficultyResponse = ref<TopicDifficultyResponse | null>(null);
 
-async function loadTopicDifficulties() {
+async function loadTopicDifficulties(page: number = 0) {
     const slug: string = route.params.slug.toString() || "";
-    await useApiHandler<TopicDifficulty[]>(
-        () => getAllTopicDifficultiesByTopic(slug),
+    const request: PageRequest = {
+        page,
+        size: PAGE_SIZE.TOPIC_DIFFICULTY,
+    }
+    await useApiHandler<TopicDifficultyResponse>(
+        () => getAllTopicDifficultiesByTopic(slug, request),
         {
             loading: TOPIC_DIFFICULTY_MESSAGE.get,
             error: TOPIC_DIFFICULTY_MESSAGE.getError,
         },
-        (data: TopicDifficulty[]) => topicDifficulties.value = data,
+        (data: TopicDifficultyResponse) => topicDifficultyResponse.value = data,
     )
 }
 
@@ -112,6 +119,32 @@ const handleUpdateTopic = async (topicInformation: TopicDifficultyUpdateRequest)
     )
 }
 
+async function handleActivateTopicDifficulty(topicDifficultyId: number) {
+    const page: number = topicDifficultyResponse.value?.currentPage || 0;
+    await useApiHandler(
+        () => activateTopicDifficulty(topicDifficultyId),
+        {
+            loading: "Đang kích hoạt độ khó",
+            error: "Lỗi kích hoạt độ khó",
+        },
+        () => { },
+        () => loadTopicDifficulties(page),
+    )
+}
+
+async function handleDeactivateTopicDifficulty(topicDifficultyId: number) {
+    const page: number = topicDifficultyResponse.value?.currentPage || 0;
+    await useApiHandler(
+        () => deactivateTopicDifficulty(topicDifficultyId),
+        {
+            loading: "Đang vô hiệu hóa độ khó",
+            error: "Lỗi vô hiệu hóa độ khó",
+        },
+        () => { },
+        () => loadTopicDifficulties(page),
+    )
+}
+
 async function handleDeleteTopicDifficulty(topicDifficultyId: number) {
     const confirmed = await openConfirmDeleteMessage("Bạn muốn xóa độ khó của chủ đề này?");
     if (!confirmed) return;
@@ -135,6 +168,10 @@ function goToAwardManagementPage(slug: string) {
 
 function goToQuestionManagementPage(slug: string) {
     router.push({ name: ROUTE_NAMES.ADMIN.QUESTION_MANAGEMENT, params: { slug } });
+}
+
+async function handlePageChange(page: number) {
+    await loadTopicDifficulties(page);
 }
 </script>
 <template>
@@ -166,16 +203,23 @@ function goToQuestionManagementPage(slug: string) {
             </div>
         </div>
 
-        <TopicDifficultyTable :topicDifficulties="topicDifficulties"
-            :openCreateTopicDifficultyModal="openCreateTopicDifficultyModal"
-            :openUpdateTopicDifficultyModal="openUpdateTopicDifficultyModal"
-            :handleDeleteTopicDifficulty="handleDeleteTopicDifficulty"
-            :goToAwardManagementPage="goToAwardManagementPage"
-            :goToQuestionManagementPage="goToQuestionManagementPage" />
+        <div v-if="topicDifficultyResponse">
+            <TopicDifficultyTable :topicDifficulties="topicDifficultyResponse.topicDifficulties"
+                :openCreateTopicDifficultyModal="openCreateTopicDifficultyModal"
+                :openUpdateTopicDifficultyModal="openUpdateTopicDifficultyModal"
+                :handleDeleteTopicDifficulty="handleDeleteTopicDifficulty"
+                :goToAwardManagementPage="goToAwardManagementPage"
+                :goToQuestionManagementPage="goToQuestionManagementPage"
+                @activate-topic-difficulty="handleActivateTopicDifficulty"
+                @deactivate-topic-difficulty="handleDeactivateTopicDifficulty" />
 
-        <TopicDifficultyModal v-if="isTopicDifficultyModalVisible"
-            :isCreatingTopicDifficulty="isCreatingTopicDifficulty"
-            @create-topic-difficulty="handleCreateTopicDifficulty" @update-topic-difficulty="handleUpdateTopic"
-            @close="isTopicDifficultyModalVisible = false" />
+            <Pagination :totalItem="topicDifficultyResponse.totalItems" :pageSize="topicDifficultyResponse.pageSize"
+                :currentPage="topicDifficultyResponse.currentPage" @change-page="handlePageChange" />
+
+            <TopicDifficultyModal v-if="isTopicDifficultyModalVisible"
+                :isCreatingTopicDifficulty="isCreatingTopicDifficulty"
+                @create-topic-difficulty="handleCreateTopicDifficulty" @update-topic-difficulty="handleUpdateTopic"
+                @close="isTopicDifficultyModalVisible = false" />
+        </div>
     </div>
 </template>

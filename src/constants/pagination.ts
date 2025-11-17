@@ -20,4 +20,5 @@ export const PAGE_SIZE = {
     ADMIN: 4,
   },
   TOPIC: 4,
+  TOPIC_DIFFICULTY: 4,
 } as const;

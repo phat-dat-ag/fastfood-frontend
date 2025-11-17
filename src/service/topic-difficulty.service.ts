@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import type { PageRequest } from "../types/pagination.types";
 import type {
   TopicDifficultyCreateRequest,
   TopicDifficultyUpdateRequest,
@@ -24,8 +25,25 @@ export const getTopicDifficultyBySlug = (topicDifficultySlug: string) => {
   });
 };
 
-export const getAllTopicDifficultiesByTopic = (topicSlug: string) => {
-  return api.get("/topic-difficulty/by-topic-slug", { params: { topicSlug } });
+export const getAllTopicDifficultiesByTopic = (
+  topicSlug: string,
+  pageRequest: PageRequest
+) => {
+  return api.get("/topic-difficulty/by-topic-slug", {
+    params: { topicSlug, ...pageRequest },
+  });
+};
+
+export const activateTopicDifficulty = (topicDifficultyId: number) => {
+  return api.put("/topic-difficulty/activate", null, {
+    params: { topicDifficultyId },
+  });
+};
+
+export const deactivateTopicDifficulty = (topicDifficultyId: number) => {
+  return api.put("/topic-difficulty/deactivate", null, {
+    params: { topicDifficultyId },
+  });
 };
 
 export const deleteTopicDifficulty = (topicDifficultyId: number) => {
