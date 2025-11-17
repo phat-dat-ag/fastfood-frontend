@@ -3,47 +3,98 @@ import { useRoute, useRouter } from 'vue-router';
 import AddButton from '../../../components/buttons/AddButton.vue';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useApiHandler } from '../../../composables/useApiHandler';
-import type { Question } from '../../../types/question.types';
-import { getAllQuestionByTopicDifficulty } from '../../../service/question.service';
+import type { QuestionResponse } from '../../../types/question.types';
+import { activateQuestion, deactivateQuestion, deleteQuestion, getAllQuestionByTopicDifficulty } from '../../../service/question.service';
 import { QUESTION_MESSAGE } from '../../../constants/messages';
 import { onMounted, ref } from 'vue';
-import { ElSwitch, ElCard } from 'element-plus';
+import { ElCard } from 'element-plus';
+import { Delete } from "@element-plus/icons-vue";
+import type { PageRequest } from '../../../types/pagination.types';
+import { PAGE_SIZE } from '../../../constants/pagination';
+import Pagination from '../../../components/Pagination.vue';
+import Switch from '../../../components/buttons/Switch.vue';
+import { openConfirmDeleteMessage } from '../../../utils/confirmation.utils';
+import type { SwitchResponse } from '../../../types/switch-button.types';
 
 const route = useRoute();
 const router = useRouter();
 
-const questions = ref<Question[]>([]);
+const questionResponse = ref<QuestionResponse | null>(null);
 
-async function loadQuestions() {
+async function loadQuestions(page: number = 0) {
   const slug = route.params.slug?.toString() || "";
-  await useApiHandler<Question[]>(
-    () => getAllQuestionByTopicDifficulty(slug),
+  const request: PageRequest = {
+    page,
+    size: PAGE_SIZE.QUESTION,
+  }
+  await useApiHandler<QuestionResponse>(
+    () => getAllQuestionByTopicDifficulty(slug, request),
     {
       loading: QUESTION_MESSAGE.get,
       error: QUESTION_MESSAGE.getError,
     },
-    (data: Question[]) => {
-      questions.value = data.map((q) => ({
-        ...q,
-        isActivated: Boolean(q.activated),
-      }));
-    }
+    (data: QuestionResponse) => questionResponse.value = data,
   );
 }
 
 onMounted(loadQuestions);
+
+async function handleActivateQuestion(payload: SwitchResponse) {
+  const page = questionResponse.value?.currentPage || 0;
+  await useApiHandler(
+    () => activateQuestion(payload.targetId),
+    {
+      loading: "Đang kích hoạt câu hỏi",
+      error: "Lỗi kích hoạt câu hỏi",
+    },
+    () => { },
+    () => loadQuestions(page)
+  )
+}
+
+async function handleDeactivateQuestion(payload: SwitchResponse) {
+  const page = questionResponse.value?.currentPage || 0;
+  await useApiHandler(
+    () => deactivateQuestion(payload.targetId),
+    {
+      loading: "Đang hủy kích hoạt câu hỏi",
+      error: "Lỗi hủy kích hoạt câu hỏi",
+    },
+    () => { },
+    () => loadQuestions(page)
+  )
+}
+
+async function handleDeleteQuestion(questionId: number) {
+  const confirmed = await openConfirmDeleteMessage("Xóa vĩnh viễn câu hỏi này?");
+  if (!confirmed) return;
+  await useApiHandler(
+    () => deleteQuestion(questionId),
+    {
+      loading: "Đang xóa câu hỏi",
+      error: "Lỗi xóa câu hỏi",
+    },
+    () => { },
+    loadQuestions
+  )
+}
+
+async function handlePageChange(page: number) {
+  await loadQuestions(page);
+}
 </script>
 
 <template>
   <AddButton label="Thêm các câu hỏi cho độ khó này"
     :onClick="() => router.push({ name: ROUTE_NAMES.ADMIN.ADD_QUESTION_PAGE })" />
 
-  <div v-if="questions && questions.length > 0" class="space-y-6 mt-4">
-    <el-card v-for="(question, qIndex) in questions" :key="qIndex"
+  <div v-if="questionResponse && questionResponse.questions.length > 0" class="space-y-6 mt-4">
+    <el-card v-for="(question, qIndex) in questionResponse.questions" :key="qIndex"
       class="shadow-md p-4 rounded-2xl border border-gray-200">
       <div class="flex items-start justify-between">
         <div class="flex-1">
-          <h3 class="text-lg font-semibold mb-2">Câu hỏi {{ qIndex + 1 }}</h3>
+          <h3 class="text-lg font-semibold mb-2">Câu hỏi {{ questionResponse.currentPage * questionResponse.pageSize
+            + qIndex + 1 }}</h3>
           <div class="prose max-w-none" v-html="question.content"></div>
 
           <div v-if="question.imageUrl" class="mt-3">
@@ -55,9 +106,10 @@ onMounted(loadQuestions);
           </div>
         </div>
 
-        <div class="ml-4 flex flex-col items-center">
-          <span class="text-sm text-gray-600 mb-1">Kích hoạt</span>
-          <el-switch v-model="question.activated" active-color="#13ce66" inactive-color="#dcdfe6" disabled />
+        <div class="ml-4 flex items-center gap-4">
+          <Switch :isActive="question.activated" :targetId="question.id" @activate="handleActivateQuestion"
+            @deactivate="handleDeactivateQuestion" />
+          <Delete @click="() => handleDeleteQuestion(question.id)" class="w-6 h-6" />
         </div>
       </div>
 
@@ -79,6 +131,9 @@ onMounted(loadQuestions);
         </div>
       </div>
     </el-card>
+
+    <Pagination :totalItem="questionResponse.totalItems" :pageSize="questionResponse.pageSize"
+      :currentPage="questionResponse.currentPage" @change-page="handlePageChange" />
   </div>
 
   <div v-else class="text-center text-gray-500 mt-6">

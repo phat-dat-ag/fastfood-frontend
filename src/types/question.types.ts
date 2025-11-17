@@ -25,3 +25,11 @@ export interface Question {
   activated: boolean;
   answers: Answer[];
 }
+
+export interface QuestionResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  questions: Question[];
+}

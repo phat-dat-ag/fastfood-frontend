@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import type { PageRequest } from "../types/pagination.types";
 import type { QuestionCreateRequest } from "../types/question.types";
 
 export const createQuestions = (
@@ -41,7 +42,20 @@ export const createQuestions = (
 };
 
 export const getAllQuestionByTopicDifficulty = (
-  topicDifficultySlug: string
+  topicDifficultySlug: string,
+  request: PageRequest
 ) => {
-  return api.get("/question", { params: { topicDifficultySlug } });
+  return api.get("/question", { params: { topicDifficultySlug, ...request } });
+};
+
+export const activateQuestion = (questionId: number) => {
+  return api.put("/question/activate", null, { params: { questionId } });
+};
+
+export const deactivateQuestion = (questionId: number) => {
+  return api.put("/question/deactivate", null, { params: { questionId } });
+};
+
+export const deleteQuestion = (questionId: number) => {
+  return api.delete("/question", { params: { questionId } });
 };
