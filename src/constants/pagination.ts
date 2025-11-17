@@ -19,4 +19,5 @@ export const PAGE_SIZE = {
   REIVEWS: {
     ADMIN: 4,
   },
+  TOPIC: 4,
 } as const;

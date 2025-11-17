@@ -30,3 +30,11 @@ export interface TopicDisplay {
   description: string;
   difficulties: TopicDifficultyDisplay[];
 }
+
+export interface TopicResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  topics: Topic[];
+}

@@ -5,6 +5,8 @@ import type { Topic } from '../../../../types/topic.types';
 import { formatDateTimeString } from '../../../../utils/time.utils';
 import EditButton from '../../../../components/buttons/EditButton.vue';
 import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
+import type { SwitchResponse } from '../../../../types/switch-button.types';
+import Switch from '../../../../components/buttons/Switch.vue';
 
 interface TopicTableProps {
     topics: Array<Topic>;
@@ -14,6 +16,19 @@ interface TopicTableProps {
     goToTopicDifficultyManagementPage: (slug: string) => void;
 }
 const props = defineProps<TopicTableProps>();
+const emit = defineEmits(["activate-topic", "deactivate-topic"]);
+
+async function handleActivateTopic(payload: SwitchResponse) {
+    if (payload.isActive) {
+        emit("activate-topic", payload.targetId);
+    }
+}
+
+async function handleDeactivateTopic(payload: SwitchResponse) {
+    if (!payload.isActive) {
+        emit("deactivate-topic", payload.targetId);
+    }
+}
 </script>
 <template>
     <div>
@@ -34,14 +49,10 @@ const props = defineProps<TopicTableProps>();
                         {{ formatDateTimeString(scope.row.updatedAt) }}
                     </template>
                 </ElTableColumn>
-                <ElTableColumn width="160" label="Trạng thái" prop="activated">
+                <ElTableColumn width="160" label="Trạng thái">
                     <template #default="scope">
-                        <span v-if="scope.row.activated" class="text-green-500 font-medium">
-                            Hoạt động
-                        </span>
-                        <span v-else class="text-red-500 font-medium">
-                            Đã ẩn
-                        </span>
+                        <Switch :isActive="scope.row.activated" :targetId="scope.row.id" @activate="handleActivateTopic"
+                            @deactivate="handleDeactivateTopic" />
                     </template>
                 </ElTableColumn>
 
