@@ -8,10 +8,13 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { AWARD_MESSAGE, TOPIC_DIFFICULTY_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
-import type { Award, AwardCreateRequest } from '../../types/award.types';
-import { createAward, deleteAward, getAllAwardsByTopicDifficulty } from '../../service/award.service';
+import type { AwardCreateRequest, AwardResponse } from '../../types/award.types';
+import { activateAward, createAward, deactivateAward, deleteAward, getAllAwardsByTopicDifficulty } from '../../service/award.service';
 import AwardTable from './components/tables/AwardTable.vue';
 import AwardModal from './components/modals/AwardModal.vue';
+import type { PageRequest } from '../../types/pagination.types';
+import { PAGE_SIZE } from '../../constants/pagination';
+import Pagination from '../../components/Pagination.vue';
 
 const route = useRoute();
 
@@ -29,17 +32,21 @@ async function loadTopicDifficultyBySlug() {
     )
 }
 
-const awards = ref<Award[]>([]);
+const awardResponse = ref<AwardResponse | null>(null);
 
-async function loadAwards() {
+async function loadAwards(page: number = 0) {
+    const request: PageRequest = {
+        page,
+        size: PAGE_SIZE.AWARD,
+    }
     const slug: string = route.params.slug.toString() || "";
-    await useApiHandler<Award[]>(
-        () => getAllAwardsByTopicDifficulty(slug),
+    await useApiHandler<AwardResponse>(
+        () => getAllAwardsByTopicDifficulty(slug, request),
         {
             loading: AWARD_MESSAGE.get,
             error: AWARD_MESSAGE.getError,
         },
-        (data: Award[]) => awards.value = data,
+        (data: AwardResponse) => awardResponse.value = data,
     )
 }
 
@@ -89,6 +96,32 @@ async function handleCreateAward(data: AwardCreateRequest) {
     )
 }
 
+async function handleActivateAward(awardId: number) {
+    const page = awardResponse.value?.currentPage || 0;
+    await useApiHandler(
+        () => activateAward(awardId),
+        {
+            loading: "Đang kích hoạt phần thưởng",
+            error: "Lỗi kích hoạt phần thưởng"
+        },
+        () => { },
+        () => loadAwards(page)
+    )
+}
+
+async function handleDeactivateAward(awardId: number) {
+    const page = awardResponse.value?.currentPage || 0;
+    await useApiHandler(
+        () => deactivateAward(awardId),
+        {
+            loading: "Đang hủy kích hoạt phần thưởng",
+            error: "Lỗi hủy kích hoạt phần thưởng"
+        },
+        () => { },
+        () => loadAwards(page)
+    )
+}
+
 async function handleDeleteAward(awardId: number) {
     const confirmed = await openConfirmDeleteMessage("Bạn muốn xóa phần thưởng này?");
     if (!confirmed) return;
@@ -102,6 +135,10 @@ async function handleDeleteAward(awardId: number) {
         () => { },
         loadAwards,
     )
+}
+
+async function handlePageChange(page: number) {
+    await loadAwards(page);
 }
 </script>
 <template>
@@ -133,9 +170,14 @@ async function handleDeleteAward(awardId: number) {
             </div>
         </div>
 
-        <AwardTable :awards="awards" :openCreateAwardModal="openCreateAwardModal"
-            :handleDeleteAward="handleDeleteAward" />
-        <AwardModal v-if="isAwardModalVisible" :isCreatingAward="isCreatingAward" @create-award="handleCreateAward"
-            @close="isAwardModalVisible = false" />
+        <div v-if="awardResponse">
+            <AwardTable :awards="awardResponse.awards" :openCreateAwardModal="openCreateAwardModal"
+                :handleDeleteAward="handleDeleteAward" @activate-award="handleActivateAward"
+                @deactivate-award="handleDeactivateAward" />
+            <Pagination :totalItem="awardResponse.totalItems" :pageSize="awardResponse.pageSize"
+                :currentPage="awardResponse.currentPage" @change-page="handlePageChange" />
+            <AwardModal v-if="isAwardModalVisible" :isCreatingAward="isCreatingAward" @create-award="handleCreateAward"
+                @close="isAwardModalVisible = false" />
+        </div>
     </div>
 </template>

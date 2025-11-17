@@ -21,3 +21,11 @@ export interface Award {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface AwardResponse {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  awards: Award[];
+}

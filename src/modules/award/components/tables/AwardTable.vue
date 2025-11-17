@@ -4,6 +4,8 @@ import AddButton from '../../../../components/buttons/AddButton.vue';
 import DeleteButton from '../../../../components/buttons/DeleteButton.vue';
 import type { Award } from '../../../../types/award.types';
 import { formatCurrencyVND } from '../../../../utils/currency.utils';
+import Switch from '../../../../components/buttons/Switch.vue';
+import type { SwitchResponse } from '../../../../types/switch-button.types';
 
 interface AwardTableProps {
     awards: Array<Award>;
@@ -11,6 +13,19 @@ interface AwardTableProps {
     handleDeleteAward: (awardId: number) => Promise<void>;
 }
 const props = defineProps<AwardTableProps>();
+const emit = defineEmits(["activate-award", "deactivate-award"]);
+
+async function handleActivateAward(payload: SwitchResponse) {
+    if (payload.isActive) {
+        emit("activate-award", payload.targetId);
+    }
+}
+
+async function handleDeactivateAward(payload: SwitchResponse) {
+    if (!payload.isActive) {
+        emit("deactivate-award", payload.targetId);
+    }
+}
 </script>
 <template>
     <div>
@@ -53,12 +68,8 @@ const props = defineProps<AwardTableProps>();
                 <ElTableColumn label="Số phần thưởng" prop="quantity" />
                 <ElTableColumn width="160" label="Trạng thái" prop="activated">
                     <template #default="scope">
-                        <span v-if="scope.row.activated" class="text-green-500 font-medium">
-                            Hoạt động
-                        </span>
-                        <span v-else class="text-red-500 font-medium">
-                            Đã ẩn
-                        </span>
+                        <Switch :isActive="scope.row.activated" :targetId="scope.row.id" @activate="handleActivateAward"
+                            @deactivate="handleDeactivateAward" />
                     </template>
                 </ElTableColumn>
 

@@ -21,4 +21,5 @@ export const PAGE_SIZE = {
   },
   TOPIC: 4,
   TOPIC_DIFFICULTY: 4,
+  AWARD: 4,
 } as const;
