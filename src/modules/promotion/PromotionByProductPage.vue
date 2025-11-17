@@ -71,6 +71,7 @@ async function handlePageChange(page: number) {
 }
 
 async function handleActivatePromotion(promotionId: number) {
+  const page: number = promotionResponse.value?.currentPage || 0;
   await useApiHandler(
     () => activatePromotion(promotionId),
     {
@@ -79,11 +80,12 @@ async function handleActivatePromotion(promotionId: number) {
       success: "Đã kích hoạt mã khuyến mãi cho sản phẩm",
     },
     () => { },
-    loadPromotions
+    () => loadPromotions(page),
   )
 }
 
 async function handleDeactivatePromotion(promotionId: number) {
+  const page: number = promotionResponse.value?.currentPage || 0;
   await useApiHandler(
     () => deactivatePromotion(promotionId),
     {
@@ -92,7 +94,7 @@ async function handleDeactivatePromotion(promotionId: number) {
       success: "Đã hủy kích hoạt mã khuyến mãi cho sản phẩm",
     },
     () => { },
-    loadPromotions
+    () => loadPromotions(page),
   )
 }
 
