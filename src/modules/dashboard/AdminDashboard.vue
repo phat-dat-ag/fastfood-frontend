@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, type Ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { STATS_CATEGORY, STATS_ORDER, STATS_PRODUCT, STATS_USER } from '../../constants/messages';
-import { getCategoryStats, getOrderStats, getProductStats, getUserStats } from '../../service/dashboard.service';
-import type { CategoryStats, OrderStats, ProductStats, UserStats } from '../../types/stats.types';
+import { STATS_CATEGORY, STATS_ORDER, STATS_PRODUCT, STATS_TOPIC, STATS_TOPIC_DIFFICULTY, STATS_USER } from '../../constants/messages';
+import { getCategoryStats, getOrderStats, getProductStats, getTopicDifficultyStats, getTopicStats, getUserStats } from '../../service/dashboard.service';
+import type { CategoryStats, OrderStats, ProductStats, TopicDifficultyStats, TopicStats, UserStats } from '../../types/stats.types';
 import { ORDER_STATUS_TEXT } from '../../utils/order-display.utils';
 import { formatCurrencyVND } from '../../utils/currency.utils';
 
@@ -16,17 +16,58 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
+  PointElement,
+  BarController,
+  LineController,
   type ChartData,
+  type ChartOptions,
   type TooltipItem,
 } from 'chart.js';
+import type { Chart, Plugin, ChartDataset } from 'chart.js';
 import { Pie, Bar } from 'vue-chartjs';
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, BarElement);
+type MixedBarLineData = ChartData<"bar" | "line", number[], string>;
+
+const bringLineToFront: Plugin<'bar' | 'line'> = {
+  id: 'bringLineToFront',
+  afterDatasetsDraw(chart: Chart) {
+    chart.data.datasets.forEach((dataset: ChartDataset, index: number) => {
+      const meta = chart.getDatasetMeta(index);
+      const dsType = (dataset as any).type;
+      if (dsType === 'line') {
+        try {
+          (meta.dataset as any)?.draw();
+        } catch (e) {
+
+        }
+      }
+    });
+  }
+};
+
+ChartJS.register(bringLineToFront);
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  BarController,
+  LineElement,
+  PointElement,
+  LineController
+);
 
 const userStats = ref<UserStats | null>(null);
 const orderStats = ref<OrderStats | null>(null);
 const productStats = ref<ProductStats[] | null>(null);
 const categoryStats = ref<CategoryStats[] | null>(null);
+const topicStats = ref<TopicStats[] | null>(null);
+const topicDifficultyStats = ref<TopicDifficultyStats[] | null>(null);
 
 const animatedCOD: Ref<number> = ref(0);
 const animatedBank: Ref<number> = ref(0);
@@ -71,6 +112,106 @@ const categoryChartData = ref<ChartData<'bar', number[], string>>({
     backgroundColor: '#4CAF50',
   }],
 });
+
+const topicChartData = ref<ChartData<'bar', number[], string>>({
+  labels: [],
+  datasets: [
+    {
+      label: 'Phần thưởng nhận',
+      data: [],
+      backgroundColor: '#1E90FF',
+    },
+    {
+      label: 'Lượt tham gia',
+      data: [],
+      backgroundColor: '#FFA500',
+    }
+  ],
+});
+
+const topicChartOptions = computed<ChartOptions<'bar'>>(() => ({
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: { font: { size: 14 } }
+    },
+    tooltip: {
+      callbacks: {
+        label: (ctx: TooltipItem<'bar'> | any) => {
+          const datasetLabel = ctx.dataset?.label ?? '';
+          const value = ctx.raw as number;
+          return `${datasetLabel}: ${value}`;
+        }
+      }
+    }
+  },
+  scales: {
+    x: {
+      ticks: { display: false },
+    }
+  }
+}));
+
+const difficultyChartData = ref<MixedBarLineData>({
+  labels: [],
+  datasets: [
+    {
+      type: 'bar',
+      label: 'Phần thưởng nhận',
+      data: [],
+      backgroundColor: '#4CAF50',
+      yAxisID: 'y',
+      order: 1,
+    },
+    {
+      type: 'bar',
+      label: 'Lượt tham gia',
+      data: [],
+      backgroundColor: '#FFA500',
+      yAxisID: 'y',
+      order: 1,
+    },
+    {
+      type: 'line',
+      label: 'Thời gian trung bình (giây)',
+      data: [],
+      borderColor: '#1E90FF',
+      yAxisID: 'y1',
+      order: 10,
+      borderWidth: 3,
+      tension: 0.3,
+      pointRadius: 3,
+      pointBackgroundColor: '#1E90FF',
+    }
+  ],
+});
+
+const difficultyChartOptions = computed<ChartOptions<'bar' | 'line'>>(() => ({
+  responsive: true,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'bottom',
+      labels: { font: { size: 14 } }
+    },
+    tooltip: {
+      callbacks: {
+        label: (ctx: TooltipItem<'bar' | 'line'>) => {
+          const dsLabel = ctx.dataset?.label ?? '';
+          const value = ctx.raw as number;
+          if (ctx.dataset?.type === 'line') return `Thời gian TB: ${value}s`;
+          return `${dsLabel}: ${value}`;
+        }
+      }
+    }
+  },
+  scales: {
+    x: { ticks: { display: false } },
+    y: { type: 'linear', position: 'left', beginAtZero: true, stacked: false }, // Bar
+    y1: { type: 'linear', position: 'right', beginAtZero: true, stacked: false, grid: { drawOnChartArea: false } }, // Line
+  }
+}));
 
 const showOrderChart = computed(() => orderStats.value !== null);
 const showCategoryChart = computed(() => categoryStats.value && categoryStats.value.length > 0);
@@ -154,6 +295,71 @@ async function loadProductStats() {
   );
 }
 
+async function loadTopicStats() {
+  await useApiHandler<TopicStats[]>(
+    getTopicStats,
+    { loading: STATS_TOPIC.get, error: STATS_TOPIC.getError },
+    (data) => {
+      topicStats.value = data;
+
+      topicChartData.value = {
+        labels: data.map(t => t.name),
+        datasets: [
+          {
+            label: 'Phần thưởng nhận',
+            data: data.map(t => t.totalPromotionsReceived),
+            backgroundColor: '#1E90FF',
+          },
+          {
+            label: 'Lượt tham gia',
+            data: data.map(t => t.totalQuizzesPlayed),
+            backgroundColor: '#FFA500',
+          }
+        ]
+      };
+    }
+  );
+}
+
+async function loadTopicDifficultyStats() {
+  await useApiHandler<TopicDifficultyStats[]>(
+    getTopicDifficultyStats,
+    { loading: STATS_TOPIC_DIFFICULTY.get, error: STATS_TOPIC_DIFFICULTY.getError },
+    (data) => {
+      topicDifficultyStats.value = data;
+
+      difficultyChartData.value = {
+        labels: data.map(d => d.name),
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Phần thưởng nhận',
+            data: data.map(d => d.totalPromotionsReceived),
+            backgroundColor: '#4CAF50',
+            yAxisID: 'y',
+          },
+          {
+            type: 'bar',
+            label: 'Lượt tham gia',
+            data: data.map(d => d.totalQuizzesPlayed),
+            backgroundColor: '#FFA500',
+            yAxisID: 'y',
+          },
+          {
+            type: 'line',
+            label: 'Thời gian trung bình (giây)',
+            data: data.map(d => d.avgDurationSeconds),
+            borderColor: '#1E90FF',
+            tension: 0.3,
+            pointRadius: 3,
+            yAxisID: 'y1',
+          }
+        ]
+      } as MixedBarLineData;
+    }
+  );
+}
+
 const categoryChartOptions = computed(() => ({
   responsive: true,
   plugins: {
@@ -195,6 +401,8 @@ onMounted(async () => {
   await loadOrderStats();
   await loadProductStats();
   await loadCategoryStats();
+  await loadTopicStats();
+  await loadTopicDifficultyStats();
 });
 </script>
 
@@ -265,6 +473,21 @@ onMounted(async () => {
       <h3 class="text-lg md:text-xl font-semibold mb-2 text-center">Top sản phẩm theo doanh thu</h3>
       <div class="w-full max-w-3xl h-72 md:h-80 lg:h-96">
         <Bar :data="productChartData" :options="productChartOptions" />
+      </div>
+    </div>
+
+    <div v-if="topicStats" class="bg-white shadow rounded p-4 flex flex-col items-center">
+      <h3 class="text-lg md:text-xl font-semibold mb-2 text-center">Thống kê theo chủ đề</h3>
+      <div class="w-full max-w-3xl h-72 md:h-80 lg:h-96">
+        <Bar :data="topicChartData" :options="topicChartOptions" />
+      </div>
+    </div>
+
+    <div v-if="topicDifficultyStats" class="bg-white shadow rounded p-4 flex flex-col items-center">
+      <h3 class="text-lg md:text-xl font-semibold mb-2 text-center">Thống kê theo độ khó</h3>
+      <div class="w-full max-w-3xl h-72 md:h-80 lg:h-96">
+        <Bar :data="difficultyChartData as unknown as ChartData<'bar', (number | null)[], string>"
+          :options="difficultyChartOptions as unknown as ChartOptions<'bar'>" />
       </div>
     </div>
   </div>

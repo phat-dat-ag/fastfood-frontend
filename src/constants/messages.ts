@@ -109,3 +109,7 @@ export const STATS_CATEGORY = createEntityMessages(
 export const STATS_PRODUCT = createEntityMessages(
   "thống kê các sản phẩm trên hệ thống"
 );
+export const STATS_TOPIC = createEntityMessages("thống kê các chủ đề");
+export const STATS_TOPIC_DIFFICULTY = createEntityMessages(
+  "thống kê các độ khó"
+);

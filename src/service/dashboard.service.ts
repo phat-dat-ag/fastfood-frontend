@@ -15,3 +15,11 @@ export const getCategoryStats = () => {
 export const getProductStats = () => {
   return api.get("/dashboard/product");
 };
+
+export const getTopicStats = () => {
+  return api.get("/dashboard/topic");
+};
+
+export const getTopicDifficultyStats = () => {
+  return api.get("/dashboard/topic-difficulty");
+};

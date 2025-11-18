@@ -35,3 +35,18 @@ export interface ProductStats {
   totalRevenue: number;
   totalQuantitySold: number;
 }
+
+export interface TopicStats {
+  id: number;
+  name: string;
+  totalQuizzesPlayed: number;
+  totalPromotionsReceived: number;
+}
+
+export interface TopicDifficultyStats {
+  id: number;
+  name: string;
+  totalQuizzesPlayed: number;
+  totalPromotionsReceived: number;
+  avgDurationSeconds: number;
+}
