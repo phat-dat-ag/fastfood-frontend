@@ -10,6 +10,7 @@ import type { ReviewCreateRequest } from '../../types/review.types';
 import ProductReviewFormItem from './components/ProductReviewFormItem.vue';
 import { createProductReview } from '../../service/review.service';
 import HeaderCard from '../../components/HeaderCard.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -94,4 +95,5 @@ async function handleSubmitReviews() {
             </div>
         </div>
     </div>
+    <EmptyPage v-else />
 </template>

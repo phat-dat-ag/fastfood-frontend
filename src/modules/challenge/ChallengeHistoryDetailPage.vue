@@ -11,6 +11,7 @@ import ChallengeHistoryHeader from './components/ChallengeHistoryHeader.vue';
 import ChallengeHistoryQuestions from './components/ChallengeHistoryQuestions.vue';
 import ChallengeHistoryFeedback from './components/ChallengeHistoryFeedback.vue';
 import { formatDateTimeString } from '../../utils/time.utils';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -68,8 +69,8 @@ async function hadnleSendFeedback(feedbackMessage: string) {
 }
 </script>
 <template>
-    <div>
-        <el-card v-if="quizHistory" class="rounded-2xl shadow-lg p-6">
+    <div v-if="quizHistory">
+        <el-card class="rounded-2xl shadow-lg p-6">
             <ChallengeHistoryHeader :quizHistory="quizHistory" />
 
             <el-divider class="my-4" />
@@ -92,4 +93,5 @@ async function hadnleSendFeedback(feedbackMessage: string) {
             </div>
         </el-card>
     </div>
+    <EmptyPage v-else />
 </template>

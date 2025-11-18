@@ -11,6 +11,7 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const userReponse = ref<UserResponse | null>(null);
 
@@ -101,14 +102,14 @@ async function handlePageChange(page: number) {
         <h2 class="text-2xl font-semibold text-orange-500">
             Quản lý nhân viên
         </h2>
-        <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-            @update:filter="handleFilterChange" />
-
         <div v-if="userReponse">
+            <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+                @update:filter="handleFilterChange" />
             <AccountTable :accounts="userReponse.users" @delete-account="deleteStaffAccount"
                 @activate-account="handleActivateAccount" @deactivate-account="handleDeactivateAccount" />
             <Pagination :totalItem="userReponse.totalItems" :pageSize="userReponse.pageSize"
                 :currentPage="userReponse.currentPage" @change-page="handlePageChange" />
         </div>
+        <EmptyPage v-else />
     </div>
 </template>

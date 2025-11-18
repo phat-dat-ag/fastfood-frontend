@@ -15,6 +15,7 @@ import { addProductToCart } from '../../service/cart.service';
 import ProductReviewList from '../review/components/ProductReviewList.vue';
 import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 const slug = String(route.params.slug || "");
@@ -143,10 +144,7 @@ function goToAllReviewsPage() {
         </div>
 
     </div>
-
-    <div v-else class="p-8 text-center text-gray-500">
-        Lỗi khi tải thông tin sản phẩm, hãy thử lại.
-    </div>
+    <EmptyPage v-else title="Không có thông tin sản phẩm nào" />
 </template>
 
 <style scoped>

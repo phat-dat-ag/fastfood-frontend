@@ -9,6 +9,7 @@ import { useUserStore } from '../../store/useUserStore.store';
 import { notifyError } from '../../utils/notification.utils';
 import { addProductToCart } from '../../service/cart.service';
 import ProductList from './components/ProductList.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 const slug = computed(() => String(route.params.slug || ""));
@@ -56,4 +57,5 @@ async function handleAddToCart(data: { product: Product; quantity: number }) {
 
 <template>
     <ProductList v-if="products.length > 0" :products="products" @add-to-cart="handleAddToCart" />
+    <EmptyPage v-else />
 </template>

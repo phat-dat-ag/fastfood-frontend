@@ -12,6 +12,7 @@ import { notifyError } from '../../utils/notification.utils';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import HeaderCard from '../../components/HeaderCard.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const router = useRouter();
 
@@ -65,7 +66,7 @@ function startChallenge() {
 }
 </script>
 <template>
-    <div class="mx-auto space-y-8">
+    <div v-if="displayableTopics.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Thử thách thú vị cùng Aurelion Shop!"
             description="Tham gia ngay để nhận mã khuyến mãi hấp dẫn — chọn chủ đề bạn yêu thích và bắt đầu thôi!" />
 
@@ -151,6 +152,7 @@ function startChallenge() {
             </div>
         </div>
     </div>
+    <EmptyPage v-else title="Không thấy chủ đề nào để thử thách" />
 </template>
 
 <style scoped>

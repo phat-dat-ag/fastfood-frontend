@@ -15,6 +15,7 @@ import AwardModal from './components/modals/AwardModal.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 
@@ -147,12 +148,8 @@ async function handlePageChange(page: number) {
             Quản lý phần thưởng của độ khó
         </h2>
 
-        <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-            @update:filter="handleFilterChange" />
-
-        <div v-if="topicDifficulty"
+        <div v-if="topicDifficulty && awardResponse"
             class="bg-white/90 border border-orange-200 rounded-2xl shadow-md p-6 hover:shadow-lg transition-all duration-300">
-
             <div class="bg-gradient-to-r from-orange-500 to-amber-400 text-white rounded-xl px-5 py-3 mb-5">
                 <h2 class="text-xl font-semibold tracking-wide drop-shadow-sm">
                     Độ khó: {{ topicDifficulty.name }}
@@ -168,16 +165,18 @@ async function handlePageChange(page: number) {
                     {{ topicDifficulty.description }}
                 </p>
             </div>
+            <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+                @update:filter="handleFilterChange" />
+            <div>
+                <AwardTable :awards="awardResponse.awards" :openCreateAwardModal="openCreateAwardModal"
+                    :handleDeleteAward="handleDeleteAward" @activate-award="handleActivateAward"
+                    @deactivate-award="handleDeactivateAward" />
+                <Pagination :totalItem="awardResponse.totalItems" :pageSize="awardResponse.pageSize"
+                    :currentPage="awardResponse.currentPage" @change-page="handlePageChange" />
+                <AwardModal v-if="isAwardModalVisible" :isCreatingAward="isCreatingAward"
+                    @create-award="handleCreateAward" @close="isAwardModalVisible = false" />
+            </div>
         </div>
-
-        <div v-if="awardResponse">
-            <AwardTable :awards="awardResponse.awards" :openCreateAwardModal="openCreateAwardModal"
-                :handleDeleteAward="handleDeleteAward" @activate-award="handleActivateAward"
-                @deactivate-award="handleDeactivateAward" />
-            <Pagination :totalItem="awardResponse.totalItems" :pageSize="awardResponse.pageSize"
-                :currentPage="awardResponse.currentPage" @change-page="handlePageChange" />
-            <AwardModal v-if="isAwardModalVisible" :isCreatingAward="isCreatingAward" @create-award="handleCreateAward"
-                @close="isAwardModalVisible = false" />
-        </div>
+        <EmptyPage v-else />
     </div>
 </template>

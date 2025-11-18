@@ -20,6 +20,7 @@ import { createCashOnDeliveryOrder, createStripePaymentOrder } from '../../servi
 import { useRouter } from 'vue-router';
 import { CART_AMOUNT_LIMIT } from '../../constants/cart';
 import { formatCurrencyVND } from '../../utils/currency.utils';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const router = useRouter();
 
@@ -218,9 +219,7 @@ async function handleCloseCheckoutModal() {
             class="w-full lg:w-auto mt-6 lg:mt-0" />
     </div>
 
-    <div v-else class="text-center py-10 text-gray-500">
-        Giỏ hàng trống, hãy mua sắm thôi nào
-    </div>
+    <EmptyPage v-else title="Giỏ hàng trống, mua sắm thôi nào" />
 
     <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>

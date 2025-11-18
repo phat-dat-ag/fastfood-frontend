@@ -11,6 +11,7 @@ import type { Filter } from '../../types/filter.types';
 import Pagination from '../../components/Pagination.vue';
 import ProductReviewList from './components/ProductReviewList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const reviewResponse = ref<ReviewResponse | null>(null);
 
@@ -71,11 +72,11 @@ async function handleDeleteReview(reviewId: number) {
 }
 </script>
 <template>
-    <div class="p-6 bg-orange-50 min-h-screen text-gray-800">
+    <div v-if="reviewResponse" class="p-6 bg-orange-50 min-h-screen text-gray-800">
         <h2 class="text-2xl font-semibold text-orange-500">
             Quản lý đơn hàng hệ thống
         </h2>
-        <div v-if="reviewResponse">
+        <div>
             <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
                 @update:filter="handleFilterChange" />
 
@@ -86,4 +87,5 @@ async function handleDeleteReview(reviewId: number) {
                 :currentPage="reviewResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
+    <EmptyPage v-else />
 </template>

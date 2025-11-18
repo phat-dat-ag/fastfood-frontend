@@ -19,7 +19,7 @@ function onHideReview(reviewId: number) {
 
 <template>
     <div class="space-y-6">
-        <div v-if="props.reviews.length > 0" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
             <div v-for="review in props.reviews" :key="review.id"
                 class="bg-white shadow rounded-2xl p-4 border border-gray-100">
                 <ReviewCard :review="review" :canDeleteReview="canHide" @delete-review="onHideReview" />
@@ -31,10 +31,6 @@ function onHideReview(reviewId: number) {
                     Xem tất cả đánh giá →
                 </button>
             </div>
-        </div>
-
-        <div v-else class="text-center py-8 text-gray-400 italic">
-            Chưa có đánh giá nào.
         </div>
     </div>
 </template>

@@ -13,6 +13,7 @@ import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import OrderCustomerInformation from './components/OrderCustomerInformation.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const order = ref<Order | null>(null);
 
@@ -79,6 +80,7 @@ function handleReviewOrder(orderId: number) {
             </div>
         </section>
     </div>
+    <EmptyPage v-else />
 </template>
 
 <style lang="postcss" scoped src="../../styles/order-modal.css"></style>

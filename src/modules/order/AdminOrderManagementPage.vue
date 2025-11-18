@@ -10,7 +10,8 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import Pagination from '../../components/Pagination.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
-import AdminOrdertable from './components/tables/AdminOrdertable.vue';
+import AdminOrdertable from './components/tables/AdminOrderTable.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -81,9 +82,9 @@ async function handlePageChange(page: number) {
 
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
-
-            <AdminOrderModal v-if="selectedOrder && isOrderModalVisible" :order="selectedOrder"
-                @close="isOrderModalVisible = false" />
         </div>
+        <EmptyPage v-else />
     </div>
+    <AdminOrderModal v-if="selectedOrder && isOrderModalVisible" :order="selectedOrder"
+        @close="isOrderModalVisible = false" />
 </template>

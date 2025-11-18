@@ -15,12 +15,9 @@ function handleDeleteProduct(productId: number) {
 <template>
   <div class="p-4 sm:p-6 bg-gray-50 rounded-2xl shadow-sm">
     <h2 class="text-2xl font-semibold mb-4">Giỏ hàng của bạn</h2>
-    <div v-if="props.carts.length > 0" class="space-y-4">
+    <div class="space-y-4">
       <CartItem v-for="cart in props.carts" :key="cart.product.id" :cart="cart"
         @quantity-change-from-cart="handleQuantityChange" @delete-product-from-cart="handleDeleteProduct" />
-    </div>
-    <div v-else class="text-gray-500 text-center py-6">
-      Giỏ hàng trống, hãy mua sắm đi nào!
     </div>
   </div>
 </template>

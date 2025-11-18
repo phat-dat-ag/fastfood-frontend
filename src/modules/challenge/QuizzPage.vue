@@ -14,6 +14,7 @@ import QuizResultModal from "./components/QuizResultModal.vue";
 import { useUserStore } from "../../store/useUserStore.store";
 import { USER_ROLES } from "../../constants/user-roles";
 import { ROUTE_NAMES } from "../../constants/route-names";
+import EmptyPage from "../../components/EmptyPage.vue";
 
 const route = useRoute();
 const quiz = ref<Quiz | null>(null);
@@ -152,7 +153,7 @@ const currentQuestion = computed<Question | null>(() => {
     <QuizProgress :selectedAnswers="selectedAnswers" :questions="quiz.questions" :goToQuestion="goToQuestion"
       :handleSubmitQuiz="handleSubmitQuiz" :remainingTime="remainingTime" />
   </div>
-
+  <EmptyPage v-else />
   <QuizResultModal v-if="isResultModalVisible" :quiz="quizResult" @close="handleCloseResultModal"
     @review-quiz="goToReviewQuizPage" />
 </template>

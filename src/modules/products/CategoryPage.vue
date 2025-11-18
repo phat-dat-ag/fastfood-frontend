@@ -9,6 +9,7 @@ import { useUserStore } from '../../store/useUserStore.store';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { USER_ROLES } from '../../constants/user-roles';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const categories = ref<Category[]>([]);
 async function loadCategories() {
@@ -39,8 +40,9 @@ function handleSelect(category: Category) {
 }
 </script>
 <template>
-  <div class="flex flex-col gap-4">
+  <div v-if="categories.length > 0" class="flex flex-col gap-4">
     <ProductSegment :categories="categories" @select="handleSelect" />
     <router-view></router-view>
   </div>
+  <EmptyPage v-else title="Không tìm thấy các danh mục sản phẩm nào" />
 </template>

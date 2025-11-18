@@ -10,6 +10,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import Pagination from '../../components/Pagination.vue';
 import type { Filter } from '../../types/filter.types';
 import FeedbackList from './components/FeedbackList.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const feedbackResponse = ref<QuizFeedbackResponse | null>(null);
 
@@ -68,5 +69,6 @@ async function handlePageChange(page: number) {
             <Pagination :totalItem="feedbackResponse.totalItems" :pageSize="feedbackResponse.pageSize"
                 :currentPage="feedbackResponse.currentPage" @change-page="handlePageChange" />
         </div>
+        <EmptyPage v-else />
     </div>
 </template>

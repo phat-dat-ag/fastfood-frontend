@@ -11,6 +11,7 @@ import PromotionByProductTable from './components/tables/PromotionByProductTable
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const filterOptions: Filter[] = [
   { label: 'Thêm gần đây', value: 'recently-added' },
@@ -104,15 +105,16 @@ async function handleDeactivatePromotion(promotionId: number) {
     <h2 class="text-2xl font-semibold text-orange-500">
       Quản lý mã khuyến mãi theo sản phẩm
     </h2>
-    <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-      @update:filter="handleFilterChange" />
 
     <div v-if="promotionResponse">
+      <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+        @update:filter="handleFilterChange" />
       <PromotionByProductTable :promotions="promotionResponse.promotions"
         :handleDeletePromotionProduct="handleDeletePromotionProduct" @activate-promotion="handleActivatePromotion"
         @deactivate-promotion="handleDeactivatePromotion" />
       <Pagination :totalItem="promotionResponse.totalItems" :pageSize="promotionResponse.pageSize"
         :currentPage="promotionResponse.currentPage" @change-page="handlePageChange" />
     </div>
+    <EmptyPage v-else />
   </div>
 </template>

@@ -7,6 +7,7 @@ import type { TopicDifficulty } from '../../types/topic-difficulty.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
 import { TOPIC_DIFFICULTY_MESSAGE } from '../../constants/messages';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 
@@ -54,9 +55,6 @@ function handleSearchChange(searchText: string) {
             Quản lý các câu hỏi của độ khó
         </h2>
 
-        <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-            @update:filter="handleFilterChange" />
-
         <div v-if="topicDifficulty"
             class="bg-white/90 border border-orange-200 rounded-2xl shadow-md p-6 hover:shadow-lg transition-all duration-300">
 
@@ -75,10 +73,12 @@ function handleSearchChange(searchText: string) {
                     {{ topicDifficulty.description }}
                 </p>
             </div>
+            <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+                @update:filter="handleFilterChange" />
+            <div class="mt-4">
+                <router-view></router-view>
+            </div>
         </div>
-
-        <div class="mt-4">
-            <router-view></router-view>
-        </div>
+        <EmptyPage v-else />
     </div>
 </template>

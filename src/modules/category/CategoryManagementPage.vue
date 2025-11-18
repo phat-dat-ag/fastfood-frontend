@@ -15,6 +15,7 @@ import { PAGE_SIZE } from '../../constants/pagination'
 import Pagination from '../../components/Pagination.vue'
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES } from '../../constants/route-names'
+import EmptyPage from '../../components/EmptyPage.vue'
 
 
 const isCategoryModalVisible = ref(false);
@@ -157,10 +158,9 @@ async function handlePageChange(page: number) {
       Quản lý danh mục sản phẩm
     </h2>
 
-    <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-      @update:filter="handleFilterChange" />
-
     <div v-if="categoryResponse">
+      <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+        @update:filter="handleFilterChange" />
 
       <CategoryTable :categories="categoryResponse.categories" :openCreateCategoryModal="openCreateCategoryModal"
         :openUpdateCategoryModal="openUpdateCategoryModal" :handleDeleteCategory="handleDeleteCategory"
@@ -169,11 +169,10 @@ async function handlePageChange(page: number) {
 
       <Pagination :totalItem="categoryResponse.totalItems" :pageSize="categoryResponse.pageSize"
         :currentPage="categoryResponse.currentPage" @change-page="handlePageChange" />
-
-      <CategoryModal v-if="isCategoryModalVisible" :isCreatingCategory="isCreatingCategory"
-        @close="isCategoryModalVisible = false" @create-category="handleCreateCategory"
-        @update-category="handleUpdateCategory" />
     </div>
-
+    <EmptyPage v-else />
+    <CategoryModal v-if="isCategoryModalVisible" :isCreatingCategory="isCreatingCategory"
+      @close="isCategoryModalVisible = false" @create-category="handleCreateCategory"
+      @update-category="handleUpdateCategory" />
   </div>
 </template>

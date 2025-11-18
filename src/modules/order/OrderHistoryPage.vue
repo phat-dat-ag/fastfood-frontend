@@ -14,6 +14,7 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import HeaderCard from '../../components/HeaderCard.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -51,14 +52,15 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div class="mx-auto space-y-8">
+    <div v-if="orderResponse" class="mx-auto space-y-8">
         <HeaderCard title="Lịch sử mua hàng"
             description="Tại đây bạn có thể xem tất cả các đơn gồm đã giao thành công, đã hủy."
             buttonLabel="Làm mới danh sách" :onClick="loadOrders" />
-        <div v-if="orderResponse">
+        <div>
             <OrderHistoryTable :orders="orderResponse.orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
+    <EmptyPage v-else />
 </template>

@@ -16,6 +16,7 @@ import { ORDER_STATUS } from '../../constants/order-status';
 import CheckoutModal from '../cart/components/CheckoutModal.vue';
 import OrderCustomerInformation from './components/OrderCustomerInformation.vue';
 import OrderInvoiceSummary from './components/OrderInvoiceSummary.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const order = ref<Order | null>(null);
 
@@ -102,6 +103,7 @@ async function handleCancelOrder(order: Order) {
             </section>
         </div>
     </div>
+    <EmptyPage v-else />
     <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>
 

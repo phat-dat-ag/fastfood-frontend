@@ -15,6 +15,7 @@ import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
 import OrderTimeline from './components/OrderTimeline.vue';
 import OrderCustomerInformation from './components/OrderCustomerInformation.vue';
 import OrderInvoiceSummary from './components/OrderInvoiceSummary.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const order = ref<Order | null>(null);
 
@@ -114,6 +115,7 @@ async function handleCancelOrder(orderId: number) {
             </section>
         </div>
     </div>
+    <EmptyPage v-else />
 </template>
 
 <style lang="postcss" scoped src="../../styles/order-modal.css"></style>

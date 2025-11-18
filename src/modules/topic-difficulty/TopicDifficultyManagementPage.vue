@@ -17,6 +17,7 @@ import { getTopicBySlug } from '../../service/topic.service';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 
@@ -180,46 +181,48 @@ async function handlePageChange(page: number) {
             Quản lý độ khó của chủ đề
         </h2>
 
-        <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-            @update:filter="handleFilterChange" />
+        <div v-if="topic && topicDifficultyResponse">
+            <div
+                class="bg-white/90 border border-orange-200 rounded-2xl shadow-md p-6 hover:shadow-lg transition-all duration-300">
+                <div class="bg-gradient-to-r from-orange-500 to-amber-400 text-white rounded-xl px-5 py-3 mb-5">
+                    <h2 class="text-xl font-semibold tracking-wide drop-shadow-sm">
+                        Chủ đề: {{ topic.name }}
+                    </h2>
+                </div>
 
-        <div v-if="topic"
-            class="bg-white/90 border border-orange-200 rounded-2xl shadow-md p-6 hover:shadow-lg transition-all duration-300">
-
-            <div class="bg-gradient-to-r from-orange-500 to-amber-400 text-white rounded-xl px-5 py-3 mb-5">
-                <h2 class="text-xl font-semibold tracking-wide drop-shadow-sm">
-                    Chủ đề: {{ topic.name }}
-                </h2>
+                <div>
+                    <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-1">
+                        Mô tả chủ đề
+                    </p>
+                    <p
+                        class="text-gray-700 leading-relaxed whitespace-pre-line bg-orange-50/50 rounded-xl p-4 border border-orange-100">
+                        {{ topic.description }}
+                    </p>
+                </div>
             </div>
+
+            <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+                @update:filter="handleFilterChange" />
 
             <div>
-                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                    Mô tả chủ đề
-                </p>
-                <p
-                    class="text-gray-700 leading-relaxed whitespace-pre-line bg-orange-50/50 rounded-xl p-4 border border-orange-100">
-                    {{ topic.description }}
-                </p>
+                <TopicDifficultyTable :topicDifficulties="topicDifficultyResponse.topicDifficulties"
+                    :openCreateTopicDifficultyModal="openCreateTopicDifficultyModal"
+                    :openUpdateTopicDifficultyModal="openUpdateTopicDifficultyModal"
+                    :handleDeleteTopicDifficulty="handleDeleteTopicDifficulty"
+                    :goToAwardManagementPage="goToAwardManagementPage"
+                    :goToQuestionManagementPage="goToQuestionManagementPage"
+                    @activate-topic-difficulty="handleActivateTopicDifficulty"
+                    @deactivate-topic-difficulty="handleDeactivateTopicDifficulty" />
+
+                <Pagination :totalItem="topicDifficultyResponse.totalItems" :pageSize="topicDifficultyResponse.pageSize"
+                    :currentPage="topicDifficultyResponse.currentPage" @change-page="handlePageChange" />
+
+                <TopicDifficultyModal v-if="isTopicDifficultyModalVisible"
+                    :isCreatingTopicDifficulty="isCreatingTopicDifficulty"
+                    @create-topic-difficulty="handleCreateTopicDifficulty" @update-topic-difficulty="handleUpdateTopic"
+                    @close="isTopicDifficultyModalVisible = false" />
             </div>
         </div>
-
-        <div v-if="topicDifficultyResponse">
-            <TopicDifficultyTable :topicDifficulties="topicDifficultyResponse.topicDifficulties"
-                :openCreateTopicDifficultyModal="openCreateTopicDifficultyModal"
-                :openUpdateTopicDifficultyModal="openUpdateTopicDifficultyModal"
-                :handleDeleteTopicDifficulty="handleDeleteTopicDifficulty"
-                :goToAwardManagementPage="goToAwardManagementPage"
-                :goToQuestionManagementPage="goToQuestionManagementPage"
-                @activate-topic-difficulty="handleActivateTopicDifficulty"
-                @deactivate-topic-difficulty="handleDeactivateTopicDifficulty" />
-
-            <Pagination :totalItem="topicDifficultyResponse.totalItems" :pageSize="topicDifficultyResponse.pageSize"
-                :currentPage="topicDifficultyResponse.currentPage" @change-page="handlePageChange" />
-
-            <TopicDifficultyModal v-if="isTopicDifficultyModalVisible"
-                :isCreatingTopicDifficulty="isCreatingTopicDifficulty"
-                @create-topic-difficulty="handleCreateTopicDifficulty" @update-topic-difficulty="handleUpdateTopic"
-                @close="isTopicDifficultyModalVisible = false" />
-        </div>
+        <EmptyPage v-else />
     </div>
 </template>

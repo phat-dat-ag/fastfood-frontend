@@ -11,6 +11,7 @@ import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
 import HeaderCard from '../../components/HeaderCard.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const historyQuizzes = ref<Quiz[]>([]);
 async function loadHistoryQuizzes() {
@@ -39,11 +40,12 @@ function handleViewChallengeHistoryDetail(quizId: number) {
 onMounted(loadHistoryQuizzes);
 </script>
 <template>
-    <div class="mx-auto space-y-8">
+    <div v-if="historyQuizzes.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Lịch sử tham gia thách thức"
             description="Tại đây bạn có thể xem tất cả thách thức đã tham gia." buttonLabel="Làm mới"
             :onClick="loadHistoryQuizzes" />
         <ChallengeHistoryTable :quizzes="historyQuizzes"
             :handleViewChallengeHistoryDetail="handleViewChallengeHistoryDetail" />
     </div>
+    <EmptyPage v-else />
 </template>

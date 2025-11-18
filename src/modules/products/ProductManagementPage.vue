@@ -17,6 +17,7 @@ import { useRoute } from 'vue-router';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const categories = ref<Category[]>([]);
 
@@ -172,10 +173,10 @@ async function handlePageChange(page: number) {
     <h2 class="text-2xl font-semibold text-orange-500">
       Quản lý sản phẩm
     </h2>
-    <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
-      @update:filter="handleFilterChange" />
 
     <div v-if="productResponse">
+      <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
+        @update:filter="handleFilterChange" />
 
       <ProductTable :products="productResponse.products" :openCreateProductModal="openCreateProductModal"
         :openUpdateProductModal="openUpdateProductModal" :handleDeleteProduct="handleDeleteProduct"
@@ -184,9 +185,10 @@ async function handlePageChange(page: number) {
       <Pagination :totalItem="productResponse.totalItems" :pageSize="productResponse.pageSize"
         :currentPage="productResponse.currentPage" @change-page="handlePageChange" />
 
-      <ProductModal v-if="isProductModalVisible" :isCreatingProduct="isCreatingProduct" :categories="categories"
-        @close="isProductModalVisible = false" @create-product="handleCreateProduct"
-        @update-product="handleUpdateProduct" />
     </div>
+    <EmptyPage v-else />
+    <ProductModal v-if="isProductModalVisible" :isCreatingProduct="isCreatingProduct" :categories="categories"
+      @close="isProductModalVisible = false" @create-product="handleCreateProduct"
+      @update-product="handleUpdateProduct" />
   </div>
 </template>

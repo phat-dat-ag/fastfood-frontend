@@ -8,6 +8,7 @@ import { getAllReviewsByProduct } from '../../service/review.service';
 import { ALL_PRODUCT_REVIEW_MESSAGE } from '../../constants/messages';
 import ProductReviewList from './components/ProductReviewList.vue';
 import HeaderCard from '../../components/HeaderCard.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,6 +41,7 @@ onMounted(() => {
 <template>
     <div v-if="reviews.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Đánh giá sản phẩm" description="Các đánh giá về sản phẩm tại đây" />
-        <ProductReviewList v-if="reviews.length > 0" :reviews="reviews" :showViewAllButton="false" />
+        <ProductReviewList :reviews="reviews" :showViewAllButton="false" />
     </div>
+    <EmptyPage v-else />
 </template>

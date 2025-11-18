@@ -15,6 +15,7 @@ import { ROUTE_NAMES } from '../../constants/route-names';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import EmptyPage from '../../components/EmptyPage.vue';
 
 const topicResponse = ref<TopicResponse | null>(null);
 
@@ -154,7 +155,6 @@ async function handlePageChange(page: number) {
             Quản lý chủ đề trò chơi
         </h2>
         <div v-if="topicResponse">
-
             <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
                 @update:filter="handleFilterChange" />
 
@@ -169,5 +169,6 @@ async function handlePageChange(page: number) {
             <TopicModal v-if="isTopicModalVisible" :isCreatingTopic="isCreatingTopic" @create-topic="handleCreateTopic"
                 @update-topic="handleUpdateTopic" @close="isTopicModalVisible = false" />
         </div>
+        <EmptyPage v-else />
     </div>
 </template>
