@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_HISTORY_MESSAGE } from '../../constants/messages';
 import { getAllOrderHistory } from '../../service/order.service';
@@ -14,6 +13,7 @@ import OrderHistoryTable from './components/tables/OrderHistoryTable.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -51,17 +51,10 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div class="mx-auto space-y-6">
-        <div
-            class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold drop-shadow-md">Lịch sử mua hàng</h1>
-                <p class="text-white/90 mt-1">Tại đây bạn có thể xem tất cả các đơn gồm đã giao thành công, đã hủy.</p>
-            </div>
-            <div class="w-[20%]">
-                <PrimaryButton label="Làm mới" :onClick="loadOrders" />
-            </div>
-        </div>
+    <div class="mx-auto space-y-8">
+        <HeaderCard title="Lịch sử mua hàng"
+            description="Tại đây bạn có thể xem tất cả các đơn gồm đã giao thành công, đã hủy."
+            buttonLabel="Làm mới danh sách" :onClick="loadOrders" />
         <div v-if="orderResponse">
             <OrderHistoryTable :orders="orderResponse.orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"

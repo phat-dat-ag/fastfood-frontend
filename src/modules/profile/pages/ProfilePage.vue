@@ -18,6 +18,7 @@ import { openConfirmDeleteMessage } from '../../../utils/confirmation.utils';
 import AvatarSection from '../components/AvatarSection.vue';
 import UserInforSection from '../components/UserInforSection.vue';
 import AddressSection from '../components/AddressSection.vue';
+import HeaderCard from '../../../components/HeaderCard.vue';
 
 const router = useRouter();
 
@@ -133,14 +134,9 @@ async function handleDeleteAddress(id: number) {
 
 </script>
 <template>
-    <div class="w-[80%] mx-auto space-y-4">
-        <div class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg">
-            <h1 class="text-3xl font-bold drop-shadow-md">
-                Xin chào
-                <span class="text-yellow-200">{{ userStore.user?.name || "Không xác định" }}</span> 👋
-            </h1>
-            <p class="text-white/90 mt-2">Tại đây bạn có thể quản lý thông tin cá nhân của mình!</p>
-        </div>
+    <div class="mx-auto space-y-8">
+        <HeaderCard :title="`Xin chào ${userStore.user?.name || 'Không xác định'}`"
+            description="Quản lý thông tin cá nhân của bạn tại đây" />
 
         <AvatarSection :avatarImage="avatarImage" :avatarFile="avatarFile" :onImageChange="onImageChange"
             @update-avatar="handleUpdateAvatar" />

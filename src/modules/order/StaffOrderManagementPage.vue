@@ -5,7 +5,6 @@ import { cancelOrderByStaff, getAllUnfinishedOrders } from '../../service/order.
 import { onMounted, ref } from 'vue';
 import type { Order, OrderResponse } from '../../types/order.types';
 import StaffOrderTable from './components/tables/StaffOrderTable.vue';
-import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
 import { useUserStore } from '../../store/useUserStore.store';
 import { useRouter } from 'vue-router';
@@ -15,6 +14,7 @@ import { notifyError } from '../../utils/notification.utils';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -64,17 +64,9 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div class="mx-auto space-y-6">
-        <div
-            class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold drop-shadow-md">📦 Quản lý đơn hàng</h1>
-                <p class="text-white/90 mt-1">Theo dõi, cập nhật và quản lý đơn hàng tại đây!</p>
-            </div>
-            <div class="w-[20%]">
-                <PrimaryButton label="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
-            </div>
-        </div>
+    <div class="mx-auto space-y-8">
+        <HeaderCard title="Quản lý đơn hàng" description="Theo dõi, cập nhật và quản lý đơn hàng tại đây!"
+            buttonLabel="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
         <div v-if="orderResponse">
             <StaffOrderTable :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
                 :handleCancelOrder="handleCancelOrder" />

@@ -7,6 +7,7 @@ import type { Review } from '../../types/review.types';
 import { getAllReviewsByProduct } from '../../service/review.service';
 import { ALL_PRODUCT_REVIEW_MESSAGE } from '../../constants/messages';
 import ProductReviewList from './components/ProductReviewList.vue';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -37,13 +38,8 @@ onMounted(() => {
 })
 </script>
 <template>
-    <div class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg">
-        <div>
-            <h1 class="text-3xl font-bold drop-shadow-md">Đánh giá sản phẩm</h1>
-            <p class="text-white/90 mt-1">Các đánh giá về sản phẩm tại đây</p>
-        </div>
-    </div>
-    <div class="mt-4">
+    <div v-if="reviews.length > 0" class="mx-auto space-y-8">
+        <HeaderCard title="Đánh giá sản phẩm" description="Các đánh giá về sản phẩm tại đây" />
         <ProductReviewList v-if="reviews.length > 0" :reviews="reviews" :showViewAllButton="false" />
     </div>
 </template>

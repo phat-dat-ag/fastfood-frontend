@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue';
-import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_TRACKING_MESSAGE } from '../../constants/messages';
 import { getAllActiveOrders, getPaymentIntent } from '../../service/order.service';
@@ -15,6 +14,7 @@ import CheckoutModal from '../cart/components/CheckoutModal.vue';
 import Pagination from '../../components/Pagination.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -76,17 +76,10 @@ async function handlePageChange(page: number) {
 </script>
 
 <template>
-    <div class="mx-auto space-y-6">
-        <div
-            class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold drop-shadow-md">Theo dõi đơn hàng</h1>
-                <p class="text-white/90 mt-1">Tại đây bạn có thể theo dõi các đơn hàng đang được vận chuyển đến bạn.</p>
-            </div>
-            <div class="w-[20%]">
-                <PrimaryButton label="Làm mới" :onClick="loadTrackingOrders" />
-            </div>
-        </div>
+    <div class="mx-auto space-y-8">
+        <HeaderCard title="Theo dõi đơn hàng"
+            description="Tại đây bạn có thể theo dõi các đơn hàng đang được vận chuyển." buttonLabel="Làm mới danh sách"
+            :onClick="loadTrackingOrders" />
         <div v-if="orderResponse">
             <OrderTrackingTable :orders="orderResponse.orders" :handleCheckout="handleCheckout"
                 :handleUpdateOrder="handleUpdateOrder" />

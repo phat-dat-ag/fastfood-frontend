@@ -11,6 +11,7 @@ import SecondaryButton from '../../components/buttons/SecondaryButton.vue';
 import { notifyError } from '../../utils/notification.utils';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const router = useRouter();
 
@@ -65,14 +66,8 @@ function startChallenge() {
 </script>
 <template>
     <div class="mx-auto space-y-8">
-        <div class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg">
-            <h1 class="text-3xl font-bold drop-shadow-md">
-                🎯 Thử thách thú vị cùng <span class="text-yellow-200">Aurelion Shop</span>!
-            </h1>
-            <p class="mt-2 text-white/90">
-                Tham gia ngay để nhận mã khuyến mãi hấp dẫn — chọn chủ đề bạn yêu thích và bắt đầu thôi!
-            </p>
-        </div>
+        <HeaderCard title="Thử thách thú vị cùng Aurelion Shop!"
+            description="Tham gia ngay để nhận mã khuyến mãi hấp dẫn — chọn chủ đề bạn yêu thích và bắt đầu thôi!" />
 
         <div v-if="!selectedTopic" class="w-[60%] mx-auto space-y-6 text-center">
             <h2 class="text-2xl font-semibold text-orange-600">Danh sách chủ đề:</h2>

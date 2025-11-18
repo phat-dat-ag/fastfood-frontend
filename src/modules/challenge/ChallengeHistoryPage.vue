@@ -4,13 +4,13 @@ import type { Quiz } from '../../types/quiz.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getAllReviewQuizzesByUser } from '../../service/quiz.service';
 import { CHALLENGE_HISTORY_MESSAGE } from '../../constants/messages';
-import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import ChallengeHistoryTable from './components/ChallengeHistoryTable.vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { notifyError } from '../../utils/notification.utils';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const historyQuizzes = ref<Quiz[]>([]);
 async function loadHistoryQuizzes() {
@@ -39,17 +39,10 @@ function handleViewChallengeHistoryDetail(quizId: number) {
 onMounted(loadHistoryQuizzes);
 </script>
 <template>
-    <div class="mx-auto space-y-6">
-        <div
-            class="rounded-2xl p-6 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold drop-shadow-md">Lịch sử thách thức</h1>
-                <p class="text-white/90 mt-1">Tại đây bạn có thể xem tất cả thách thức đã tham gia.</p>
-            </div>
-            <div class="w-[20%]">
-                <PrimaryButton label="Làm mới" :onClick="loadHistoryQuizzes" />
-            </div>
-        </div>
+    <div class="mx-auto space-y-8">
+        <HeaderCard title="Lịch sử tham gia thách thức"
+            description="Tại đây bạn có thể xem tất cả thách thức đã tham gia." buttonLabel="Làm mới"
+            :onClick="loadHistoryQuizzes" />
         <ChallengeHistoryTable :quizzes="historyQuizzes"
             :handleViewChallengeHistoryDetail="handleViewChallengeHistoryDetail" />
     </div>

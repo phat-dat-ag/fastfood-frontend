@@ -9,6 +9,7 @@ import type { Order } from '../../types/order.types';
 import type { ReviewCreateRequest } from '../../types/review.types';
 import ProductReviewFormItem from './components/ProductReviewFormItem.vue';
 import { createProductReview } from '../../service/review.service';
+import HeaderCard from '../../components/HeaderCard.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -75,16 +76,11 @@ async function handleSubmitReviews() {
 </script>
 
 <template>
-    <div class="mx-auto py-10 px-6">
-        <div
-            class="rounded-2xl p-6 mb-10 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 shadow-lg">
-            <h1 class="text-3xl font-bold drop-shadow-md text-center">Đánh giá đơn hàng của bạn</h1>
-            <p class="text-white/90 text-center mt-2">
-                Cảm ơn bạn đã mua hàng! Hãy chia sẻ cảm nhận của bạn để chúng tôi phục vụ tốt hơn
-            </p>
-        </div>
+    <div v-if="order" class="mx-auto space-y-8">
+        <HeaderCard title="Đánh giá đơn hàng của bạn"
+            description="Cảm ơn bạn đã mua hàng! Hãy chia sẻ cảm nhận của bạn để chúng tôi phục vụ tốt hơn" />
 
-        <div v-if="order" class="space-y-6">
+        <div class="space-y-6">
             <ProductReviewFormItem v-for="detail in order.orderDetails" :key="detail.product.id" :detail="detail"
                 :review-data="reviews[detail.product.id]"
                 @update:reviewData="(data) => handleUpdateReview(detail.product.id, data)" />
