@@ -2,14 +2,15 @@
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElCard, ElDivider } from 'element-plus';
-import type { Quiz } from '../../types/quiz.types';
-import { getQuizHistoryDetailByUser } from '../../service/quiz.service';
+import type { Quiz, QuizAddFeedbackRequest } from '../../types/quiz.types';
+import { addFeedback, getQuizHistoryDetailByUser } from '../../service/quiz.service';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { CHALLENGE_HISTORY_DETAIL_MESSAGE } from '../../constants/messages';
+import { CHALLENGE_HISTORY_DETAIL_MESSAGE, QUIZ_FEEDBACK_MESSAGE } from '../../constants/messages';
 import { notifyError } from '../../utils/notification.utils';
 import ChallengeHistoryHeader from './components/ChallengeHistoryHeader.vue';
 import ChallengeHistoryQuestions from './components/ChallengeHistoryQuestions.vue';
 import ChallengeHistoryFeedback from './components/ChallengeHistoryFeedback.vue';
+import { formatDateTimeString } from '../../utils/time.utils';
 
 const route = useRoute();
 const router = useRouter();
@@ -47,7 +48,23 @@ const withinOneDay = computed(() => {
 });
 
 async function hadnleSendFeedback(feedbackMessage: string) {
-    console.log("Feedback: ", feedbackMessage);
+    if (!quizHistory.value) {
+        notifyError("Không tìm thấy bài làm để thêm góp ý");
+        return;
+    }
+    const addFeedbackRequest: QuizAddFeedbackRequest = {
+        quizId: quizHistory.value.id,
+        feedback: feedbackMessage,
+    }
+    await useApiHandler(
+        () => addFeedback(addFeedbackRequest),
+        {
+            loading: QUIZ_FEEDBACK_MESSAGE.create,
+            error: QUIZ_FEEDBACK_MESSAGE.createError,
+        },
+        () => { },
+        loadQuizHistory
+    )
 }
 </script>
 <template>
@@ -61,7 +78,18 @@ async function hadnleSendFeedback(feedbackMessage: string) {
 
             <el-divider class="my-4" />
 
-            <ChallengeHistoryFeedback :withinOneDay="withinOneDay" @send-feedback="hadnleSendFeedback" />
+            <ChallengeHistoryFeedback v-if="!quizHistory.feedback" :withinOneDay="withinOneDay"
+                @send-feedback="hadnleSendFeedback" />
+            <div v-else class="space-y-1 text-sm">
+                <p>
+                    <span class="font-medium">Góp ý lúc:</span>
+                    {{ quizHistory.feedbackAt ? formatDateTimeString(quizHistory.feedbackAt) : "Không xác định" }}
+                </p>
+                <p>
+                    <span class="font-medium">Nội dung góp ý:</span>
+                    {{ quizHistory.feedback || "Không có nội dung" }}
+                </p>
+            </div>
         </el-card>
     </div>
 </template>

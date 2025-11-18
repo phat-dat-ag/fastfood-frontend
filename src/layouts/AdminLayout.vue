@@ -127,7 +127,7 @@ function signOut() {
                         <template #title>Đánh giá</template>
                     </el-menu-item>
 
-                    <el-menu-item index="8">
+                    <el-menu-item index="8" @click="router.push({ name: ROUTE_NAMES.ADMIN.QUIZ_FEEDBACK_MANAGEMENT })">
                         <el-icon>
                             <Document />
                         </el-icon>

@@ -92,6 +92,7 @@ export const CHALLENGE_HISTORY_MESSAGE = createEntityMessages(
 export const CHALLENGE_HISTORY_DETAIL_MESSAGE = createEntityMessages(
   "chi tiết lịch sử tham gia thử thách"
 );
+export const QUIZ_FEEDBACK_MESSAGE = createEntityMessages("góp ý trò chơi");
 export const ADMIN_DASHBOARD_MESSAGE = createEntityMessages("thống kê báo cáo");
 export const ABOUT_US_PAGE_IMAGE_MESSAGE = createEntityMessages(
   "ảnh của trang Về chúng tôi"

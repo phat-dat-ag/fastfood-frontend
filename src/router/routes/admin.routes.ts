@@ -21,6 +21,7 @@ import AdminOrderManagementPage from "../../modules/order/AdminOrderManagementPa
 import AdminDashboard from "../../modules/dashboard/AdminDashboard.vue";
 import ReviewManagementPage from "../../modules/review/ReviewManagementPage.vue";
 import AboutUseImageManagement from "../../modules/image/AboutUseImageManagement.vue";
+import QuizFeedbackManagementPage from "../../modules/quiz-feedback/QuizFeedbackManagementPage.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -124,6 +125,11 @@ export const adminRoutes = {
           component: AddQuestionsPage,
         },
       ],
+    },
+    {
+      path: "manage-quiz-feedback",
+      name: ROUTE_NAMES.ADMIN.QUIZ_FEEDBACK_MANAGEMENT,
+      component: QuizFeedbackManagementPage,
     },
     {
       path: "manage-image",

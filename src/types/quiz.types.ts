@@ -13,10 +13,17 @@ export interface Quiz {
   topicDifficulty: TopicDifficulty;
   promotion: Promotion | null;
   questions: Question[];
+  feedback: string | null;
+  feedbackAt: string | null;
 }
 
 export interface QuizSubmitRequest {
   quizId: number;
   topicDifficultySlug: string;
   quizQuestions: QuizQuestionSubmitRequest[];
+}
+
+export interface QuizAddFeedbackRequest {
+  quizId: number;
+  feedback: string;
 }
