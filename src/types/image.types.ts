@@ -22,3 +22,18 @@ export interface ImageCreateRequest {
   pageType: string;
   sectionType: string;
 }
+
+export interface ItemPromotionImage {
+  name: string;
+  url: string;
+  type: string;
+  value: number;
+  code: string;
+  startAt: string;
+  endAt: string;
+}
+
+export interface ItemPromotionImageResponse {
+  categoryPromotions: ItemPromotionImage[];
+  productPromotions: ItemPromotionImage[];
+}

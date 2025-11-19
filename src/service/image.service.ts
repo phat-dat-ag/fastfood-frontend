@@ -22,6 +22,10 @@ export const getChallengeIntroductionPageImages = () => {
   return api.get("/image/challenge-introduction");
 };
 
+export const getItemPromotionImages = () => {
+  return api.get("/image/promotion");
+};
+
 export const deleteImage = (imageId: number) => {
   return api.delete("/image", { params: { imageId } });
 };

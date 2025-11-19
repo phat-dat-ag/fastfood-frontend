@@ -100,6 +100,9 @@ export const ABOUT_US_PAGE_IMAGE_MESSAGE = createEntityMessages(
 export const CHALLENGE_INTRODUCTION_PAGE_IMAGE_MESSAGE = createEntityMessages(
   "ảnh của trang Thử thách"
 );
+export const PROMOTION_PAGE_IMAGE_MESSAGE = createEntityMessages(
+  "ảnh của trang Khuyến mãi"
+);
 export const STATS_USER = createEntityMessages(
   "thống kê các tài khoản trên hệ thống"
 );
