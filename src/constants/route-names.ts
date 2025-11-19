@@ -79,5 +79,7 @@ export const ROUTE_NAMES = {
     ADD_QUESTION_PAGE: "AddQuestionPage",
     QUIZ_FEEDBACK_MANAGEMENT: "QuizFeedbackManagement",
     ABOUT_US_IMAGE_MANAGEMENT: "AboutUsImageManagement",
+    CHALLENGE_INTRODUCTION_IMAGE_MANAGEMENT:
+      "ChallengeIntroductionImageManagement",
   },
 } as const;

@@ -146,12 +146,8 @@ function signOut() {
                             Trang Về chúng tôi
                         </el-menu-item>
                         <el-menu-item index="9-2"
-                            @click="router.push({ name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT })">
+                            @click="router.push({ name: ROUTE_NAMES.ADMIN.CHALLENGE_INTRODUCTION_IMAGE_MANAGEMENT })">
                             Trang Thử thách
-                        </el-menu-item>
-                        <el-menu-item index="9-3"
-                            @click="router.push({ name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT })">
-                            Trang hợp tác
                         </el-menu-item>
                     </el-sub-menu>
                 </el-menu>

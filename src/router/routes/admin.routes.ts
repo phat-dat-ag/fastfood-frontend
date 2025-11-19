@@ -22,6 +22,7 @@ import AdminDashboard from "../../modules/dashboard/AdminDashboard.vue";
 import ReviewManagementPage from "../../modules/review/ReviewManagementPage.vue";
 import AboutUseImageManagement from "../../modules/image/AboutUseImageManagement.vue";
 import QuizFeedbackManagementPage from "../../modules/quiz-feedback/QuizFeedbackManagementPage.vue";
+import ChallengeIntroductionImageManagement from "../../modules/image/ChallengeIntroductionImageManagement.vue";
 
 export const adminRoutes = {
   path: "/admin",
@@ -132,9 +133,14 @@ export const adminRoutes = {
       component: QuizFeedbackManagementPage,
     },
     {
-      path: "manage-image",
+      path: "manage-image/about-us-page",
       name: ROUTE_NAMES.ADMIN.ABOUT_US_IMAGE_MANAGEMENT,
       component: AboutUseImageManagement,
+    },
+    {
+      path: "manage-image/challenge-introduction-page",
+      name: ROUTE_NAMES.ADMIN.CHALLENGE_INTRODUCTION_IMAGE_MANAGEMENT,
+      component: ChallengeIntroductionImageManagement,
     },
   ],
 };
