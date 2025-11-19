@@ -32,29 +32,42 @@ const productPromotions = [
 </script>
 
 <template>
-    <div class="min-h-screen text-gray-800">
-        <section class="text-center py-16">
-            <h1 class="text-3xl font-bold text-amber-600 mb-4">🎉 ƯU ĐÃI KHỦNG – NHẬN NGAY HÔM NAY!</h1>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+    <div class="text-gray-800">
+        <section class="text-center py-10 md:py-14 lg:py-10">
+            <h1 class="text-2xl md:text-3xl font-bold text-amber-600 mb-3 md:mb-4">
+                🎉 ƯU ĐÃI KHỦNG – NHẬN NGAY HÔM NAY!
+            </h1>
+            <p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-4">
                 Aurelion Shop luôn mang đến cho bạn những chương trình khuyến mãi hấp dẫn nhất —
                 từ món ăn, danh mục đến hóa đơn! Hãy tận dụng cơ hội để thưởng thức hương vị tuyệt vời với giá siêu ưu
                 đãi ✨
             </p>
         </section>
 
-        <section class="py-12 bg-gradient-to-r from-amber-100 to-orange-50">
+        <section class="py-10 md:py-14 lg:py-12 bg-gradient-to-r from-amber-100 to-orange-50">
             <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-10 text-amber-700">
+                <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-10 text-amber-700">
                     🔥 Khuyến mãi theo Hóa đơn
                 </h2>
-                <el-carousel :interval="4000" height="300px" arrow="always">
-                    <el-carousel-item v-for="(promo, i) in billPromotions" :key="i" class="rounded-2xl overflow-hidden">
-                        <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md h-full">
-                            <img :src="promo.image" alt="Bill promotion" class="w-full md:w-1/2 h-full object-cover" />
-                            <div class="flex flex-col justify-center p-6 text-left">
-                                <h3 class="text-2xl font-semibold text-amber-700 mb-2">{{ promo.title }}</h3>
-                                <p class="text-gray-600 mb-3">{{ promo.desc }}</p>
-                                <div class="text-sm bg-amber-600 text-white px-4 py-2 rounded-full w-fit font-semibold">
+
+                <el-carousel :interval="4000" arrow="always" height="320px"
+                    class="sm:!h-80 md:!h-[380px] lg:!h-[360px]">
+                    <el-carousel-item v-for="(promo, i) in billPromotions" :key="i" class="rounded-xl overflow-hidden">
+                        <div class="flex flex-col md:flex-row bg-white rounded-xl shadow-md h-full">
+                            <img :src="promo.image" alt="Bill promotion"
+                                class="w-full md:w-1/2 h-40 sm:h-48 md:h-auto object-cover flex-shrink-0" />
+
+                            <div class="flex flex-col justify-center p-4 md:p-6 text-left flex-1 overflow-hidden">
+                                <h3 class="text-xl md:text-2xl font-semibold text-amber-700 leading-tight mb-2">
+                                    {{ promo.title }}
+                                </h3>
+
+                                <p class="text-sm md:text-base text-gray-600 mb-3 leading-snug">
+                                    {{ promo.desc }}
+                                </p>
+
+                                <div
+                                    class="text-sm bg-amber-600 text-white px-4 py-2 rounded-full w-fit font-semibold shadow">
                                     Mã: {{ promo.code }}
                                 </div>
                             </div>
@@ -64,32 +77,38 @@ const productPromotions = [
             </div>
         </section>
 
-        <section class="max-w-6xl mx-auto px-4 py-16">
-            <h2 class="text-3xl font-bold text-center mb-10 text-amber-700">
+        <section class="max-w-6xl mx-auto px-4 py-10 md:py-14 lg:py-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-10 text-amber-700">
                 🍗 Khuyến mãi theo Danh mục
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
                 <div v-for="(promo, i) in categoryPromotions" :key="i"
-                    class="rounded-2xl overflow-hidden shadow hover:shadow-lg transition">
-                    <img :src="promo.img" alt="Category promotion" class="w-full h-64 object-cover" />
-                    <div class="p-6 text-center">
-                        <h3 class="text-xl font-semibold text-amber-700 mb-2">{{ promo.title }}</h3>
+                    class="rounded-xl overflow-hidden shadow hover:shadow-lg transition">
+                    <img :src="promo.img" alt="Category promotion" class="w-full h-48 md:h-64 object-cover" />
+                    <div class="p-4 md:p-6 text-center">
+                        <h3 class="text-lg md:text-xl font-semibold text-amber-700 mb-2">
+                            {{ promo.title }}
+                        </h3>
                         <p class="text-gray-600">{{ promo.desc }}</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="max-w-6xl mx-auto px-4 py-16">
-            <h2 class="text-3xl font-bold text-center mb-10 text-amber-700">
+        <section class="max-w-6xl mx-auto px-4 py-10 md:py-14 lg:py-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-10 text-amber-700">
                 🍕 Khuyến mãi theo Món ăn
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
                 <div v-for="(promo, i) in productPromotions" :key="i"
-                    class="rounded-2xl overflow-hidden shadow hover:shadow-lg transition">
-                    <img :src="promo.img" alt="Product promotion" class="w-full h-64 object-cover" />
-                    <div class="p-6 text-center">
-                        <h3 class="text-xl font-semibold text-amber-700 mb-2">{{ promo.title }}</h3>
+                    class="rounded-xl overflow-hidden shadow hover:shadow-lg transition">
+                    <img :src="promo.img" alt="Product promotion" class="w-full h-48 md:h-64 object-cover" />
+                    <div class="p-4 md:p-6 text-center">
+                        <h3 class="text-lg md:text-xl font-semibold text-amber-700 mb-2">
+                            {{ promo.title }}
+                        </h3>
                         <p class="text-gray-600">{{ promo.desc }}</p>
                     </div>
                 </div>
