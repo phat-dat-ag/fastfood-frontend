@@ -2,22 +2,33 @@
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES } from '../../constants/route-names';
 import { onMounted, onUnmounted, ref } from 'vue';
+import type { ChallengeIntroductionImage, Image } from '../../types/image.types';
+import { useApiHandler } from '../../composables/useApiHandler';
+import { getChallengeIntroductionPageImages } from '../../service/image.service';
+import { CHALLENGE_INTRODUCTION_PAGE_IMAGE_MESSAGE } from '../../constants/messages';
 
 const router = useRouter();
-
-const heroImages = [
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619383/Yone_sqkrmp.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619381/AurelionSol_z7hsub.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619383/sejuani_ysltlj.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619382/nautilus_sybstb.jpg',
-    'https://res.cloudinary.com/dfsdlsfbv/image/upload/v1760619382/poro_q88uuy.webp',
-]
 
 const difficulties = [
     { name: 'Dễ', desc: 'Khởi động nhẹ nhàng, vui vẻ.', icon: '🥪', reward: 'Mã giảm giá từ 10%' },
     { name: 'Trung bình', desc: 'Thử thách vừa phải, thú vị.', icon: '🍟', reward: 'Mã giảm giá từ 20%' },
     { name: 'Khó', desc: 'Đòi hỏi tốc độ và sự tập trung cao độ!', icon: '🍔', reward: 'Mã giảm giá từ 40%' },
 ]
+
+const carouselImages = ref<Image[]>([]);
+
+async function loadChallengeIntroductionImages() {
+    await useApiHandler<ChallengeIntroductionImage>(
+        getChallengeIntroductionPageImages,
+        {
+            loading: CHALLENGE_INTRODUCTION_PAGE_IMAGE_MESSAGE.get,
+            error: CHALLENGE_INTRODUCTION_PAGE_IMAGE_MESSAGE.getError,
+        },
+        (data: ChallengeIntroductionImage) => carouselImages.value = data.carouselImages
+    );
+}
+
+onMounted(loadChallengeIntroductionImages);
 
 const carouselHeight = ref("400px");
 const updateCarouselHeight = () => {
@@ -41,10 +52,12 @@ onUnmounted(() => {
 <template>
     <div>
         <section class="relative">
-            <el-carousel :interval="4000" type="card" :height="carouselHeight" indicator-position="outside"
-                arrow="always" class="transparent-carousel">
-                <el-carousel-item v-for="(img, index) in heroImages" :key="index" class="rounded-2xl overflow-hidden">
-                    <img :src="img" alt="Promo slide" class="w-full h-full object-cover rounded-2xl shadow-lg" />
+            <el-carousel v-if="carouselImages.length > 0" :interval="4000" type="card" :height="carouselHeight"
+                indicator-position="outside" arrow="always" class="transparent-carousel">
+                <el-carousel-item v-for="(img, index) in carouselImages" :key="index"
+                    class="rounded-2xl overflow-hidden">
+                    <img :src="img.url" :alt="img.alternativeText"
+                        class="w-full h-full object-cover rounded-2xl shadow-lg" />
                 </el-carousel-item>
             </el-carousel>
         </section>

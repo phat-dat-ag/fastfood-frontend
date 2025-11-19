@@ -18,6 +18,10 @@ export const getAboutUsPageImages = () => {
   return api.get("/image/about-us");
 };
 
+export const getChallengeIntroductionPageImages = () => {
+  return api.get("/image/challenge-introduction");
+};
+
 export const deleteImage = (imageId: number) => {
   return api.delete("/image", { params: { imageId } });
 };

@@ -12,6 +12,10 @@ export interface AboutUsPageImage {
   missionImages: Image[];
 }
 
+export interface ChallengeIntroductionImage {
+  carouselImages: Image[];
+}
+
 export interface ImageCreateRequest {
   imageFile: File;
   alternativeText: string;
