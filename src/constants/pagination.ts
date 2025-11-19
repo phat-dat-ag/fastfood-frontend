@@ -24,4 +24,5 @@ export const PAGE_SIZE = {
   AWARD: 4,
   QUESTION: 4,
   QUIZ_FEEDBACK: 4,
+  QUIZ_HISTORY: 5,
 } as const;

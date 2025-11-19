@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApiHandler } from "../../composables/useApiHandler";
 import { getQuiz, submitQuiz } from "../../service/quiz.service";
@@ -46,6 +46,10 @@ async function loadQuiz() {
 
 let timer: number | null = null;
 
+function clearTimeout() {
+  if (timer) clearInterval(timer);
+}
+
 onMounted(() => {
   loadQuiz();
   timer = setInterval(async () => {
@@ -62,6 +66,8 @@ onMounted(() => {
     remainingTime.value--;
   }, 1000);
 });
+
+onUnmounted(clearTimeout);
 
 const questionCount = computed<number>(() => {
   if (!quiz.value) return 0;
@@ -112,7 +118,7 @@ async function handleSubmitQuiz() {
       loading: "Đang nộp bài",
       error: "Lỗi nộp bài"
     },
-    (data: Quiz) => handleQuizResult(data),
+    (data: Quiz) => { handleQuizResult(data), clearTimeout() },
   )
 }
 

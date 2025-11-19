@@ -16,8 +16,8 @@ export const submitQuiz = (quizSubmitRequest: QuizSubmitRequest) => {
 export const addFeedback = (addFeedbackRequest: QuizAddFeedbackRequest) => {
   return api.put("/quiz", addFeedbackRequest);
 };
-export const getAllReviewQuizzesByUser = () => {
-  return api.get("/quiz/by-user");
+export const getAllReviewQuizzesByUser = (request: PageRequest) => {
+  return api.get("/quiz/by-user", { params: request });
 };
 
 export const getQuizHistoryDetailByUser = (quizId: number) => {
