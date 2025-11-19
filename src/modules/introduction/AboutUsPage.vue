@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import type { AboutUsPageImage, Image } from '../../types/image.types';
 import { getAboutUsPageImages } from '../../service/image.service';
@@ -24,13 +24,31 @@ async function loadAboutUsImages() {
     );
 }
 
-onMounted(loadAboutUsImages);
+const carouselHeight = ref("400px");
+const updateCarouselHeight = () => {
+    const w = window.innerWidth;
+
+    if (w < 480) carouselHeight.value = "100px";
+    else if (w < 1024) carouselHeight.value = "200px";
+    else carouselHeight.value = "400px";
+};
+
+onMounted(async () => {
+    await loadAboutUsImages();
+    updateCarouselHeight();
+    window.addEventListener("resize", updateCarouselHeight);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", updateCarouselHeight);
+});
 </script>
 
 <template>
     <div class="space-y-16">
         <section v-if="carouselImages.length > 0" class="relative">
-            <el-carousel :interval="4000" type="card" height="400px" indicator-position="outside" arrow="always">
+            <el-carousel :interval="4000" type="card" :height="carouselHeight" indicator-position="outside"
+                arrow="always">
                 <el-carousel-item v-for="(img, index) in carouselImages" :key="index"
                     class="rounded-2xl overflow-hidden">
                     <img :src="img.url" :alt="img.alternativeText" class="w-full h-full object-cover rounded-2xl" />

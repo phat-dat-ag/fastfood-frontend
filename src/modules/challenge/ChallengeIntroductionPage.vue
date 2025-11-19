@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES } from '../../constants/route-names';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const router = useRouter();
 
@@ -17,13 +18,31 @@ const difficulties = [
     { name: 'Trung bình', desc: 'Thử thách vừa phải, thú vị.', icon: '🍟', reward: 'Mã giảm giá từ 20%' },
     { name: 'Khó', desc: 'Đòi hỏi tốc độ và sự tập trung cao độ!', icon: '🍔', reward: 'Mã giảm giá từ 40%' },
 ]
+
+const carouselHeight = ref("400px");
+const updateCarouselHeight = () => {
+    const w = window.innerWidth;
+
+    if (w < 480) carouselHeight.value = "100px";
+    else if (w < 1024) carouselHeight.value = "200px";
+    else carouselHeight.value = "400px";
+};
+
+onMounted(() => {
+    updateCarouselHeight();
+    window.addEventListener("resize", updateCarouselHeight);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", updateCarouselHeight);
+});
 </script>
 
 <template>
     <div>
         <section class="relative">
-            <el-carousel :interval="4000" type="card" height="400px" indicator-position="outside" arrow="always"
-                class="transparent-carousel">
+            <el-carousel :interval="4000" type="card" :height="carouselHeight" indicator-position="outside"
+                arrow="always" class="transparent-carousel">
                 <el-carousel-item v-for="(img, index) in heroImages" :key="index" class="rounded-2xl overflow-hidden">
                     <img :src="img" alt="Promo slide" class="w-full h-full object-cover rounded-2xl shadow-lg" />
                 </el-carousel-item>
