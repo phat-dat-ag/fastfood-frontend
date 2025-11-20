@@ -37,25 +37,27 @@ const totalScore = computed(() => {
                 </span>
             </p>
 
-            <p class="text-gray-500 text-sm mt-1">
-                ⏱ <span class="font-medium">{{ props.quizHistory.topicDifficulty.duration }} giây</span>
-                • 🧩 <span class="font-medium">
-                    {{ props.quizHistory.topicDifficulty.questionCount }} câu hỏi
-                </span>
-                • 🎯 Điểm cần đạt:
-                <span class="font-medium">{{ props.quizHistory.topicDifficulty.minCorrectToReward }}</span>
-            </p>
+            <div
+                class="text-gray-500 text-sm mt-1 flex flex-col lg:flex-row lg:flex-wrap lg:items-center gap-1 lg:gap-2">
+                <div>⏱ <span class="font-medium">{{ props.quizHistory.topicDifficulty.duration }} giây</span></div>
+                <div class="hidden lg:block">•</div>
+                <div>🧩 <span class="font-medium">{{ props.quizHistory.topicDifficulty.questionCount }} câu hỏi</span>
+                </div>
+                <div class="hidden lg:block">•</div>
+                <div>🎯 Điểm cần đạt:
+                    <span class="font-medium">{{ props.quizHistory.topicDifficulty.minCorrectToReward }}</span>
+                </div>
+            </div>
 
-            <p class="text-gray-500 text-sm">
-                🕒 Bắt đầu:
-                <span class="font-medium">
-                    {{ formatDateTimeString(props.quizHistory.startedAt) }}
-                </span>
-                • Nộp bài:
-                <span class="font-medium">
-                    {{ formatDateTimeString(props.quizHistory.completedAt) }}
-                </span>
-            </p>
+            <div class="text-gray-500 text-sm flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2">
+                <div>🕒 Bắt đầu:
+                    <span class="font-medium">{{ formatDateTimeString(props.quizHistory.startedAt) }}</span>
+                </div>
+                <div class="hidden lg:block">•</div>
+                <div>🕒 Nộp bài:
+                    <span class="font-medium">{{ formatDateTimeString(props.quizHistory.completedAt || "") }}</span>
+                </div>
+            </div>
         </div>
 
         <div class="flex flex-col md:items-end gap-4">

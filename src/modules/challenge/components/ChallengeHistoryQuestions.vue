@@ -73,7 +73,7 @@ function answerClasses(answer: Answer) {
                         </div>
 
                         <div v-if="question.audioUrl" class="mt-3">
-                            <audio :src="question.audioUrl" controls></audio>
+                            <audio :src="question.audioUrl" controls class="w-full max-w-full"></audio>
                         </div>
                     </div>
 

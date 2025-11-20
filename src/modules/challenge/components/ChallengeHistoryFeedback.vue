@@ -33,7 +33,7 @@ function submitFeedback() {
         <div v-if="feedbackErrors" class="text-sm text-red-600 mt-2">{{ feedbackErrors }}</div>
 
         <div class="flex items-center justify-end gap-3 mt-3">
-            <div class="w-[12%]">
+            <div class="w-full lg:w-[12%]">
                 <PrimaryButton label="Gửi góp ý" :onclick="() => submitFeedback()" />
             </div>
         </div>
