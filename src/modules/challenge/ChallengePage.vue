@@ -66,30 +66,31 @@ function startChallenge() {
 }
 </script>
 <template>
-    <div v-if="displayableTopics.length > 0" class="mx-auto space-y-8">
+    <div v-if="displayableTopics.length > 0" class="mx-auto space-y-8 px-4 sm:px-6 md:px-8 lg:px-0">
         <HeaderCard title="Thử thách thú vị cùng Aurelion Shop!"
             description="Tham gia ngay để nhận mã khuyến mãi hấp dẫn — chọn chủ đề bạn yêu thích và bắt đầu thôi!" />
 
-        <div v-if="!selectedTopic" class="w-[60%] mx-auto space-y-6 text-center">
+        <div v-if="!selectedTopic" class="w-full sm:w-[80%] md:w-[70%] lg:w-[60%] mx-auto space-y-6 text-center">
             <h2 class="text-2xl font-semibold text-orange-600">Danh sách chủ đề:</h2>
             <div class="flex flex-col space-y-2">
-                <button v-for="topic in displayableTopics" :key="topic.id" @click="handleSelectTopic(topic)"
-                    class="text-left px-5 py-3 rounded-xl border border-orange-200 bg-white shadow-sm hover:bg-orange-50 hover:scale-[1.02] transition-all text-center">
+                <button v-for="topic in displayableTopics" :key="topic.id" @click="handleSelectTopic(topic)" class="px-5 py-4 rounded-xl border border-orange-200 bg-white shadow-sm 
+                           hover:bg-orange-50 hover:scale-[1.02] transition-all
+                           text-center text-lg md:text-xl font-semibold text-orange-600">
                     <span class="text-orange-600 font-semibold text-lg">{{ topic.name }}</span>
                 </button>
             </div>
         </div>
 
         <div v-else-if="!selectedDifficulty" class="space-y-6">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center flex-wrap gap-3">
                 <h2 class="text-2xl font-bold text-orange-600">{{ selectedTopic.name }}</h2>
-                <div class="w-[12%]">
+                <div class="w-full md:w-[15%]">
                     <SecondaryButton label="Quay lại" :onClick="goBack" />
                 </div>
             </div>
 
-            <div
-                class="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-2xl p-6 shadow-md">
+            <div class="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 
+                       rounded-2xl p-4 md:p-6 shadow-md text-sm sm:text-base">
                 <p class="text-gray-700 whitespace-pre-line">
                     {{ selectedTopic.description?.slice(0, 2000) }}
                 </p>
@@ -107,7 +108,7 @@ function startChallenge() {
                         ]">
                         <div class="flex flex-col space-y-1">
                             <span class="text-lg font-semibold text-orange-600">{{ diff.name }}</span>
-                            <div class="flex flex-wrap gap-3 text-sm text-gray-700">
+                            <div class="flex flex-wrap gap-2 md:gap-3 text-sm text-gray-700">
                                 <span class="bg-orange-50 px-2 py-1 rounded-md border border-orange-200">⏱ {{
                                     diff.duration }}s</span>
                                 <span class="bg-orange-50 px-2 py-1 rounded-md border border-orange-200">❓ {{
@@ -125,15 +126,15 @@ function startChallenge() {
         </div>
 
         <div v-else class="space-y-6">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col md:flex-row justify-between items-center">
                 <h2 class="text-2xl font-bold text-orange-600">{{ selectedDifficulty.name }}</h2>
-                <div class="w-[12%]">
+                <div class="w-full md:w-[15%]">
                     <SecondaryButton label="Quay lại" :onClick="goBack" />
                 </div>
             </div>
 
-            <div
-                class="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-2xl p-6 shadow-md">
+            <div class="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 
+                       rounded-2xl p-4 md:p-6 shadow-md text-sm sm:text-base">
                 <p class="text-gray-700 mb-4 whitespace-pre-line">
                     {{ selectedDifficulty.description?.slice(0, 2000) }}
                 </p>
@@ -145,8 +146,10 @@ function startChallenge() {
             </div>
 
             <div class="text-center mt-6">
-                <button @click="startChallenge"
-                    class="px-8 py-3 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 text-white font-bold rounded-2xl shadow-md hover:scale-[1.03] transition-all">
+                <button @click="startChallenge" class="px-8 py-3 md:px-12 md:py-4
+                           bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 
+                           text-white font-bold rounded-2xl shadow-md 
+                           hover:scale-[1.03] transition-all text-lg md:text-xl">
                     Bắt đầu thử thách
                 </button>
             </div>
