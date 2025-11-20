@@ -68,12 +68,12 @@ function handleReviewOrder(orderId: number) {
 }
 </script>
 <template>
-    <div v-if="order" class="grid grid-cols-2 gap-8 text-gray-700">
+    <div v-if="order" class="grid gap-8 text-gray-700 grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
         <div class="space-y-6">
             <OrderCustomerInformation :order="order" />
             <OrderInvoiceSummary :order="order" />
         </div>
-        <section>
+        <section class="px-1 sm:px-2 md:px-4">
             <OrderTimeline :order="order" />
             <div v-if="isReviewAllowed">
                 <PrimaryButton label="Đánh giá ngay" :onClick="() => handleReviewOrder(order!.id)" />

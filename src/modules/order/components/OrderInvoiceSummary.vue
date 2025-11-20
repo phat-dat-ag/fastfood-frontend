@@ -21,8 +21,8 @@ const remainingCount = computed(() =>
     <div v-if="props.order.orderDetails.length > 0" class="space-y-3">
         <h3 class="section-title">Thông tin đơn hàng</h3>
 
-        <div class="max-h-72 overflow-y-auto pr-1 space-y-3 custom-scrollbar" v-for="orderDetail in visibleItems"
-            :key="orderDetail.product.id">
+        <div class="max-h-[unset] md:max-h-72 overflow-y-auto pr-1 space-y-3 custom-scrollbar"
+            v-for="orderDetail in visibleItems" :key="orderDetail.product.id">
             <div
                 class="flex items-center justify-between p-3 rounded-lg border border-gray-200 shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
                 <div class="flex-1">

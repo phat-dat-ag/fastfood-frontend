@@ -88,14 +88,14 @@ async function handleCancelOrder(order: Order) {
 }
 </script>
 <template>
-    <div v-if="order" class="grid grid-cols-2 gap-8 text-gray-700">
+    <div v-if="order" class="grid gap-8 text-gray-700 grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
         <div class="space-y-6">
             <OrderCustomerInformation :order="order" />
             <OrderInvoiceSummary :order="order" />
         </div>
         <div class="flex flex-col justify-between">
             <OrderTimeline :order="order" />
-            <section class="mt-5 flex flex-col gap-3">
+            <section class="px-1 sm:px-2 md:px-4 mt-5 flex flex-col gap-3">
                 <PrimaryButton v-if="canCheckout" label="Thanh toán ngay" :onClick="() => handleCheckout(order!.id)" />
                 <DeleteButton
                     v-if="!order.deliveringAt && !(order.paymentStatus === PAYMENT_STATUS.PAID && order.paymentMethod === PAYMENT_METHODS.BANK_TRANSFER)"
