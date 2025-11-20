@@ -47,11 +47,11 @@ const props = defineProps<QuizPaginationProps>();
             </div>
         </div>
 
-        <div class="flex justify-between mt-6">
-            <div class="w-[20%]">
+        <div class="flex justify-between gap-4 mt-6">
+            <div class="w-full lg:w-[20%]">
                 <PrimaryButton label="Câu trước" @click="goToQuestion(props.currentIndex - 1)" />
             </div>
-            <div class="w-[20%]">
+            <div class="w-full lg:w-[20%]">
                 <PrimaryButton label="Câu tiếp theo" @click="goToQuestion(props.currentIndex + 1)" />
             </div>
         </div>

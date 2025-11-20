@@ -20,7 +20,7 @@ function goToReview() {
 }
 </script>
 <template>
-    <ElDialog v-model="isVisible" width="500px" @close="emit('close')">
+    <ElDialog v-model="isVisible" width="80%" @close="emit('close')">
         <template #title>
             <div class="flex items-center justify-center">
                 <h2 class="text-3xl font-bold">

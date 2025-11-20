@@ -152,7 +152,7 @@ const currentQuestion = computed<Question | null>(() => {
 
 </script>
 <template>
-  <div v-if="quiz" class="grid grid-cols-[4fr_1fr] gap-4">
+  <div v-if="quiz" class="grid grid-rows lg:grid-cols-[4fr_1fr] gap-4">
     <QuizQuestion :currentQuestion="currentQuestion" :currentIndex="currentIndex" :questionCount="questionCount"
       :selectedAnswers="selectedAnswers" :goToQuestion="goToQuestion" :selectAnswer="selectAnswer" />
 
