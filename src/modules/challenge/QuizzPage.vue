@@ -37,9 +37,9 @@ async function loadQuiz() {
       }
       selectedAnswers.value = answers;
 
-      const now = new Date();
-      const expired = new Date(data.expiredAt);
-      remainingTime.value = Math.max(Math.floor((expired.getTime() - now.getTime()) / 1000), 0);
+      const now = Date.now();
+      const expired = new Date(data.expiredAt).getTime();
+      remainingTime.value = Math.max(Math.floor((expired - now) / 1000), 0);
     }
   );
 }
