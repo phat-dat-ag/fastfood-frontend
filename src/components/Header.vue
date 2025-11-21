@@ -205,7 +205,8 @@ const toggleMobileMenu = () => { isMobileMenuOpen.value = !isMobileMenuOpen.valu
         </div>
     </header>
 
-    <div v-if="isMobileMenuOpen" class="sm:hidden w-full bg-orange-600/95 shadow-lg flex flex-col gap-2 px-4 py-3">
+    <div v-if="isMobileMenuOpen"
+        class="fixed top-[68px] left-0 sm:hidden z-50 w-full bg-orange-600/95 shadow-lg flex flex-col gap-2 px-4 py-3">
         <div v-for="item in menuItems" :key="item.id" @click="navigateMenu(item.id, item.key)"
             class="text-white font-semibold py-2 px-3 rounded hover:bg-white/10">
             {{ item.label }}
