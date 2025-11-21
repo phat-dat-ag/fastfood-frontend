@@ -50,8 +50,8 @@ function clearTimeout() {
   if (timer) clearInterval(timer);
 }
 
-onMounted(() => {
-  loadQuiz();
+onMounted(async () => {
+  await loadQuiz();
   timer = setInterval(async () => {
     if (remainingTime.value === 0) {
       if (timer) clearInterval(timer);
