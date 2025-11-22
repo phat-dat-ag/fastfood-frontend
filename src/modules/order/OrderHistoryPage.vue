@@ -15,6 +15,7 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import OrderHistoryCardList from './components/OrderHistoryCardList.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -57,7 +58,14 @@ async function handlePageChange(page: number) {
             description="Tại đây bạn có thể xem tất cả các đơn gồm đã giao thành công, đã hủy."
             buttonLabel="Làm mới danh sách" :onClick="loadOrders" />
         <div>
-            <OrderHistoryTable :orders="orderResponse.orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
+            <div class="hidden lg:block">
+                <OrderHistoryTable :orders="orderResponse.orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
+            </div>
+
+            <div class="block lg:hidden">
+                <OrderHistoryCardList :orders="orderResponse.orders"
+                    :handleUpdateOrder="handleViewOrderHistoryDetail" />
+            </div>
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
         </div>

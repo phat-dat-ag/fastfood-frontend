@@ -15,6 +15,7 @@ import EmptyPage from '../../components/EmptyPage.vue';
 import Pagination from '../../components/Pagination.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
+import ChallengeHistoryCardList from './components/ChallengeHistoryCardList.vue';
 
 const historyQuizResponse = ref<QuizHistoryResponse | null>(null);
 async function loadHistoryQuizzes(page: number = 0) {
@@ -55,8 +56,15 @@ async function handlePageChange(page: number) {
         <HeaderCard title="Lịch sử tham gia thách thức"
             description="Tại đây bạn có thể xem tất cả thách thức đã tham gia." buttonLabel="Làm mới"
             :onClick="loadHistoryQuizzes" />
-        <ChallengeHistoryTable :quizzes="historyQuizResponse.quizzes"
-            :handleViewChallengeHistoryDetail="handleViewChallengeHistoryDetail" />
+        <div class="hidden lg:block">
+            <ChallengeHistoryTable :quizzes="historyQuizResponse.quizzes"
+                :handleViewChallengeHistoryDetail="handleViewChallengeHistoryDetail" />
+        </div>
+
+        <div class="block lg:hidden">
+            <ChallengeHistoryCardList :quizzes="historyQuizResponse.quizzes"
+                :handleViewChallengeHistoryDetail="handleViewChallengeHistoryDetail" />
+        </div>
         <Pagination :totalItem="historyQuizResponse.totalItems" :pageSize="historyQuizResponse.pageSize"
             :currentPage="historyQuizResponse.currentPage" @change-page="handlePageChange" />
     </div>
