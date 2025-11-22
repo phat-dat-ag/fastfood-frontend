@@ -22,6 +22,8 @@ import StaffOrderDetail from "../../modules/order/StaffOrderDetail.vue";
 import QuizzPage from "../../modules/challenge/QuizzPage.vue";
 import ChallengeHistoryPage from "../../modules/challenge/ChallengeHistoryPage.vue";
 import ChallengeHistoryDetailPage from "../../modules/challenge/ChallengeHistoryDetailPage.vue";
+import DeliveryPolicyPage from "../../components/policy/DeliveryPolicyPage.vue";
+import ChallengePolicyPage from "../../components/policy/ChallengePolicyPage.vue";
 
 export const staffRoutes = {
   path: "/staff",
@@ -134,6 +136,16 @@ export const staffRoutes = {
       path: "order-management/:orderId",
       name: ROUTE_NAMES.STAFF.ORDER_DETAIL_MANAGEMENT,
       component: StaffOrderDetail,
+    },
+    {
+      path: "delivery-policy",
+      name: ROUTE_NAMES.STAFF.DELIVERY_POLILY,
+      component: DeliveryPolicyPage,
+    },
+    {
+      path: "challenge-policy",
+      name: ROUTE_NAMES.STAFF.CHALLENGE_POLICY,
+      component: ChallengePolicyPage,
     },
   ],
 };

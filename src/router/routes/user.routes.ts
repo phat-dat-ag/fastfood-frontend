@@ -20,6 +20,8 @@ import OrderTrackingDetail from "../../modules/order/OrderTrackingDetail.vue";
 import QuizzPage from "../../modules/challenge/QuizzPage.vue";
 import ChallengeHistoryPage from "../../modules/challenge/ChallengeHistoryPage.vue";
 import ChallengeHistoryDetailPage from "../../modules/challenge/ChallengeHistoryDetailPage.vue";
+import DeliveryPolicyPage from "../../components/policy/DeliveryPolicyPage.vue";
+import ChallengePolicyPage from "../../components/policy/ChallengePolicyPage.vue";
 
 export const userRoutes = {
   path: "/user",
@@ -122,6 +124,16 @@ export const userRoutes = {
       path: "product/:productId/all-review",
       name: ROUTE_NAMES.USER.ALL_PRODUCT_REVIEWS,
       component: AllProductReviewsPage,
+    },
+    {
+      path: "delivery-policy",
+      name: ROUTE_NAMES.USER.DELIVERY_POLILY,
+      component: DeliveryPolicyPage,
+    },
+    {
+      path: "challenge-policy",
+      name: ROUTE_NAMES.USER.CHALLENGE_POLICY,
+      component: ChallengePolicyPage,
     },
   ],
 };

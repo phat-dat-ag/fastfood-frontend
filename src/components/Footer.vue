@@ -1,32 +1,64 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { STORE_LOCATION } from '../constants/location-store';
+import { useUserStore } from '../store/useUserStore.store';
+import { USER_ROLES } from '../constants/user-roles';
+import { ROUTE_NAMES } from '../constants/route-names';
+import { notifyError } from '../utils/notification.utils';
 
 const FOOTER_LINKS = {
     INFORMATION: {
         title: "Thông tin",
         items: [
-            "Tin tức",
-            "Khuyến mãi",
-            "Tuyển dụng",
-            "Nhượng quyền",
-            "Đăng ký chào hàng",
+            { label: "Tin tức", routeKey: null },
+            { label: "Khuyến mãi", routeKey: null },
+            { label: "Tuyển dụng", routeKey: null },
+            { label: "Nhượng quyền", routeKey: null },
+            { label: "Đăng ký chào hàng", routeKey: null },
         ],
     },
     SUPPORT: {
         title: "Hỗ trợ khách hàng",
         items: [
-            "Điều khoản sử dụng",
-            "Chính sách bảo mật",
-            "Chính sách giao hàng",
-            "Chăm sóc khách hàng",
-            "Chính sách thành viên",
+            { label: "Điều khoản sử dụng", routeKey: null },
+            { label: "Chính sách bảo mật", routeKey: null },
+            { label: "Chính sách giao hàng", routeKey: "DELIVERY_POLILY" },
+            { label: "Tham gia thử thách", routeKey: "CHALLENGE_POLICY" },
+            { label: "Chính sách thành viên", routeKey: null },
         ],
     },
     CHANNELS: {
         title: "Kênh liên hệ",
-        items: ["Facebook", "Instagram", "Zalo",],
+        items: [{ label: "Facebook", routeKey: null },
+        { label: "Instagram", routeKey: null },
+        { label: "Zalo", routeKey: null },],
     },
 } as const;
+
+const userStore = useUserStore();
+
+const router = useRouter();
+
+function goToPage(routeKey: string | null) {
+    if (!routeKey) return;
+
+    const role = userStore.user?.role;
+    let targetRouteName = null;
+
+    if (role === USER_ROLES.USER) {
+        targetRouteName = ROUTE_NAMES.USER[routeKey as keyof typeof ROUTE_NAMES.USER];
+    } else if (role === USER_ROLES.STAFF) {
+        targetRouteName = ROUTE_NAMES.STAFF[routeKey as keyof typeof ROUTE_NAMES.STAFF];
+    } else if (role === USER_ROLES.GUEST) {
+        targetRouteName = ROUTE_NAMES.GUEST[routeKey as keyof typeof ROUTE_NAMES.GUEST];
+    }
+    if (!targetRouteName) {
+        notifyError("Không tìm thấy trang phù hợp cho vai trò của bạn");
+        return;
+    }
+
+    router.push({ name: targetRouteName });
+}
 
 </script>
 <template>
@@ -59,9 +91,9 @@ const FOOTER_LINKS = {
                     {{ section.title }}
                 </h2>
                 <ul class="space-y-1 text-sm text-white/90">
-                    <li v-for="item in section.items" :key="item"
+                    <li v-for="item in section.items" :key="item.label" @click="goToPage(item.routeKey)"
                         class="cursor-default hover:text-yellow-100 hover:translate-x-1 transition-all duration-300">
-                        {{ item }}
+                        {{ item.label }}
                     </li>
                 </ul>
             </div>

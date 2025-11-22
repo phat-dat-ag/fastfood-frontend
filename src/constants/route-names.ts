@@ -12,6 +12,8 @@ export const ROUTE_NAMES = {
     PROMOTION: "GuestPromotion",
     CHALLENGE: "GuestChallengeIntroduction",
     ABOUT: "GuestAbout",
+    DELIVERY_POLILY: "GuestDeliveryPolicy",
+    CHALLENGE_POLICY: "GuestChallengePolicy",
   },
   USER: {
     HOME: "UserHome",
@@ -33,6 +35,8 @@ export const ROUTE_NAMES = {
     ORDER_HISTORY_DETAIL: "UserOrderHistoryDetail",
     PRODUCT_REVIEW: "UserProductReview",
     ALL_PRODUCT_REVIEWS: "UserAllProductReivews",
+    DELIVERY_POLILY: "UserDeliveryPolicy",
+    CHALLENGE_POLICY: "UserChallengePolicy",
   },
   STAFF: {
     HOME: "StaffHome",
@@ -56,6 +60,8 @@ export const ROUTE_NAMES = {
     ALL_PRODUCT_REVIEWS: "StaffAllProductReivews",
     ORDER_MANAGEMENT: "StaffOrderManagement",
     ORDER_DETAIL_MANAGEMENT: "StaffOrderDetailManagement",
+    DELIVERY_POLILY: "StaffDeliveryPolicy",
+    CHALLENGE_POLICY: "StaffChallengePolicy",
   },
   ADMIN: {
     DASHBOARD: "AdminDashboard",

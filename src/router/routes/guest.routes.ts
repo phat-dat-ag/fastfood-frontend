@@ -10,6 +10,8 @@ import CategoryPage from "../../modules/products/CategoryPage.vue";
 import PromotionPage from "../../modules/promotion/PromotionPage.vue";
 import ProductPage from "../../modules/products/ProductPage.vue";
 import AllProductReviewsPage from "../../modules/review/AllProductReviewsPage.vue";
+import DeliveryPolicyPage from "../../components/policy/DeliveryPolicyPage.vue";
+import ChallengePolicyPage from "../../components/policy/ChallengePolicyPage.vue";
 
 export const guestRoutes = {
   path: "/",
@@ -66,6 +68,16 @@ export const guestRoutes = {
       path: "forget-password",
       name: ROUTE_NAMES.AUTH.FORGET_PASSWORD,
       component: ForgetPasswordPage,
+    },
+    {
+      path: "delivery-policy",
+      name: ROUTE_NAMES.GUEST.DELIVERY_POLILY,
+      component: DeliveryPolicyPage,
+    },
+    {
+      path: "challenge-policy",
+      name: ROUTE_NAMES.GUEST.CHALLENGE_POLICY,
+      component: ChallengePolicyPage,
     },
   ],
 };
