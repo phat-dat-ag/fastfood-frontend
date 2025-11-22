@@ -16,7 +16,7 @@ const props = defineProps<QuizPaginationProps>();
 
 </script>
 <template>
-    <ElCard v-if="props.currentQuestion" class="p-4 border border-gray-200 rounded-2xl shadow-sm">
+    <ElCard v-if="props.currentQuestion" class="lg:p-4 border border-gray-200 rounded-2xl shadow-sm">
         <h3 class="text-lg font-semibold mb-2 text-gray-800">
             Câu {{ currentIndex + 1 }} / {{ props.questionCount }}
         </h3>
@@ -33,7 +33,7 @@ const props = defineProps<QuizPaginationProps>();
 
         <div class="mt-4 grid grid-cols-2 gap-4">
             <div v-for="answer in props.currentQuestion.answers" :key="answer.id"
-                class="cursor-pointer p-4 border rounded-xl flex flex-col items-center justify-center transition-all duration-200"
+                class="cursor-pointer p-2 lg:p-4 border rounded-xl flex flex-col items-center justify-center transition-all duration-200"
                 :class="props.selectedAnswers[props.currentQuestion.id] === answer.id
                     ? 'bg-orange-100 border-orange-500 shadow'
                     : 'bg-white border-gray-200 hover:border-orange-300 hover:bg-orange-50'"

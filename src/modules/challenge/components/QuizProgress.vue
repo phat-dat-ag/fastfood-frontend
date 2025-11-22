@@ -22,7 +22,7 @@ const formattedTime = computed(() => {
 </script>
 
 <template>
-    <ElCard class="p-4 border border-gray-200 rounded-2xl shadow-sm">
+    <ElCard class="lg:p-4 border border-gray-200 rounded-2xl shadow-sm">
         <h3 class="text-lg font-semibold mb-2 text-gray-800">Tiến độ</h3>
 
         <div class="flex flex-wrap gap-2 mb-4">

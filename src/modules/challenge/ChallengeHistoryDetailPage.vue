@@ -70,7 +70,7 @@ async function hadnleSendFeedback(feedbackMessage: string) {
 </script>
 <template>
     <div v-if="quizHistory">
-        <el-card class="rounded-2xl shadow-lg p-6">
+        <el-card class="rounded-2xl shadow-lg lg:p-6">
             <ChallengeHistoryHeader :quizHistory="quizHistory" />
 
             <el-divider class="my-4" />

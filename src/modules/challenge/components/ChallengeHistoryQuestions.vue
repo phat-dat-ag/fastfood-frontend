@@ -51,7 +51,7 @@ function answerClasses(answer: Answer) {
 <template>
     <div v-if="props.quizHistory.questions.length > 0" class="space-y-4">
         <el-card v-for="(question, questionIndex) in props.quizHistory.questions" :key="question.id"
-            class="p-4 rounded-xl border-gray-200">
+            class="lg:p-4 rounded-xl border-gray-200">
             <div class="flex flex-col md:flex-row md:justify-between gap-3">
                 <div class="flex-1">
                     <div>
