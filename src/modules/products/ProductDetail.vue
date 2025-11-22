@@ -133,16 +133,11 @@ function goToAllReviewsPage() {
             </div>
         </div>
 
-        <div class="border-t pt-10">
+        <div v-if="product.reviews.length > 0" class="border-t pt-10">
             <h2 class="text-2xl font-bold mb-4">Đánh giá khách hàng</h2>
             <ProductReviewList :reviews="product.reviews" :showViewAllButton=true
                 @view-all-reviews="goToAllReviewsPage" />
         </div>
-
-        <div class="border-t pt-10">
-            <h2 class="text-2xl font-bold mb-6">Sản phẩm gợi ý</h2>
-        </div>
-
     </div>
     <EmptyPage v-else title="Không có thông tin sản phẩm nào" />
 </template>
