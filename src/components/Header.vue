@@ -58,6 +58,7 @@ function navigateMenu(id: string, key: string) {
     const targetRoute = routeMap[key]?.[role];
     if (targetRoute) {
         router.push({ name: targetRoute });
+        isMobileMenuOpen.value = false;
     } else {
         notifyError("Không tìm thấy trang phù hợp!");
     }
@@ -142,6 +143,8 @@ const toggleMobileMenu = () => { isMobileMenuOpen.value = !isMobileMenuOpen.valu
 </script>
 
 <template>
+    <div v-if="isMobileMenuOpen" class="fixed inset-0 bg-black/20 sm:hidden z-30" @click="isMobileMenuOpen = false">
+    </div>
     <header class="sticky top-0 z-50 w-full flex items-center justify-between py-3 px-6
          bg-gradient-to-r from-orange-500 via-red-400 to-orange-600
          shadow-lg shadow-orange-300/40 backdrop-blur-sm">
