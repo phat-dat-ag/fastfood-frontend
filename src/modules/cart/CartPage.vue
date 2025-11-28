@@ -175,7 +175,7 @@ async function placeOrder(userNote: string) {
     }
     if (selectedPaymentMethod.value == PAYMENT_METHODS.CASH_ON_DELIVERY) {
         if (Number(cartDetail.value.totalPrice) > CART_AMOUNT_LIMIT.MAX_CASH_ON_DELIVERY_AMOUNT) {
-            notifyError(`Tổng đơn từ từ từ ${formatCurrencyVND(CART_AMOUNT_LIMIT.MAX_CASH_ON_DELIVERY_AMOUNT.toString())} phải thanh toán trước`);
+            notifyError(`Tổng đơn từ ${formatCurrencyVND(CART_AMOUNT_LIMIT.MAX_CASH_ON_DELIVERY_AMOUNT.toString())} phải thanh toán trước`);
             return;
         }
         await useApiHandler<Order>(
