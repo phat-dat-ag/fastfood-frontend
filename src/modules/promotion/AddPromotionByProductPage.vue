@@ -60,7 +60,7 @@ async function handleSubmitPromotionProduct(formValues: any) {
         <h2 class="text-2xl font-semibold text-orange-500">
             Thêm mã khuyến mãi cho sản phẩm
         </h2>
-        <PromotionFormBase :showTargetSelect="true" selectLabel="Sản phẩm áp dụnghhhh" placeholderOption="Chọn sản phẩm"
+        <PromotionFormBase :showTargetSelect="true" selectLabel="Sản phẩm áp dụng" placeholderOption="Chọn sản phẩm"
             :options="products" :onSubmit="handleSubmitPromotionProduct" />
     </div>
 </template>
