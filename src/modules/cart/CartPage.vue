@@ -204,7 +204,7 @@ async function placeOrder(userNote: string) {
 
 async function handleCloseCheckoutModal() {
     isCheckoutModalVisible.value = false;
-    await loadCarts();
+    router.back();
 }
 
 </script>
