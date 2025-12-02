@@ -97,7 +97,10 @@ function goToChallengeHistoryPage() {
     else notifyError("Tài khoản của bạn không đủ quyền để thực hiện");
 }
 
-const goTo = (routeName: string) => router.push({ name: routeName });
+const goTo = (routeName: string) => {
+    router.push({ name: routeName });
+    isMobileMenuOpen.value = false;
+};
 
 interface UserIcon {
     icon: any;
