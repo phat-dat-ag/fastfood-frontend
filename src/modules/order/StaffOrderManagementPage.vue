@@ -16,6 +16,7 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import StaffOrderCardList from './components/StaffOrderCardList.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -65,15 +66,22 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div v-if="orderResponse" class="mx-auto space-y-8">
+    <div v-if="orderResponse && orderResponse.orders.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Quản lý đơn hàng" description="Theo dõi, cập nhật và quản lý đơn hàng tại đây!"
             buttonLabel="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
         <div>
-            <StaffOrderTable :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
-                :handleCancelOrder="handleCancelOrder" />
+            <div class="hidden lg:block">
+                <StaffOrderTable :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
+                    :handleCancelOrder="handleCancelOrder" />
+            </div>
+
+            <div class="block lg:hidden">
+                <StaffOrderCardList :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
+                    :handleCancelOrder="handleCancelOrder" />
+            </div>
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
-    <EmptyPage v-else />
+    <EmptyPage v-else title="Không có đơn hàng nào cần quản lý" />
 </template>
