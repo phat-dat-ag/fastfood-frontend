@@ -16,6 +16,7 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import OrderTrackingCardList from './components/OrderTrackingCardList.vue';
 
 const orderResponse = ref<OrderResponse | null>(null);
 
@@ -77,17 +78,24 @@ async function handlePageChange(page: number) {
 </script>
 
 <template>
-    <div v-if="orderResponse" class="mx-auto space-y-8">
+    <div v-if="orderResponse && orderResponse.orders.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Theo dõi đơn hàng"
             description="Tại đây bạn có thể theo dõi các đơn hàng đang được vận chuyển." buttonLabel="Làm mới danh sách"
             :onClick="loadTrackingOrders" />
         <div>
-            <OrderTrackingTable :orders="orderResponse.orders" :handleCheckout="handleCheckout"
-                :handleUpdateOrder="handleUpdateOrder" />
+            <div class="hidden lg:block">
+                <OrderTrackingTable :orders="orderResponse.orders" :handleCheckout="handleCheckout"
+                    :handleUpdateOrder="handleUpdateOrder" />
+            </div>
+
+            <div class="block lg:hidden">
+                <OrderTrackingCardList :orders="orderResponse.orders" :handleCheckout="handleCheckout"
+                    :handleUpdateOrder="handleUpdateOrder" />
+            </div>
             <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
-    <EmptyPage v-else />
+    <EmptyPage v-else title="Không có đơn hàng nào đang giao" />
     <CheckoutModal v-if="isCheckoutModalVisible" :clientSecret="clientSecret" @close="handleCloseCheckoutModal" />
 </template>
