@@ -53,7 +53,7 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div v-if="orderResponse" class="mx-auto space-y-8">
+    <div v-if="orderResponse && orderResponse.orders.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Lịch sử mua hàng"
             description="Tại đây bạn có thể xem tất cả các đơn gồm đã giao thành công, đã hủy."
             buttonLabel="Làm mới danh sách" :onClick="loadOrders" />
@@ -70,5 +70,5 @@ async function handlePageChange(page: number) {
                 :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
-    <EmptyPage v-else />
+    <EmptyPage v-else title="Bạn chưa có lịch sử mua hàng nào" />
 </template>

@@ -68,5 +68,5 @@ async function handlePageChange(page: number) {
         <Pagination :totalItem="historyQuizResponse.totalItems" :pageSize="historyQuizResponse.pageSize"
             :currentPage="historyQuizResponse.currentPage" @change-page="handlePageChange" />
     </div>
-    <EmptyPage v-else />
+    <EmptyPage v-else title="Bạn chưa có lịch sử tham gia thách thức" />
 </template>
