@@ -37,6 +37,6 @@ export interface Address {
   province: string;
 }
 
-export interface AddressResponse {
+export interface AddressesResponse {
   addresses: Address[];
 }

@@ -10,7 +10,7 @@ import CheckoutSummary from './components/CheckoutSummary.vue';
 import { getValidPromotionOrder } from '../../service/promotion.service';
 import type { Promotion } from '../../types/promotion.types';
 import { notifyError, notifySuccess } from '../../utils/notification.utils';
-import type { Address, AddressResponse } from '../../types/geocode.types';
+import type { Address, AddressesResponse } from '../../types/geocode.types';
 import { getAddresses } from '../../service/address.service';
 import type { DeliveryRequest } from '../../types/delivery.types';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
@@ -78,13 +78,13 @@ onMounted(loadPromotions);
 const addresses = ref<Address[]>([]);
 
 async function loadAddresses() {
-    await useApiHandler<AddressResponse>(
+    await useApiHandler<AddressesResponse>(
         getAddresses,
         {
             loading: ADDRESS_MESSAGE.get,
             error: ADDRESS_MESSAGE.getError,
         },
-        (data: AddressResponse) => addresses.value = data.addresses,
+        (data: AddressesResponse) => addresses.value = data.addresses,
     )
 }
 

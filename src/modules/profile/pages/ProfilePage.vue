@@ -10,7 +10,7 @@ import type { User } from '../../../types/user.types';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { USER_ROLES } from '../../../constants/user-roles';
-import type { Address, AddressCreateRequest, AddressResponse } from '../../../types/geocode.types';
+import type { Address, AddressCreateRequest, AddressesResponse } from '../../../types/geocode.types';
 import { useApiHandler } from '../../../composables/useApiHandler';
 import { createAddress, deleteAddress, getAddresses } from '../../../service/address.service';
 import { ADDRESS_MESSAGE } from '../../../constants/messages';
@@ -27,13 +27,13 @@ const userStore = useUserStore();
 const addresses = ref<Address[]>([]);
 
 async function loadAddresses() {
-    await useApiHandler<AddressResponse>(
+    await useApiHandler<AddressesResponse>(
         getAddresses,
         {
             loading: ADDRESS_MESSAGE.get,
             error: ADDRESS_MESSAGE.getError,
         },
-        (data: AddressResponse) => addresses.value = data.addresses,
+        (data: AddressesResponse) => addresses.value = data.addresses,
     )
 }
 
