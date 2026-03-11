@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../../../store/useUserStore.store';
 import * as yup from "yup";
 import { ErrorMessage, Field, Form } from 'vee-validate';
-import type { ChangePasswordRequest, User } from '../../../types/user.types';
+import type { ChangePasswordRequest, UserResponse } from '../../../types/user.types';
 import { closeLoading, openLoading } from '../../../utils/loading.utils';
 import { changePassword } from '../../../service/user.service';
 import type { ApiResponse } from '../../../types/api.types';
@@ -53,12 +53,12 @@ async function onSubmit(values: any) {
     const loading = openLoading("Đang xử lý đổi mật khẩu mới...");
     try {
         const response = await changePassword(changePasswordData);
-        const dataResponse: ApiResponse<User> = response.data;
+        const dataResponse: ApiResponse<UserResponse> = response.data;
         if (!dataResponse.data) {
             notifyError("Không thấy dữ liệu trả về sau khi đổi mật khẩu");
             return;
         }
-        userStore.setUser(dataResponse.data);
+        userStore.setUser(dataResponse.data.user);
         notifySuccess("Bạn đã đổi mật khẩu");
         router.back();
     } catch (e) {

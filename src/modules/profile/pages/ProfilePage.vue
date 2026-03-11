@@ -6,7 +6,7 @@ import type { AxiosError } from 'axios';
 import { notifyError, notifySuccess } from '../../../utils/notification.utils';
 import { closeLoading, openLoading } from '../../../utils/loading.utils';
 import type { ApiResponse } from '../../../types/api.types';
-import type { User } from '../../../types/user.types';
+import type { UserResponse } from '../../../types/user.types';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { USER_ROLES } from '../../../constants/user-roles';
@@ -59,12 +59,12 @@ async function handleUpdateAvatar() {
     try {
         if (avatarFile) {
             const response = await updateAvatar(avatarFile);
-            const dataResponse: ApiResponse<User> = response.data;
+            const dataResponse: ApiResponse<UserResponse> = response.data;
             if (!dataResponse.data) {
                 notifyError("Không có dữ liệu trả về khi đổi ảnh đại diện");
                 return;
             }
-            userStore.setUser(dataResponse.data);
+            userStore.setUser(dataResponse.data.user);
             avatarFile = null;
             if (fileInputRef.value)
                 fileInputRef.value.value = '';

@@ -2,7 +2,7 @@
 import * as yup from "yup";
 import { useUserStore } from '../../../store/useUserStore.store';
 import { Form, Field, ErrorMessage } from "vee-validate";
-import type { EidtUserRequest, User } from "../../../types/user.types";
+import type { EidtUserRequest, UserResponse } from "../../../types/user.types";
 import { closeLoading, openLoading } from "../../../utils/loading.utils";
 import { updateUserInformation } from "../../../service/user.service";
 import type { ApiResponse } from "../../../types/api.types";
@@ -30,12 +30,12 @@ async function onSubmit(values: any) {
     const loading = openLoading("Đang cập nhật thông tin của bạn...");
     try {
         const response = await updateUserInformation(editProfileData);
-        const dataResponse: ApiResponse<User> = response.data;
+        const dataResponse: ApiResponse<UserResponse> = response.data;
         if (!dataResponse.data) {
             notifyError("Không thấy dữ liệu trả về sau khi cập nhật");
             return;
         }
-        userStore.setUser(dataResponse.data);
+        userStore.setUser(dataResponse.data.user);
         notifySuccess("Thông tin của bạn đã được cập nhật");
         router.back();
     } catch (e) {

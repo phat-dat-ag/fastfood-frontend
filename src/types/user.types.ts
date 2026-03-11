@@ -13,6 +13,10 @@ export interface User {
 }
 
 export interface UserResponse {
+  user: User;
+}
+
+export interface UserPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

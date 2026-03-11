@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
-import type { UserResponse } from '../../types/user.types';
+import type { UserPageResponse } from '../../types/user.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { activateAccount, deactivateAccount, deleteUser, getAllCustomerAccounts } from '../../service/user.service';
 import { CUSTOMER_ACCOUNT_MESSAGES } from '../../constants/messages';
@@ -13,20 +13,20 @@ import Pagination from '../../components/Pagination.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import EmptyPage from '../../components/EmptyPage.vue';
 
-const userReponse = ref<UserResponse | null>(null);
+const userReponse = ref<UserPageResponse | null>(null);
 
 async function loadCustomerAccounts(page: number = 0) {
     const pageRequest: PageRequest = {
         page,
         size: PAGE_SIZE.ACCOUNTS.CUSTOMER,
     }
-    await useApiHandler<UserResponse>(
+    await useApiHandler<UserPageResponse>(
         () => getAllCustomerAccounts(pageRequest),
         {
             loading: CUSTOMER_ACCOUNT_MESSAGES.get,
             error: CUSTOMER_ACCOUNT_MESSAGES.getError,
         },
-        (data: UserResponse) => userReponse.value = data,
+        (data: UserPageResponse) => userReponse.value = data,
     )
 }
 
