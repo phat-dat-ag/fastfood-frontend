@@ -15,7 +15,7 @@ import { getAddresses } from '../../service/address.service';
 import type { DeliveryRequest } from '../../types/delivery.types';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
 import CheckoutModal from './components/CheckoutModal.vue';
-import type { Order, OrderCreateRequest } from '../../types/order.types';
+import type { Order, OrderCreateRequest, OrderResponse } from '../../types/order.types';
 import { createCashOnDeliveryOrder, createStripePaymentOrder } from '../../service/order.service';
 import { useRouter } from 'vue-router';
 import { CART_AMOUNT_LIMIT } from '../../constants/cart';
@@ -188,14 +188,14 @@ async function placeOrder(userNote: string) {
             () => router.back(),
         )
     } else {
-        await useApiHandler<Order>(
+        await useApiHandler<OrderResponse>(
             () => createStripePaymentOrder(dataRequest),
             {
                 loading: STRIPE_PAYMENT_ORDER.create,
                 error: STRIPE_PAYMENT_ORDER.createError,
                 success: STRIPE_PAYMENT_ORDER.createSuccess,
             },
-            (data: Order) => { clientSecret.value = data.clientSecret },
+            (data: OrderResponse) => { clientSecret.value = data.order.clientSecret },
         )
         if (clientSecret.value)
             isCheckoutModalVisible.value = true;

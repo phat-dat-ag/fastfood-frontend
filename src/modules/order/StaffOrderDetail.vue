@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { Order } from '../../types/order.types';
+import type { Order, OrderResponse } from '../../types/order.types';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
@@ -30,13 +30,13 @@ async function loadUnfinishedOrder() {
         router.back();
         return;
     }
-    await useApiHandler<Order>(
+    await useApiHandler<OrderResponse>(
         () => getUnfinishedOrder(orderId),
         {
             loading: STAFF_MANAGEMENT_ORDER_DETAIL_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_DETAIL_MESSAGE.getError,
         },
-        (data: Order) => order.value = data,
+        (data: OrderResponse) => order.value = data.order,
     )
 }
 

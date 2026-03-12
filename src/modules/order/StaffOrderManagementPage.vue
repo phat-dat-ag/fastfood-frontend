@@ -3,7 +3,7 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
 import { cancelOrderByStaff, getAllUnfinishedOrders } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
-import type { Order, OrderResponse } from '../../types/order.types';
+import type { Order, OrderPageResponse } from '../../types/order.types';
 import StaffOrderTable from './components/tables/StaffOrderTable.vue';
 import { openCancelOrderConfirm } from '../../utils/confirmation.utils';
 import { useUserStore } from '../../store/useUserStore.store';
@@ -18,20 +18,20 @@ import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import StaffOrderCardList from './components/StaffOrderCardList.vue';
 
-const orderResponse = ref<OrderResponse | null>(null);
+const orderPageResponse = ref<OrderPageResponse | null>(null);
 
 async function loadUnfinishedOrders(page: number = 0) {
     const pageRequest: PageRequest = {
         page,
         size: PAGE_SIZE.ORDERS.STAFF,
     }
-    await useApiHandler<OrderResponse>(
+    await useApiHandler<OrderPageResponse>(
         () => getAllUnfinishedOrders(pageRequest),
         {
             loading: STAFF_MANAGEMENT_ORDER_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_MESSAGE.getError,
         },
-        (data: OrderResponse) => orderResponse.value = data,
+        (data: OrderPageResponse) => orderPageResponse.value = data,
     )
 }
 
@@ -66,21 +66,21 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div v-if="orderResponse && orderResponse.orders.length > 0" class="mx-auto space-y-8">
+    <div v-if="orderPageResponse && orderPageResponse.orders.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Quản lý đơn hàng" description="Theo dõi, cập nhật và quản lý đơn hàng tại đây!"
             buttonLabel="Làm mới danh sách" :onClick="loadUnfinishedOrders" />
         <div>
             <div class="hidden lg:block">
-                <StaffOrderTable :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
+                <StaffOrderTable :orders="orderPageResponse.orders" :handleUpdateOrder="handleUpdateOrder"
                     :handleCancelOrder="handleCancelOrder" />
             </div>
 
             <div class="block lg:hidden">
-                <StaffOrderCardList :orders="orderResponse.orders" :handleUpdateOrder="handleUpdateOrder"
+                <StaffOrderCardList :orders="orderPageResponse.orders" :handleUpdateOrder="handleUpdateOrder"
                     :handleCancelOrder="handleCancelOrder" />
             </div>
-            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
-                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+            <Pagination :totalItem="orderPageResponse.totalItems" :pageSize="orderPageResponse.pageSize"
+                :currentPage="orderPageResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
     <EmptyPage v-else title="Không có đơn hàng nào cần quản lý" />

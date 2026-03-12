@@ -5,7 +5,7 @@ import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getOrderHistory } from '../../service/order.service';
 import { ORDER_HISTORY_DETAIL_MESSAGE } from '../../constants/messages';
-import type { Order } from '../../types/order.types';
+import type { Order, OrderResponse } from '../../types/order.types';
 import OrderInvoiceSummary from './components/OrderInvoiceSummary.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
 import OrderTimeline from './components/OrderTimeline.vue';
@@ -18,13 +18,13 @@ import EmptyPage from '../../components/EmptyPage.vue';
 const order = ref<Order | null>(null);
 
 async function loadOrderHistory(orderId: number) {
-    await useApiHandler<Order>(
+    await useApiHandler<OrderResponse>(
         () => getOrderHistory(orderId),
         {
             loading: ORDER_HISTORY_DETAIL_MESSAGE.get,
             error: ORDER_HISTORY_DETAIL_MESSAGE.getError,
         },
-        (data: Order) => order.value = data,
+        (data: OrderResponse) => order.value = data.order,
     )
 }
 

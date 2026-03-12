@@ -3,7 +3,7 @@ import { nextTick, onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_TRACKING_MESSAGE } from '../../constants/messages';
 import { getAllActiveOrders, getPaymentIntent } from '../../service/order.service';
-import { type Order, type OrderResponse } from '../../types/order.types';
+import { type Order, type OrderPageResponse, type OrderResponse } from '../../types/order.types';
 import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
 import { useUserStore } from '../../store/useUserStore.store';
 import { useRouter } from 'vue-router';
@@ -18,20 +18,20 @@ import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import OrderTrackingCardList from './components/OrderTrackingCardList.vue';
 
-const orderResponse = ref<OrderResponse | null>(null);
+const orderPageResponse = ref<OrderPageResponse | null>(null);
 
 async function loadTrackingOrders(page: number = 0) {
     const pageRequest: PageRequest = {
         page,
         size: PAGE_SIZE.ORDERS.TRACKING,
     }
-    await useApiHandler<OrderResponse>(
+    await useApiHandler<OrderPageResponse>(
         () => getAllActiveOrders(pageRequest),
         {
             loading: ORDER_TRACKING_MESSAGE.get,
             error: ORDER_TRACKING_MESSAGE.getError,
         },
-        (data: OrderResponse) => orderResponse.value = data,
+        (data: OrderPageResponse) => orderPageResponse.value = data,
     )
 }
 
@@ -45,13 +45,13 @@ const clientSecret = ref<string | null>(null);
 
 async function handleCheckout(orderId: number) {
     isCheckoutModalVisible.value = true;
-    await useApiHandler<Order>(
+    await useApiHandler<OrderResponse>(
         () => getPaymentIntent(orderId),
         {
             loading: "Đang chuẩn bị thanh toán qua Stripe",
             error: "Chuẩn bị thanh toán thất bại",
         },
-        (data: Order) => clientSecret.value = data.clientSecret,
+        (data: OrderResponse) => clientSecret.value = data.order.clientSecret,
     )
 }
 
@@ -78,22 +78,22 @@ async function handlePageChange(page: number) {
 </script>
 
 <template>
-    <div v-if="orderResponse && orderResponse.orders.length > 0" class="mx-auto space-y-8">
+    <div v-if="orderPageResponse && orderPageResponse.orders.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Theo dõi đơn hàng"
             description="Tại đây bạn có thể theo dõi các đơn hàng đang được vận chuyển." buttonLabel="Làm mới danh sách"
             :onClick="loadTrackingOrders" />
         <div>
             <div class="hidden lg:block">
-                <OrderTrackingTable :orders="orderResponse.orders" :handleCheckout="handleCheckout"
+                <OrderTrackingTable :orders="orderPageResponse.orders" :handleCheckout="handleCheckout"
                     :handleUpdateOrder="handleUpdateOrder" />
             </div>
 
             <div class="block lg:hidden">
-                <OrderTrackingCardList :orders="orderResponse.orders" :handleCheckout="handleCheckout"
+                <OrderTrackingCardList :orders="orderPageResponse.orders" :handleCheckout="handleCheckout"
                     :handleUpdateOrder="handleUpdateOrder" />
             </div>
-            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
-                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+            <Pagination :totalItem="orderPageResponse.totalItems" :pageSize="orderPageResponse.pageSize"
+                :currentPage="orderPageResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
     <EmptyPage v-else title="Không có đơn hàng nào đang giao" />

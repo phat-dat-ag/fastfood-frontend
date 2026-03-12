@@ -2,7 +2,7 @@
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getAllOrdersByAdmin } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
-import type { Order, OrderResponse } from '../../types/order.types';
+import type { Order, OrderPageResponse } from '../../types/order.types';
 import { ADMIN_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
 import AdminOrderModal from './components/modals/AdminOrderModal.vue';
 import type { Filter } from '../../types/filter.types';
@@ -13,20 +13,20 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import AdminOrdertable from './components/tables/AdminOrderTable.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 
-const orderResponse = ref<OrderResponse | null>(null);
+const orderPageResponse = ref<OrderPageResponse | null>(null);
 
 async function loadAllOrders(page: number = 0) {
     const pageRequest: PageRequest = {
         page,
         size: PAGE_SIZE.ORDERS.ADMIN,
     }
-    await useApiHandler<OrderResponse>(
+    await useApiHandler<OrderPageResponse>(
         () => getAllOrdersByAdmin(pageRequest),
         {
             loading: ADMIN_MANAGEMENT_ORDER_MESSAGE.get,
             error: ADMIN_MANAGEMENT_ORDER_MESSAGE.getError,
         },
-        (data: OrderResponse) => orderResponse.value = data,
+        (data: OrderPageResponse) => orderPageResponse.value = data,
     )
 }
 
@@ -74,14 +74,14 @@ async function handlePageChange(page: number) {
         <h2 class="text-2xl font-semibold text-orange-500">
             Quản lý đơn hàng hệ thống
         </h2>
-        <div v-if="orderResponse">
+        <div v-if="orderPageResponse">
             <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
                 @update:filter="handleFilterChange" />
 
-            <AdminOrdertable :orders="orderResponse.orders" :handleUpdateOrder="handleOpenOrderModal" />
+            <AdminOrdertable :orders="orderPageResponse.orders" :handleUpdateOrder="handleOpenOrderModal" />
 
-            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
-                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+            <Pagination :totalItem="orderPageResponse.totalItems" :pageSize="orderPageResponse.pageSize"
+                :currentPage="orderPageResponse.currentPage" @change-page="handlePageChange" />
         </div>
         <EmptyPage v-else />
     </div>

@@ -35,6 +35,10 @@ export interface Order {
 }
 
 export interface OrderResponse {
+  order: Order;
+}
+
+export interface OrderPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

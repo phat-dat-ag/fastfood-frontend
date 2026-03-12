@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_HISTORY_MESSAGE } from '../../constants/messages';
 import { getAllOrderHistory } from '../../service/order.service';
-import { type Order, type OrderResponse } from '../../types/order.types';
+import { type Order, type OrderPageResponse } from '../../types/order.types';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
 import { useRouter } from 'vue-router';
@@ -17,20 +17,20 @@ import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import OrderHistoryCardList from './components/OrderHistoryCardList.vue';
 
-const orderResponse = ref<OrderResponse | null>(null);
+const orderPageResponse = ref<OrderPageResponse | null>(null);
 
 async function loadOrders(page: number = 0) {
     const pageRequest: PageRequest = {
         page,
         size: PAGE_SIZE.ORDERS.HISTORY,
     }
-    await useApiHandler<OrderResponse>(
+    await useApiHandler<OrderPageResponse>(
         () => getAllOrderHistory(pageRequest),
         {
             loading: ORDER_HISTORY_MESSAGE.get,
             error: ORDER_HISTORY_MESSAGE.getError,
         },
-        (data: OrderResponse) => orderResponse.value = data,
+        (data: OrderPageResponse) => orderPageResponse.value = data,
     )
 }
 
@@ -53,21 +53,22 @@ async function handlePageChange(page: number) {
 }
 </script>
 <template>
-    <div v-if="orderResponse && orderResponse.orders.length > 0" class="mx-auto space-y-8">
+    <div v-if="orderPageResponse && orderPageResponse.orders.length > 0" class="mx-auto space-y-8">
         <HeaderCard title="Lịch sử mua hàng"
             description="Tại đây bạn có thể xem tất cả các đơn gồm đã giao thành công, đã hủy."
             buttonLabel="Làm mới danh sách" :onClick="loadOrders" />
         <div>
             <div class="hidden lg:block">
-                <OrderHistoryTable :orders="orderResponse.orders" :handleUpdateOrder="handleViewOrderHistoryDetail" />
+                <OrderHistoryTable :orders="orderPageResponse.orders"
+                    :handleUpdateOrder="handleViewOrderHistoryDetail" />
             </div>
 
             <div class="block lg:hidden">
-                <OrderHistoryCardList :orders="orderResponse.orders"
+                <OrderHistoryCardList :orders="orderPageResponse.orders"
                     :handleUpdateOrder="handleViewOrderHistoryDetail" />
             </div>
-            <Pagination :totalItem="orderResponse.totalItems" :pageSize="orderResponse.pageSize"
-                :currentPage="orderResponse.currentPage" @change-page="handlePageChange" />
+            <Pagination :totalItem="orderPageResponse.totalItems" :pageSize="orderPageResponse.pageSize"
+                :currentPage="orderPageResponse.currentPage" @change-page="handlePageChange" />
         </div>
     </div>
     <EmptyPage v-else title="Bạn chưa có lịch sử mua hàng nào" />

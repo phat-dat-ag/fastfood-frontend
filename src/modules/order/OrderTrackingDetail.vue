@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import type { Order } from '../../types/order.types';
+import type { Order, OrderResponse } from '../../types/order.types';
 import { cancelOrder, getActiveOrder, getPaymentIntent } from '../../service/order.service';
 import { ORDER_TRACKING_DETAIL_MESSAGE } from '../../constants/messages';
 import { PAYMENT_STATUS } from '../../constants/payment-status';
@@ -30,13 +30,13 @@ async function loadActiveOrder() {
         router.back();
         return;
     }
-    await useApiHandler<Order>(
+    await useApiHandler<OrderResponse>(
         () => getActiveOrder(orderId),
         {
             loading: ORDER_TRACKING_DETAIL_MESSAGE.get,
             error: ORDER_TRACKING_DETAIL_MESSAGE.getError,
         },
-        (data: Order) => order.value = data,
+        (data: OrderResponse) => order.value = data.order,
     )
 }
 const router = useRouter();
@@ -55,13 +55,13 @@ const clientSecret = ref<string | null>(null);
 
 async function handleCheckout(orderId: number) {
     isCheckoutModalVisible.value = true;
-    await useApiHandler<Order>(
+    await useApiHandler<OrderResponse>(
         () => getPaymentIntent(orderId),
         {
             loading: "Đang chuẩn bị thanh toán qua Stripe",
             error: "Chuẩn bị thanh toán thất bại",
         },
-        (data: Order) => clientSecret.value = data.clientSecret,
+        (data: OrderResponse) => clientSecret.value = data.order.clientSecret,
     )
 }
 

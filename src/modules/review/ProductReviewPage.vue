@@ -5,7 +5,7 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { getOrderById } from '../../service/order.service';
 import { ORDER_MESSAGE, REVIEW_MESSAGE } from '../../constants/messages';
 import { notifyError } from '../../utils/notification.utils';
-import type { Order } from '../../types/order.types';
+import type { Order, OrderResponse } from '../../types/order.types';
 import type { ReviewCreateRequest } from '../../types/review.types';
 import ProductReviewFormItem from './components/ProductReviewFormItem.vue';
 import { createProductReview } from '../../service/review.service';
@@ -18,12 +18,12 @@ const order = ref<Order | null>(null);
 const reviews = ref<Record<number, ReviewCreateRequest>>({});
 
 async function loadOrder(orderId: number) {
-    await useApiHandler<Order>(
+    await useApiHandler<OrderResponse>(
         () => getOrderById(orderId),
         { loading: ORDER_MESSAGE.get, error: ORDER_MESSAGE.getError },
-        (data: Order) => {
-            order.value = data;
-            data.orderDetails.forEach((detail) => {
+        (data: OrderResponse) => {
+            order.value = data.order;
+            data.order.orderDetails.forEach((detail) => {
                 reviews.value[detail.product.id] = {
                     productId: detail.product.id,
                     rating: 0,
