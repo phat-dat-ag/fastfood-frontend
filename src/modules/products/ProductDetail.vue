@@ -4,7 +4,7 @@ import Container3D from '../3DModel/Container3D.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getProductBySlug } from '../../service/product.service';
 import { CART_MESSAGE, PRODUCT_MESSAGES } from '../../constants/messages';
-import type { Product } from '../../types/product.types';
+import type { Product, ProductResponse } from '../../types/product.types';
 import { onMounted, ref } from 'vue';
 import NumberInput from '../../components/inputs/NumberInput.vue';
 import PrimaryButton from '../../components/buttons/PrimaryButton.vue';
@@ -29,7 +29,7 @@ async function loadProduct() {
             loading: PRODUCT_MESSAGES.get,
             error: PRODUCT_MESSAGES.getError,
         },
-        (data: Product) => product.value = data,
+        (data: ProductResponse) => product.value = data.product,
     )
 }
 

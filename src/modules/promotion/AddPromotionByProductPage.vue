@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { PRODUCT_MESSAGES, PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
-import type { Product } from '../../types/product.types';
+import type { Product, ProductDisplayResponse } from '../../types/product.types';
 import { getAllDisplayableProducts } from '../../service/product.service';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import type { PromotionProductCreateRequest } from '../../types/promotion.types';
@@ -13,13 +13,13 @@ import PromotionFormBase from './components/PromotionFormBase.vue';
 const products = ref<Product[]>([]);
 
 async function loadProducts() {
-    await useApiHandler<Product[]>(
+    await useApiHandler<ProductDisplayResponse>(
         getAllDisplayableProducts,
         {
             loading: PRODUCT_MESSAGES.get,
             error: PRODUCT_MESSAGES.getError,
         },
-        (data: Product[]) => products.value = data,
+        (data: ProductDisplayResponse) => products.value = data.displayableProducts,
     )
 }
 

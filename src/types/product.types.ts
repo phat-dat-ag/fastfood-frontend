@@ -45,6 +45,14 @@ export interface Product {
 }
 
 export interface ProductResponse {
+  product: Product;
+}
+
+export interface ProductDisplayResponse {
+  displayableProducts: Product[];
+}
+
+export interface ProductPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

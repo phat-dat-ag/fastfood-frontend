@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useApiHandler } from '../../composables/useApiHandler';
-import type { Product } from '../../types/product.types';
+import type { Product, ProductDisplayResponse } from '../../types/product.types';
 import { getAllDisplayableProductsByCategory } from '../../service/product.service';
 import { CART_MESSAGE, PRODUCT_MESSAGES } from '../../constants/messages';
 import { useUserStore } from '../../store/useUserStore.store';
@@ -17,13 +17,13 @@ const slug = computed(() => String(route.params.slug || ""));
 const products = ref<Product[]>([]);
 
 async function loadProducts() {
-    await useApiHandler<Product[]>(
+    await useApiHandler<ProductDisplayResponse>(
         () => getAllDisplayableProductsByCategory(slug.value),
         {
             loading: PRODUCT_MESSAGES.get,
             error: PRODUCT_MESSAGES.getError,
         },
-        (data: Product[]) => products.value = data,
+        (data: ProductDisplayResponse) => products.value = data.displayableProducts,
     )
 }
 

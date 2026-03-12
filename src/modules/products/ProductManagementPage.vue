@@ -4,7 +4,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import ProductTable from './components/ProductTable.vue';
 import ProductModal from './components/ProductModal.vue';
-import type { Product, ProductCreateRequest, ProductResponse, ProductUpdateRequest } from '../../types/product.types';
+import type { Product, ProductCreateRequest, ProductPageResponse, ProductUpdateRequest } from '../../types/product.types';
 import type { Category, CategoryDisplayResponse } from '../../types/category.types';
 import { getDisplayableCategories } from '../../service/category.service';
 import { activateProduct, createProduct, deactivateProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
@@ -34,7 +34,7 @@ async function loadCategories() {
 
 const route = useRoute();
 
-const productResponse = ref<ProductResponse | null>(null);
+const productResponse = ref<ProductPageResponse | null>(null);
 
 async function loadProducts(page: number = 0) {
   const request: PageRequest = {
@@ -42,13 +42,13 @@ async function loadProducts(page: number = 0) {
     size: PAGE_SIZE.PRODUCT,
   }
   const categorySlug = String(route.params.categorySlug || "");
-  await useApiHandler<ProductResponse>(
+  await useApiHandler<ProductPageResponse>(
     () => getProducts(request, categorySlug),
     {
       loading: PRODUCT_MESSAGES.get,
       error: PRODUCT_MESSAGES.getError,
     },
-    (data: ProductResponse) => productResponse.value = data,
+    (data: ProductPageResponse) => productResponse.value = data,
   )
 }
 
