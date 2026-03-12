@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import type { OTPResponseType } from '../../../types/auth.types';
+import type { OTPResponse } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
 import { useAuthStore } from '../../../store/useAuthStore.store';
 import { forgetPassword, verifyForgetPassword } from '../../../service/auth.service';
@@ -40,11 +40,11 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const { remainingTime, isOTPModalVisible, sendOTP, verifyOTP } = useOtpHandler(
-    async (): Promise<OTPResponseType> => {
+    async (): Promise<OTPResponse> => {
         const forgetPasswordData = authStore.forgetPasswordData;
         if (!forgetPasswordData) throw new Error("Thiếu dữ liệu quên mật khẩu");
         const response = await forgetPassword(forgetPasswordData);
-        const dataRespone: ApiResponse<OTPResponseType> = response.data;
+        const dataRespone: ApiResponse<OTPResponse> = response.data;
         if (!dataRespone.data) throw new Error("Không có dữ liệu đăng ký trả về");
         return dataRespone.data;
     },

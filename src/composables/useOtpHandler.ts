@@ -2,12 +2,12 @@ import { onUnmounted, ref } from "vue";
 import { closeLoading, openLoading } from "../utils/loading.utils";
 import type { AxiosError } from "axios";
 import { notifyError, notifySuccess } from "../utils/notification.utils";
-import type { OTPResponseType } from "../types/auth.types";
+import type { OTPResponse } from "../types/auth.types";
 
 export function useOtpHandler(
-  sendOtpApi: () => Promise<OTPResponseType>,
+  sendOtpApi: () => Promise<OTPResponse>,
   verifyOtpApi: (otp: string) => Promise<void>,
-  onSucess: () => void
+  onSucess: () => void,
 ) {
   const remainingTime = ref(0);
   const isOTPModalVisible = ref(false);
@@ -39,7 +39,7 @@ export function useOtpHandler(
     } catch (e) {
       const err = e as AxiosError<any>;
       notifyError(
-        err.response?.data.message || "Không gửi được OTP, hãy thử lại"
+        err.response?.data.message || "Không gửi được OTP, hãy thử lại",
       );
     } finally {
       closeLoading(loading);

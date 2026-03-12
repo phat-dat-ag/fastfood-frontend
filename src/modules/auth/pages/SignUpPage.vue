@@ -2,7 +2,7 @@
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import * as yup from 'yup';
 import { nomarlizeSpaces } from '../../../utils/string.utils';
-import type { OTPResponseType } from '../../../types/auth.types';
+import type { OTPResponse } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
 import { signUp, verifySignUp } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
@@ -59,7 +59,7 @@ const { remainingTime, isOTPModalVisible, sendOTP, verifyOTP } = useOtpHandler(
         const signUpData = authStore.signUpData;
         if (!signUpData) throw new Error("Thiếu dữ liệu đăng ký");
         const response = await signUp(signUpData);
-        const dataRespone: ApiResponse<OTPResponseType> = response.data;
+        const dataRespone: ApiResponse<OTPResponse> = response.data;
         if (!dataRespone.data) throw new Error("Không có dữ liệu đăng ký trả về");
         return dataRespone.data;
     },

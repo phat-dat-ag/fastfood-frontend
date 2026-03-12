@@ -1,6 +1,6 @@
 import type { User } from "./user.types";
 
-export interface OTPResponseType {
+export interface OTPResponse {
   phone: string;
   expiredAt: string;
 }
