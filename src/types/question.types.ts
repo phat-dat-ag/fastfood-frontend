@@ -26,7 +26,7 @@ export interface Question {
   answers: Answer[];
 }
 
-export interface QuestionResponse {
+export interface QuestionPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

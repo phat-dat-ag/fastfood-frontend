@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router';
 import AddButton from '../../../components/buttons/AddButton.vue';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useApiHandler } from '../../../composables/useApiHandler';
-import type { QuestionResponse } from '../../../types/question.types';
+import type { QuestionPageResponse } from '../../../types/question.types';
 import { activateQuestion, deactivateQuestion, deleteQuestion, getAllQuestionByTopicDifficulty } from '../../../service/question.service';
 import { QUESTION_MESSAGE } from '../../../constants/messages';
 import { onMounted, ref } from 'vue';
@@ -19,7 +19,7 @@ import type { SwitchResponse } from '../../../types/switch-button.types';
 const route = useRoute();
 const router = useRouter();
 
-const questionResponse = ref<QuestionResponse | null>(null);
+const questionResponse = ref<QuestionPageResponse | null>(null);
 
 async function loadQuestions(page: number = 0) {
   const slug = route.params.slug?.toString() || "";
@@ -27,13 +27,13 @@ async function loadQuestions(page: number = 0) {
     page,
     size: PAGE_SIZE.QUESTION,
   }
-  await useApiHandler<QuestionResponse>(
+  await useApiHandler<QuestionPageResponse>(
     () => getAllQuestionByTopicDifficulty(slug, request),
     {
       loading: QUESTION_MESSAGE.get,
       error: QUESTION_MESSAGE.getError,
     },
-    (data: QuestionResponse) => questionResponse.value = data,
+    (data: QuestionPageResponse) => questionResponse.value = data,
   );
 }
 
