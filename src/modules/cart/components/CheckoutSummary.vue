@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { CartResponse } from "../../../types/cart.types";
+import type { CartDetailResponse } from "../../../types/cart.types";
 import { formatCurrencyVND } from "../../../utils/currency.utils";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { Promotion } from "../../../types/promotion.types";
@@ -9,7 +9,7 @@ import type { Address } from "../../../types/geocode.types";
 import { ElInput, ElOption, ElSelect } from "element-plus";
 import { PAYMENT_METHODS } from "../../../constants/payment-methods";
 
-const props = defineProps<{ cartDetail: CartResponse; promotions: Promotion[]; addresses: Address[] }>();
+const props = defineProps<{ cartDetail: CartDetailResponse; promotions: Promotion[]; addresses: Address[] }>();
 const emit = defineEmits(["change-promotion", "change-address", "change-payment-method", "place-order"]);
 
 const selectedPromotionCode = ref<string>("");

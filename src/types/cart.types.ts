@@ -25,7 +25,7 @@ export interface PromotionCodeCheckResult {
   promotion: Promotion | null;
 }
 
-export interface CartResponse {
+export interface CartDetailResponse {
   carts: Cart[];
   originalPrice: string;
   subtotalPrice: string;

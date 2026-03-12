@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { CartResponse, PromotionCodeCheckResult } from '../../types/cart.types';
+import type { CartDetailResponse, PromotionCodeCheckResult } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
 import { ADDRESS_MESSAGE, CART_MESSAGE, CASH_ON_DELIVERY_ORDER, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_ORDER } from '../../constants/messages';
@@ -26,13 +26,13 @@ const router = useRouter();
 
 const selectedPromotionCode = ref<string>("");
 
-const cartDetail = ref<CartResponse | null>(null);
+const cartDetail = ref<CartDetailResponse | null>(null);
 
 const deliveryRequest = ref<DeliveryRequest | null>(null);
 
 const selectedPaymentMethod = ref<string>("");
 
-function handleCartResponse(data: CartResponse) {
+function handleCartResponse(data: CartDetailResponse) {
     cartDetail.value = data;
     if (cartDetail.value.applyPromotionResult) {
         const result: PromotionCodeCheckResult = cartDetail.value.applyPromotionResult;
@@ -51,13 +51,13 @@ function handleCartResponse(data: CartResponse) {
 }
 
 async function loadCarts() {
-    await useApiHandler<CartResponse>(
+    await useApiHandler<CartDetailResponse>(
         () => getCartDetail(selectedPromotionCode.value, deliveryRequest.value),
         {
             loading: CART_MESSAGE.get,
             error: CART_MESSAGE.getError,
         },
-        (data: CartResponse) => handleCartResponse(data),
+        (data: CartDetailResponse) => handleCartResponse(data),
     )
 }
 onMounted(loadCarts);
