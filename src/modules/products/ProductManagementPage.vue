@@ -5,7 +5,7 @@ import type { Filter } from '../../types/filter.types';
 import ProductTable from './components/ProductTable.vue';
 import ProductModal from './components/ProductModal.vue';
 import type { Product, ProductCreateRequest, ProductResponse, ProductUpdateRequest } from '../../types/product.types';
-import type { Category } from '../../types/category.types';
+import type { Category, CategoryDisplayResponse } from '../../types/category.types';
 import { getDisplayableCategories } from '../../service/category.service';
 import { activateProduct, createProduct, deactivateProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
 import { useApiHandler } from '../../composables/useApiHandler';
@@ -22,13 +22,13 @@ import EmptyPage from '../../components/EmptyPage.vue';
 const categories = ref<Category[]>([]);
 
 async function loadCategories() {
-  await useApiHandler<Category[]>(
+  await useApiHandler<CategoryDisplayResponse>(
     getDisplayableCategories,
     {
       loading: CATEGORY_MESSAGES.get,
       error: CATEGORY_MESSAGES.getError,
     },
-    (data: Category[]) => categories.value = data,
+    (data: CategoryDisplayResponse) => categories.value = data.displayableCategories,
   )
 }
 

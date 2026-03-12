@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import CategoryModal from './components/CategoryModal.vue'
 import { activateCategory, createCategory, deactivateCategory, deleteCategory, getCategories, updateCategory } from '../../service/category.service'
-import type { Category, CategoryCreateRequest, CategoryResponse, CategoryUpdateRequest } from '../../types/category.types'
+import type { Category, CategoryCreateRequest, CategoryPageResponse, CategoryUpdateRequest } from '../../types/category.types'
 import { useCategoryStore } from '../../store/useCategoryStore.store'
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils'
 import CategoryTable from './components/CategoryTable.vue'
@@ -21,20 +21,20 @@ import EmptyPage from '../../components/EmptyPage.vue'
 const isCategoryModalVisible = ref(false);
 const isCreatingCategory = ref(true);
 
-const categoryResponse = ref<CategoryResponse | null>(null);
+const categoryResponse = ref<CategoryPageResponse | null>(null);
 
 async function loadCategories(page: number = 0) {
   const request: PageRequest = {
     page,
     size: PAGE_SIZE.CATEGORY,
   }
-  await useApiHandler<CategoryResponse>(
+  await useApiHandler<CategoryPageResponse>(
     () => getCategories(request),
     {
       loading: CATEGORY_MESSAGES.get,
       error: CATEGORY_MESSAGES.getError,
     },
-    (data: CategoryResponse) => categoryResponse.value = data,
+    (data: CategoryPageResponse) => categoryResponse.value = data,
   )
 }
 

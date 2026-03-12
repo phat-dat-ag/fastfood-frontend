@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { Category } from '../../types/category.types';
+import type { Category, CategoryDisplayResponse } from '../../types/category.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getDisplayableCategories } from '../../service/category.service';
 import { CATEGORY_MESSAGES, PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
@@ -13,13 +13,13 @@ import router from '../../router';
 const categories = ref<Category[]>([]);
 
 async function loadCategories() {
-    await useApiHandler<Category[]>(
+    await useApiHandler<CategoryDisplayResponse>(
         getDisplayableCategories,
         {
             loading: CATEGORY_MESSAGES.get,
             error: CATEGORY_MESSAGES.getError,
         },
-        (data: Category[]) => categories.value = data,
+        (data: CategoryDisplayResponse) => categories.value = data.displayableCategories,
     )
 }
 

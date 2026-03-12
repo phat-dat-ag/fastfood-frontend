@@ -24,10 +24,14 @@ export interface Category {
   updatedAt: string;
 }
 
-export interface CategoryResponse {
+export interface CategoryPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;
   totalPages: number;
   categories: Category[];
+}
+
+export interface CategoryDisplayResponse {
+  displayableCategories: Category[];
 }
