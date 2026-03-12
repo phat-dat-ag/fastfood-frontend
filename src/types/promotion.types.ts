@@ -57,7 +57,11 @@ export interface Promotion {
   name: string;
 }
 
-export interface PromotionResponse {
+export interface PromotionOrderResponse {
+  promotionOrders: Promotion[];
+}
+
+export interface PromotionPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

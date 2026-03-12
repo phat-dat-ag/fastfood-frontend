@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionOrderTable from './components/tables/PromotionOrderTable.vue';
-import type { PromotionResponse } from '../../types/promotion.types';
+import type { PromotionPageResponse } from '../../types/promotion.types';
 import { activatePromotion, deactivatePromotion, deletePromotion, getPromotionOrder } from '../../service/promotion.service';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import { useApiHandler } from '../../composables/useApiHandler';
@@ -34,20 +34,20 @@ function handleSearchChange(searchText: string) {
     console.log(search.value);
 }
 
-const promotionResponse = ref<PromotionResponse | null>(null);
+const promotionResponse = ref<PromotionPageResponse | null>(null);
 
 async function loadPromotions(page: number = 0) {
     const request: PageRequest = {
         page,
         size: PAGE_SIZE.PROMOTION.BY_ORDER,
     }
-    await useApiHandler<PromotionResponse>(
+    await useApiHandler<PromotionPageResponse>(
         () => getPromotionOrder(request),
         {
             loading: PROMOTION_ORDER_MESSAGE.get,
             error: PROMOTION_ORDER_MESSAGE.getError,
         },
-        (data: PromotionResponse) => promotionResponse.value = data,
+        (data: PromotionPageResponse) => promotionResponse.value = data,
     )
 }
 onMounted(loadPromotions);

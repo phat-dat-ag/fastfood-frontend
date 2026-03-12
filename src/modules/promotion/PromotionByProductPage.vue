@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
-import type { PromotionResponse } from '../../types/promotion.types';
+import type { PromotionPageResponse } from '../../types/promotion.types';
 import { PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
@@ -34,20 +34,20 @@ function handleSearchChange(searchText: string) {
   console.log(search.value);
 }
 
-const promotionResponse = ref<PromotionResponse | null>(null);
+const promotionResponse = ref<PromotionPageResponse | null>(null);
 
 async function loadPromotions(page: number = 0) {
   const request: PageRequest = {
     page,
     size: PAGE_SIZE.PROMOTION.BY_PRODUCT,
   }
-  await useApiHandler<PromotionResponse>(
+  await useApiHandler<PromotionPageResponse>(
     () => getPromotionProduct(request),
     {
       loading: PROMOTION_PRODUCT_MESSAGE.get,
       error: PROMOTION_PRODUCT_MESSAGE.getError,
     },
-    (data: PromotionResponse) => promotionResponse.value = data,
+    (data: PromotionPageResponse) => promotionResponse.value = data,
   )
 }
 onMounted(loadPromotions);

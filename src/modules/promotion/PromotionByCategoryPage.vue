@@ -5,7 +5,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionByCategoryTable from './components/tables/PromotionByCategoryTable.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { activatePromotion, deactivatePromotion, deletePromotion, getPromotionCategory } from '../../service/promotion.service';
-import type { PromotionResponse } from '../../types/promotion.types';
+import type { PromotionPageResponse } from '../../types/promotion.types';
 import { PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import type { PageRequest } from '../../types/pagination.types';
@@ -34,20 +34,20 @@ function handleSearchChange(searchText: string) {
   console.log(search.value);
 }
 
-const promotionResponse = ref<PromotionResponse | null>(null);
+const promotionResponse = ref<PromotionPageResponse | null>(null);
 
 async function loadPromotions(page: number = 0) {
   const request: PageRequest = {
     page,
     size: PAGE_SIZE.PROMOTION.BY_CATEGORY,
   }
-  await useApiHandler<PromotionResponse>(
+  await useApiHandler<PromotionPageResponse>(
     () => getPromotionCategory(request),
     {
       loading: PROMOTION_CATEGORY_MESSAGE.get,
       error: PROMOTION_CATEGORY_MESSAGE.getError,
     },
-    (data: PromotionResponse) => promotionResponse.value = data,
+    (data: PromotionPageResponse) => promotionResponse.value = data,
   )
 }
 onMounted(loadPromotions);
