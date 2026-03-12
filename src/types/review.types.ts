@@ -13,7 +13,11 @@ export interface Review {
   createdAt: string;
 }
 
-export interface ReviewResponse {
+export interface ReviewProductsResponse {
+  reviewProducts: Review[];
+}
+
+export interface ReviewPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

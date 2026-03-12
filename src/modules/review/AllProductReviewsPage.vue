@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import type { Review } from '../../types/review.types';
+import type { Review, ReviewProductsResponse } from '../../types/review.types';
 import { getAllReviewsByProduct } from '../../service/review.service';
 import { ALL_PRODUCT_REVIEW_MESSAGE } from '../../constants/messages';
 import ProductReviewList from './components/ProductReviewList.vue';
@@ -16,13 +16,13 @@ const router = useRouter();
 const reviews = ref<Review[]>([]);
 
 async function loadReviews(productId: number) {
-    await useApiHandler<Review[]>(
+    await useApiHandler<ReviewProductsResponse>(
         () => getAllReviewsByProduct(productId),
         {
             loading: ALL_PRODUCT_REVIEW_MESSAGE.get,
             error: ALL_PRODUCT_REVIEW_MESSAGE.getError,
         },
-        (data: Review[]) => reviews.value = data,
+        (data: ReviewProductsResponse) => reviews.value = data.reviewProducts,
     )
 }
 

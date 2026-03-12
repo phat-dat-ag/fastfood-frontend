@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { ReviewResponse } from '../../types/review.types';
+import type { ReviewPageResponse } from '../../types/review.types';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import { useApiHandler } from '../../composables/useApiHandler';
@@ -13,20 +13,20 @@ import ProductReviewList from './components/ProductReviewList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import EmptyPage from '../../components/EmptyPage.vue';
 
-const reviewResponse = ref<ReviewResponse | null>(null);
+const reviewResponse = ref<ReviewPageResponse | null>(null);
 
 async function loadAllReviews(page: number = 0) {
     const request: PageRequest = {
         page,
         size: PAGE_SIZE.REIVEWS.ADMIN,
     }
-    await useApiHandler<ReviewResponse>(
+    await useApiHandler<ReviewPageResponse>(
         () => getAllReviewsByAdmin(request),
         {
             loading: ADMIN_MANAGEMENT_REVIEW_MESSAGE.get,
             error: ADMIN_MANAGEMENT_REVIEW_MESSAGE.getError,
         },
-        (data: ReviewResponse) => reviewResponse.value = data,
+        (data: ReviewPageResponse) => reviewResponse.value = data,
     )
 }
 
