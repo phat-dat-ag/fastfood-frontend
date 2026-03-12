@@ -4,7 +4,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import TopicTable from './components/tables/TopicTable.vue';
 import TopicModal from './components/modals/TopicModal.vue';
-import type { Topic, TopicCreateRequest, TopicResponse, TopicUpdateRequest } from '../../types/topic.types';
+import type { Topic, TopicCreateRequest, TopicPageResponse, TopicUpdateRequest } from '../../types/topic.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { activateTopic, createTopic, deactivateTopic, deleteTopic, getAllTopics, updateTopic } from '../../service/topic.service';
 import { TOPIC_MESSAGE } from '../../constants/messages';
@@ -17,20 +17,20 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 
-const topicResponse = ref<TopicResponse | null>(null);
+const topicPageResponse = ref<TopicPageResponse | null>(null);
 
 async function loadTopics(page: number = 0) {
     const request: PageRequest = {
         page,
         size: PAGE_SIZE.TOPIC,
     }
-    await useApiHandler<TopicResponse>(
+    await useApiHandler<TopicPageResponse>(
         () => getAllTopics(request),
         {
             loading: TOPIC_MESSAGE.get,
             error: TOPIC_MESSAGE.getError,
         },
-        (data: TopicResponse) => topicResponse.value = data,
+        (data: TopicPageResponse) => topicPageResponse.value = data,
     )
 }
 
@@ -98,7 +98,7 @@ const handleUpdateTopic = async (topicInformation: TopicUpdateRequest) => {
 }
 
 async function handleActivateTopic(topicId: number) {
-    const page: number = topicResponse.value?.currentPage || 0;
+    const page: number = topicPageResponse.value?.currentPage || 0;
     await useApiHandler(
         () => activateTopic(topicId),
         {
@@ -111,7 +111,7 @@ async function handleActivateTopic(topicId: number) {
 }
 
 async function handleDeactivateTopic(topicId: number) {
-    const page: number = topicResponse.value?.currentPage || 0;
+    const page: number = topicPageResponse.value?.currentPage || 0;
     await useApiHandler(
         () => deactivateTopic(topicId),
         {
@@ -154,17 +154,17 @@ async function handlePageChange(page: number) {
         <h2 class="text-2xl font-semibold text-orange-500">
             Quản lý chủ đề trò chơi
         </h2>
-        <div v-if="topicResponse">
+        <div v-if="topicPageResponse">
             <AdminFilterHeader :filterOptions="filterOptions" @update:search="handleSearchChange"
                 @update:filter="handleFilterChange" />
 
-            <TopicTable :topics="topicResponse.topics" :openCreateTopicModal="openCreateTopicModal"
+            <TopicTable :topics="topicPageResponse.topics" :openCreateTopicModal="openCreateTopicModal"
                 :openUpdateTopicModal="openUpdateTopicModal" :handleDeleteTopic="handleDeleteTopic"
                 :goToTopicDifficultyManagementPage="goToTopicDifficultyManagementPage"
                 @activate-topic="handleActivateTopic" @deactivate-topic="handleDeactivateTopic" />
 
-            <Pagination :totalItem="topicResponse.totalItems" :pageSize="topicResponse.pageSize"
-                :currentPage="topicResponse.currentPage" @change-page="handlePageChange" />
+            <Pagination :totalItem="topicPageResponse.totalItems" :pageSize="topicPageResponse.pageSize"
+                :currentPage="topicPageResponse.currentPage" @change-page="handlePageChange" />
 
             <TopicModal v-if="isTopicModalVisible" :isCreatingTopic="isCreatingTopic" @create-topic="handleCreateTopic"
                 @update-topic="handleUpdateTopic" @close="isTopicModalVisible = false" />

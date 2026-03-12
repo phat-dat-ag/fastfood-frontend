@@ -23,6 +23,10 @@ export interface Topic {
   updatedAt: string;
 }
 
+export interface TopicResponse {
+  topic: Topic;
+}
+
 export interface TopicDisplay {
   id: number;
   name: string;
@@ -31,7 +35,11 @@ export interface TopicDisplay {
   difficulties: TopicDifficultyDisplay[];
 }
 
-export interface TopicResponse {
+export interface TopicDisplayResponse {
+  displayableTopics: TopicDisplay[];
+}
+
+export interface TopicPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

@@ -12,7 +12,7 @@ import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { activateTopicDifficulty, createTopicDifficulty, deactivateTopicDifficulty, deleteTopicDifficulty, getAllTopicDifficultiesByTopic, updateTopicDifficulty } from '../../service/topic-difficulty.service';
 import { useTopicDifficultyStore } from '../../store/useTopicDifficultyStore.store';
 import TopicDifficultyModal from './components/modals/TopicDifficultyModal.vue';
-import type { Topic } from '../../types/topic.types';
+import type { Topic, TopicResponse } from '../../types/topic.types';
 import { getTopicBySlug } from '../../service/topic.service';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
@@ -25,13 +25,13 @@ const topic = ref<Topic | null>(null);
 
 async function loadTopicBySlug() {
     const slug: string = route.params.slug.toString() || "";
-    await useApiHandler<Topic>(
+    await useApiHandler<TopicResponse>(
         () => getTopicBySlug(slug),
         {
             loading: TOPIC_MESSAGE.get,
             error: TOPIC_MESSAGE.getError,
         },
-        (data: Topic) => topic.value = data,
+        (data: TopicResponse) => topic.value = data.topic,
     )
 }
 

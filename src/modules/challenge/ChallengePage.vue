@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import type { TopicDisplay } from '../../types/topic.types';
+import type { TopicDisplay, TopicDisplayResponse } from '../../types/topic.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getAllDisplayableTopics } from '../../service/topic.service';
 import { TOPIC_MESSAGE } from '../../constants/messages';
@@ -21,13 +21,13 @@ const selectedTopic = ref<TopicDisplay | null>(null);
 const selectedDifficulty = ref<TopicDifficultyDisplay | null>(null);
 
 async function loadDisplayableTopics() {
-    await useApiHandler<TopicDisplay[]>(
+    await useApiHandler<TopicDisplayResponse>(
         getAllDisplayableTopics,
         {
             loading: TOPIC_MESSAGE.get,
             error: TOPIC_MESSAGE.getError,
         },
-        (data: TopicDisplay[]) => (displayableTopics.value = data),
+        (data: TopicDisplayResponse) => (displayableTopics.value = data.displayableTopics),
     );
 }
 
