@@ -1,5 +1,6 @@
 export interface Image {
   id: number;
+  sectionType: string;
   url: string;
   alternativeText: string;
   createdAt: string;
