@@ -39,6 +39,10 @@ export interface TopicDifficultyDisplay {
 }
 
 export interface TopicDifficultyResponse {
+  topicDifficulty: TopicDifficulty;
+}
+
+export interface TopicDifficultyPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

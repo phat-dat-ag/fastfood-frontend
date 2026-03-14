@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
-import { type TopicDifficulty, type TopicDifficultyCreateRequest, type TopicDifficultyResponse, type TopicDifficultyUpdateRequest } from '../../types/topic-difficulty.types';
+import { type TopicDifficulty, type TopicDifficultyCreateRequest, type TopicDifficultyPageResponse, type TopicDifficultyUpdateRequest } from '../../types/topic-difficulty.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { TOPIC_DIFFICULTY_MESSAGE, TOPIC_MESSAGE } from '../../constants/messages';
 import { ROUTE_NAMES } from '../../constants/route-names';
@@ -35,7 +35,7 @@ async function loadTopicBySlug() {
     )
 }
 
-const topicDifficultyResponse = ref<TopicDifficultyResponse | null>(null);
+const topicDifficultyResponse = ref<TopicDifficultyPageResponse | null>(null);
 
 async function loadTopicDifficulties(page: number = 0) {
     const slug: string = route.params.slug.toString() || "";
@@ -43,13 +43,13 @@ async function loadTopicDifficulties(page: number = 0) {
         page,
         size: PAGE_SIZE.TOPIC_DIFFICULTY,
     }
-    await useApiHandler<TopicDifficultyResponse>(
+    await useApiHandler<TopicDifficultyPageResponse>(
         () => getAllTopicDifficultiesByTopic(slug, request),
         {
             loading: TOPIC_DIFFICULTY_MESSAGE.get,
             error: TOPIC_DIFFICULTY_MESSAGE.getError,
         },
-        (data: TopicDifficultyResponse) => topicDifficultyResponse.value = data,
+        (data: TopicDifficultyPageResponse) => topicDifficultyResponse.value = data,
     )
 }
 

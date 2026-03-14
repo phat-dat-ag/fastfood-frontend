@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
-import type { TopicDifficulty } from '../../types/topic-difficulty.types';
+import type { TopicDifficulty, TopicDifficultyResponse } from '../../types/topic-difficulty.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
 import { TOPIC_DIFFICULTY_MESSAGE } from '../../constants/messages';
@@ -15,13 +15,13 @@ const topicDifficulty = ref<TopicDifficulty | null>(null);
 
 async function loadTopicDifficultyBySlug() {
     const slug: string = route.params.slug.toString() || "";
-    await useApiHandler<TopicDifficulty>(
+    await useApiHandler<TopicDifficultyResponse>(
         () => getTopicDifficultyBySlug(slug),
         {
             loading: TOPIC_DIFFICULTY_MESSAGE.get,
             error: TOPIC_DIFFICULTY_MESSAGE.getError,
         },
-        (data: TopicDifficulty) => topicDifficulty.value = data,
+        (data: TopicDifficultyResponse) => topicDifficulty.value = data.topicDifficulty,
     )
 }
 
