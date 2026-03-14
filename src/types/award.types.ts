@@ -22,7 +22,7 @@ export interface Award {
   updatedAt: string;
 }
 
-export interface AwardResponse {
+export interface AwardPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

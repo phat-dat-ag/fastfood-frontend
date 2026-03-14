@@ -8,7 +8,7 @@ import { useApiHandler } from '../../composables/useApiHandler';
 import { AWARD_MESSAGE, TOPIC_DIFFICULTY_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
-import type { AwardCreateRequest, AwardResponse } from '../../types/award.types';
+import type { AwardCreateRequest, AwardPageResponse } from '../../types/award.types';
 import { activateAward, createAward, deactivateAward, deleteAward, getAllAwardsByTopicDifficulty } from '../../service/award.service';
 import AwardTable from './components/tables/AwardTable.vue';
 import AwardModal from './components/modals/AwardModal.vue';
@@ -33,7 +33,7 @@ async function loadTopicDifficultyBySlug() {
     )
 }
 
-const awardResponse = ref<AwardResponse | null>(null);
+const awardResponse = ref<AwardPageResponse | null>(null);
 
 async function loadAwards(page: number = 0) {
     const request: PageRequest = {
@@ -41,13 +41,13 @@ async function loadAwards(page: number = 0) {
         size: PAGE_SIZE.AWARD,
     }
     const slug: string = route.params.slug.toString() || "";
-    await useApiHandler<AwardResponse>(
+    await useApiHandler<AwardPageResponse>(
         () => getAllAwardsByTopicDifficulty(slug, request),
         {
             loading: AWARD_MESSAGE.get,
             error: AWARD_MESSAGE.getError,
         },
-        (data: AwardResponse) => awardResponse.value = data,
+        (data: AwardPageResponse) => awardResponse.value = data,
     )
 }
 
