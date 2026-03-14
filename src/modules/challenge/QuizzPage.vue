@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useApiHandler } from "../../composables/useApiHandler";
 import { getQuiz, submitQuiz } from "../../service/quiz.service";
 import { CHALLENGE_MESSAGE } from "../../constants/messages";
-import type { Quiz, QuizSubmitRequest } from "../../types/quiz.types";
+import type { Quiz, QuizResponse, QuizSubmitRequest } from "../../types/quiz.types";
 import QuizProgress from "./components/QuizProgress.vue";
 import QuizQuestion from "./components/QuizQuestion.vue";
 import type { Question } from "../../types/question.types";
@@ -23,22 +23,22 @@ const remainingTime = ref<number>(0);
 
 async function loadQuiz() {
   const slug = route.params.slug?.toString() || "";
-  await useApiHandler<Quiz>(
+  await useApiHandler<QuizResponse>(
     () => getQuiz(slug),
     {
       loading: CHALLENGE_MESSAGE.get,
       error: CHALLENGE_MESSAGE.getError,
     },
-    (data: Quiz) => {
-      quiz.value = data;
+    (data: QuizResponse) => {
+      quiz.value = data.quiz;
       const answers: Record<number, number | null> = {};
-      for (const q of data.questions) {
+      for (const q of data.quiz.questions) {
         answers[q.id] = null;
       }
       selectedAnswers.value = answers;
 
       const now = Date.now();
-      const expired = new Date(data.expiredAt).getTime();
+      const expired = new Date(data.quiz.expiredAt).getTime();
       remainingTime.value = Math.max(Math.floor((expired - now) / 1000), 0);
     }
   );
@@ -112,13 +112,13 @@ async function handleSubmitQuiz() {
     quizQuestions,
   };
 
-  await useApiHandler<Quiz>(
+  await useApiHandler<QuizResponse>(
     () => submitQuiz(dataRequest),
     {
       loading: "Đang nộp bài",
       error: "Lỗi nộp bài"
     },
-    (data: Quiz) => { handleQuizResult(data), clearTimeout() },
+    (data: QuizResponse) => { handleQuizResult(data.quiz), clearTimeout() },
   )
 }
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { QuizHistoryResponse } from '../../types/quiz.types';
+import type { QuizHistoryPageResponse } from '../../types/quiz.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { getAllReviewQuizzesByUser } from '../../service/quiz.service';
 import { CHALLENGE_HISTORY_MESSAGE } from '../../constants/messages';
@@ -17,19 +17,19 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import ChallengeHistoryCardList from './components/ChallengeHistoryCardList.vue';
 
-const historyQuizResponse = ref<QuizHistoryResponse | null>(null);
+const historyQuizResponse = ref<QuizHistoryPageResponse | null>(null);
 async function loadHistoryQuizzes(page: number = 0) {
     const request: PageRequest = {
         page,
         size: PAGE_SIZE.QUIZ_HISTORY,
     }
-    await useApiHandler<QuizHistoryResponse>(
+    await useApiHandler<QuizHistoryPageResponse>(
         () => getAllReviewQuizzesByUser(request),
         {
             loading: CHALLENGE_HISTORY_MESSAGE.get,
             error: CHALLENGE_HISTORY_MESSAGE.getError,
         },
-        (data: QuizHistoryResponse) => historyQuizResponse.value = data,
+        (data: QuizHistoryPageResponse) => historyQuizResponse.value = data,
     )
 }
 

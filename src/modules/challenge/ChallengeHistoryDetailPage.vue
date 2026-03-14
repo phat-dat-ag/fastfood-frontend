@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElCard, ElDivider } from 'element-plus';
-import type { Quiz, QuizAddFeedbackRequest } from '../../types/quiz.types';
+import type { Quiz, QuizAddFeedbackRequest, QuizResponse } from '../../types/quiz.types';
 import { addFeedback, getQuizHistoryDetailByUser } from '../../service/quiz.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CHALLENGE_HISTORY_DETAIL_MESSAGE, QUIZ_FEEDBACK_MESSAGE } from '../../constants/messages';
@@ -27,14 +27,14 @@ async function loadQuizHistory() {
         return;
     }
 
-    await useApiHandler<Quiz>(
+    await useApiHandler<QuizResponse>(
         () => getQuizHistoryDetailByUser(quizId),
         {
             loading: CHALLENGE_HISTORY_DETAIL_MESSAGE.get,
             error: CHALLENGE_HISTORY_DETAIL_MESSAGE.getError,
         },
-        (data: Quiz) => {
-            quizHistory.value = data;
+        (data: QuizResponse) => {
+            quizHistory.value = data.quiz;
         }
     );
 }

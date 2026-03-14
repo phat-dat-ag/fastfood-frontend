@@ -28,7 +28,11 @@ export interface QuizAddFeedbackRequest {
   feedback: string;
 }
 
-export interface QuizHistoryResponse {
+export interface QuizResponse {
+  quiz: Quiz;
+}
+
+export interface QuizHistoryPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

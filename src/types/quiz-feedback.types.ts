@@ -7,7 +7,7 @@ export interface QuizFeedback {
   feedbackAt: string;
 }
 
-export interface QuizFeedbackResponse {
+export interface QuizFeedbackPageResponse {
   currentPage: number;
   pageSize: number;
   totalItems: number;

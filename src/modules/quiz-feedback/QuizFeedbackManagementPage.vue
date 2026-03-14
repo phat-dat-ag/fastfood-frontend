@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { QuizFeedbackResponse } from '../../types/quiz-feedback.types';
+import type { QuizFeedbackPageResponse } from '../../types/quiz-feedback.types';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import { useApiHandler } from '../../composables/useApiHandler';
@@ -12,20 +12,20 @@ import type { Filter } from '../../types/filter.types';
 import FeedbackList from './components/FeedbackList.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 
-const feedbackResponse = ref<QuizFeedbackResponse | null>(null);
+const feedbackResponse = ref<QuizFeedbackPageResponse | null>(null);
 
 async function loadFeedbacks(page: number = 0) {
     const request: PageRequest = {
         page,
         size: PAGE_SIZE.QUIZ_FEEDBACK,
     }
-    await useApiHandler<QuizFeedbackResponse>(
+    await useApiHandler<QuizFeedbackPageResponse>(
         () => getAllFeedbackByAdmin(request),
         {
             loading: QUIZ_FEEDBACK_MESSAGE.get,
             error: QUIZ_FEEDBACK_MESSAGE.getError,
         },
-        (data: QuizFeedbackResponse) => feedbackResponse.value = data,
+        (data: QuizFeedbackPageResponse) => feedbackResponse.value = data,
     )
 }
 
