@@ -38,8 +38,8 @@ async function handleSubmitPromotionCategory(formValues: any) {
         quantity: formValues.quantity,
         maxDiscountAmount: formValues.maxDiscountAmount,
         minSpendAmount: 0,
-        isGlobal: false,
-        isActivated: formValues.isActivated,
+        global: false,
+        activated: formValues.isActivated,
         code: formValues.code,
     }
 

@@ -7,8 +7,8 @@ export interface PromotionCategoryCreateRequest {
   quantity: number;
   maxDiscountAmount: number;
   minSpendAmount: number;
-  isGlobal: boolean;
-  isActivated: boolean;
+  global: boolean;
+  activated: boolean;
   code: string;
 }
 
@@ -21,8 +21,8 @@ export interface PromotionProductCreateRequest {
   quantity: number;
   maxDiscountAmount: number;
   minSpendAmount: number;
-  isGlobal: boolean;
-  isActivated: boolean;
+  global: boolean;
+  activated: boolean;
   code: string;
 }
 
@@ -34,8 +34,8 @@ export interface PromotionOrderCreateRequest {
   quantity: number;
   maxDiscountAmount: number;
   minSpendAmount: number;
-  isGlobal: boolean;
-  isActivated: boolean;
+  global: boolean;
+  activated: boolean;
   code: string;
 }
 

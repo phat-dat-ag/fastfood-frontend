@@ -19,8 +19,8 @@ async function handleSubmitPromotionOrder(formValues: any) {
         quantity: formValues.quantity,
         maxDiscountAmount: formValues.maxDiscountAmount,
         minSpendAmount: formValues.minSpendAmount,
-        isGlobal: true,
-        isActivated: formValues.isActivated,
+        global: true,
+        activated: formValues.isActivated,
         code: formValues.code,
     }
 
