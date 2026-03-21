@@ -56,7 +56,7 @@ const schema = yup.object({
 const handleSubmit = (formValues: any) => {
     if (props.isCreatingProduct) {
         const formData: ProductCreateRequest = {
-            category_id: formValues.category_id,
+            categorId: formValues.category_id,
             name: formValues.name,
             description: formValues.description,
             price: formValues.price,

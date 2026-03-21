@@ -2,7 +2,7 @@ import type { Promotion } from "./promotion.types";
 import type { Review } from "./review.types";
 
 export interface ProductCreateRequest {
-  category_id: number;
+  categorId: number;
   name: string;
   description: string;
   price: string;

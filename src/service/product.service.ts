@@ -7,7 +7,7 @@ import type {
 
 export const createProduct = (data: ProductCreateRequest) => {
   const formData = new FormData();
-  formData.append("category_id", data.category_id.toString());
+  formData.append("category_id", data.categorId.toString());
   formData.append("name", data.name);
   formData.append("description", data.description);
   formData.append("price", data.price);
