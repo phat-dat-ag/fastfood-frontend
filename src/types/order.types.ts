@@ -1,3 +1,4 @@
+import type { OrderStatus } from "../constants/order-status";
 import type { Address } from "./geocode.types";
 import type { OrderDetail } from "./order-detail.types";
 import type { OrderNote } from "./order-note.types";
@@ -9,6 +10,11 @@ export interface OrderCreateRequest {
   userNote: string;
   promotionCode: string;
   addressId: number;
+}
+
+export interface OrderStatusUpdateRequest {
+  status: OrderStatus;
+  reason?: string;
 }
 
 export interface Order {

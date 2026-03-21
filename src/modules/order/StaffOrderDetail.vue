@@ -4,7 +4,7 @@ import type { Order, OrderResponse } from '../../types/order.types';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { cancelOrderByStaff, confirmOrder, getUnfinishedOrder, markAsDelivered, markAsDelivering } from '../../service/order.service';
+import { updateOrderStatus, getUnfinishedOrder, } from '../../service/order.service';
 import { STAFF_MANAGEMENT_ORDER_DETAIL_MESSAGE } from '../../constants/messages';
 import { PAYMENT_STATUS } from '../../constants/payment-status';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
@@ -44,7 +44,7 @@ onMounted(loadUnfinishedOrder);
 
 async function handleConfirmOrder(orderId: number) {
     await useApiHandler<Order>(
-        () => confirmOrder(orderId),
+        () => updateOrderStatus(orderId, { status: ORDER_STATUS.CONFIRMED }),
         {
             loading: "Đang xác nhận đơn hàng",
             error: "Lỗi xác nhận đơn hàng",
@@ -57,7 +57,7 @@ async function handleConfirmOrder(orderId: number) {
 
 async function handleMarkDelivering(orderId: number) {
     await useApiHandler<Order>(
-        () => markAsDelivering(orderId),
+        () => updateOrderStatus(orderId, { status: ORDER_STATUS.DELIVERING }),
         {
             loading: "Đang đánh dấu đơn hàng",
             error: "Lỗi đánh dấu đơn hàng",
@@ -70,7 +70,7 @@ async function handleMarkDelivering(orderId: number) {
 
 async function handleMarkDelivered(orderId: number) {
     await useApiHandler<Order>(
-        () => markAsDelivered(orderId),
+        () => updateOrderStatus(orderId, { status: ORDER_STATUS.DELIVERED }),
         {
             loading: "Đang đánh dấu đơn hàng",
             error: "Lỗi đánh dấu đơn hàng",
@@ -84,7 +84,7 @@ async function handleCancelOrder(orderId: number) {
     const reason: string | null = await openCancelOrderConfirm();
     if (!reason) return;
     await useApiHandler<Order>(
-        () => cancelOrderByStaff(orderId, reason),
+        () => updateOrderStatus(orderId, { status: ORDER_STATUS.CONFIRMED, reason }),
         {
             loading: "Đang hủy đơn cho khách",
             error: "Lỗi hủy đơn cho khách",

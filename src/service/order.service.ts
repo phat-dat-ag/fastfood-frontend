@@ -1,5 +1,8 @@
 import api from "../api/axios";
-import type { OrderCreateRequest } from "../types/order.types";
+import type {
+  OrderCreateRequest,
+  OrderStatusUpdateRequest,
+} from "../types/order.types";
 import type { PageRequest } from "../types/pagination.types";
 
 export const createCashOnDeliveryOrder = (data: OrderCreateRequest) => {
@@ -26,32 +29,11 @@ export const getUnfinishedOrder = (orderId: number) => {
   return api.get("/order/staff/unfinished-order", { params: { orderId } });
 };
 
-export const confirmOrder = (orderId: number) => {
-  return api.put("/order/confirm", null, { params: { orderId } });
-};
-
-export const markAsDelivering = (orderId: number) => {
-  return api.put("/order/mark-delivering", null, { params: { orderId } });
-};
-
-export const markAsDelivered = (orderId: number) => {
-  return api.put("/order/mark-delivered", null, { params: { orderId } });
-};
-
-export const cancelOrder = (orderId: number, reason: string) => {
-  return api.put(
-    "/order/user/cancel-order",
-    { reason },
-    { params: { orderId } }
-  );
-};
-
-export const cancelOrderByStaff = (orderId: number, reason: string) => {
-  return api.put(
-    "/order/staff/cancel-order",
-    { reason },
-    { params: { orderId } }
-  );
+export const updateOrderStatus = (
+  orderId: number,
+  orderStatusUpdateRequest: OrderStatusUpdateRequest,
+) => {
+  return api.patch(`/order/${orderId}/status`, orderStatusUpdateRequest);
 };
 
 export const getAllActiveOrders = (pageRequest: PageRequest) => {
