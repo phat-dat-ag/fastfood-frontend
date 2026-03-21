@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { updateOrderStatus, getAllUnfinishedOrders } from '../../service/order.service';
+import { updateOrderStatus, getOrders } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderPageResponse } from '../../types/order.types';
 import StaffOrderTable from './components/tables/StaffOrderTable.vue';
@@ -18,6 +18,7 @@ import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import StaffOrderCardList from './components/StaffOrderCardList.vue';
 import { ORDER_STATUS } from '../../constants/order-status';
+import { ORDER_QUERY } from '../../constants/order-query';
 
 const orderPageResponse = ref<OrderPageResponse | null>(null);
 
@@ -27,7 +28,7 @@ async function loadUnfinishedOrders(page: number = 0) {
         size: PAGE_SIZE.ORDERS.STAFF,
     }
     await useApiHandler<OrderPageResponse>(
-        () => getAllUnfinishedOrders(pageRequest),
+        () => getOrders(pageRequest, ORDER_QUERY.UNFINISHED),
         {
             loading: STAFF_MANAGEMENT_ORDER_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_MESSAGE.getError,

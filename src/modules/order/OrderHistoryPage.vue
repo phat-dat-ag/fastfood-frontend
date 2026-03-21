@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_HISTORY_MESSAGE } from '../../constants/messages';
-import { getAllOrderHistory } from '../../service/order.service';
+import { getOrders } from '../../service/order.service';
 import { type Order, type OrderPageResponse } from '../../types/order.types';
 import { useUserStore } from '../../store/useUserStore.store';
 import { USER_ROLES } from '../../constants/user-roles';
@@ -16,6 +16,7 @@ import Pagination from '../../components/Pagination.vue';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import OrderHistoryCardList from './components/OrderHistoryCardList.vue';
+import { ORDER_QUERY } from '../../constants/order-query';
 
 const orderPageResponse = ref<OrderPageResponse | null>(null);
 
@@ -25,7 +26,7 @@ async function loadOrders(page: number = 0) {
         size: PAGE_SIZE.ORDERS.HISTORY,
     }
     await useApiHandler<OrderPageResponse>(
-        () => getAllOrderHistory(pageRequest),
+        () => getOrders(pageRequest, ORDER_QUERY.HISTORY),
         {
             loading: ORDER_HISTORY_MESSAGE.get,
             error: ORDER_HISTORY_MESSAGE.getError,

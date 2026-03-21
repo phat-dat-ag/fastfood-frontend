@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getAllOrdersByAdmin } from '../../service/order.service';
+import { getOrders } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderPageResponse } from '../../types/order.types';
 import { ADMIN_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
@@ -12,6 +12,7 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import AdminOrdertable from './components/tables/AdminOrderTable.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { ORDER_QUERY } from '../../constants/order-query';
 
 const orderPageResponse = ref<OrderPageResponse | null>(null);
 
@@ -21,7 +22,7 @@ async function loadAllOrders(page: number = 0) {
         size: PAGE_SIZE.ORDERS.ADMIN,
     }
     await useApiHandler<OrderPageResponse>(
-        () => getAllOrdersByAdmin(pageRequest),
+        () => getOrders(pageRequest, ORDER_QUERY.ALL),
         {
             loading: ADMIN_MANAGEMENT_ORDER_MESSAGE.get,
             error: ADMIN_MANAGEMENT_ORDER_MESSAGE.getError,

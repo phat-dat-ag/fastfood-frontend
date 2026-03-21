@@ -2,7 +2,7 @@
 import { nextTick, onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { ORDER_TRACKING_MESSAGE } from '../../constants/messages';
-import { getAllActiveOrders, getPaymentIntent } from '../../service/order.service';
+import { getOrders, getPaymentIntent } from '../../service/order.service';
 import { type Order, type OrderPageResponse, type OrderResponse } from '../../types/order.types';
 import OrderTrackingTable from './components/tables/OrderTrackingTable.vue';
 import { useUserStore } from '../../store/useUserStore.store';
@@ -17,6 +17,7 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import OrderTrackingCardList from './components/OrderTrackingCardList.vue';
+import { ORDER_QUERY } from '../../constants/order-query';
 
 const orderPageResponse = ref<OrderPageResponse | null>(null);
 
@@ -26,7 +27,7 @@ async function loadTrackingOrders(page: number = 0) {
         size: PAGE_SIZE.ORDERS.TRACKING,
     }
     await useApiHandler<OrderPageResponse>(
-        () => getAllActiveOrders(pageRequest),
+        () => getOrders(pageRequest, ORDER_QUERY.ACTIVE),
         {
             loading: ORDER_TRACKING_MESSAGE.get,
             error: ORDER_TRACKING_MESSAGE.getError,
