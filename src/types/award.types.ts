@@ -5,7 +5,7 @@ export interface AwardCreateRequest {
   quantity: number;
   maxDiscountAmount: number;
   minSpendAmount: number;
-  isActivated: boolean;
+  activated: boolean;
 }
 
 export interface Award {

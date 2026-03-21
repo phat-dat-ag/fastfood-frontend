@@ -104,7 +104,7 @@ const handleSubmit = (formValues: any) => {
         quantity: formValues.quantity,
         maxDiscountAmount: formValues.maxDiscountAmount,
         minSpendAmount: formValues.minSpendAmount,
-        isActivated: formValues.isActivated,
+        activated: formValues.isActivated,
     }
     emit('create-award', formData);
     emit('close');
