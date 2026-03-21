@@ -25,10 +25,10 @@ function makeEmptyQuestion(): QuestionPrimaryData {
         isActivated: true,
         answerType: "text",
         answers: [
-            { content: "", imageUrl: null, isCorrect: true },
-            { content: "", imageUrl: null, isCorrect: false },
-            { content: "", imageUrl: null, isCorrect: false },
-            { content: "", imageUrl: null, isCorrect: false },
+            { content: "", imageUrl: null, correct: true },
+            { content: "", imageUrl: null, correct: false },
+            { content: "", imageUrl: null, correct: false },
+            { content: "", imageUrl: null, correct: false },
         ],
     };
 }
@@ -113,7 +113,7 @@ async function handleSubmitAll(): Promise<void> {
             }
         }
 
-        if (q.answers.filter(a => a.isCorrect).length !== 1) {
+        if (q.answers.filter(a => a.correct).length !== 1) {
             notifyError(`Câu hỏi ${i + 1}: phải có đúng 1 đáp án đúng.`);
             return;
         }
@@ -127,7 +127,7 @@ async function handleSubmitAll(): Promise<void> {
         answers: q.answers.map(a => ({
             content: a.content || "",
             imageUrl: a.imageUrl ? a.imageUrl : null,
-            isCorrect: a.isCorrect,
+            correct: a.correct,
         })),
     }));
 
@@ -215,8 +215,8 @@ function getObjectURL(file: File | null): string | undefined {
             <div class="mt-4 grid grid-cols-2 gap-4">
                 <div v-for="(a, i) in q.answers" :key="i" class="p-3 flex flex-col gap-2">
                     <div class="flex items-center gap-2">
-                        <input type="radio" :name="'correct-' + index" v-model="a.isCorrect" :value="true"
-                            @change="q.answers.forEach((x, j) => (x.isCorrect = j === i))" />
+                        <input type="radio" :name="'correct-' + index" v-model="a.correct" :value="true"
+                            @change="q.answers.forEach((x, j) => (x.correct = j === i))" />
                         <span class="text-sm font-medium text-gray-700">Đáp án {{ i + 1 }}</span>
                     </div>
 

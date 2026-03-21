@@ -4,7 +4,7 @@ import type { QuestionCreateRequest } from "../types/question.types";
 
 export const createQuestions = (
   questions: QuestionCreateRequest[],
-  topicDifficultySlug: string
+  topicDifficultySlug: string,
 ) => {
   const formData = new FormData();
 
@@ -12,7 +12,7 @@ export const createQuestions = (
     formData.append(`questions[${i}].content`, question.content);
     formData.append(
       `questions[${i}].isActivated`,
-      String(question.isActivated)
+      String(question.isActivated),
     );
 
     if (question.imageUrl)
@@ -23,13 +23,13 @@ export const createQuestions = (
     question.answers.forEach((answer, j) => {
       formData.append(`questions[${i}].answers[${j}].content`, answer.content);
       formData.append(
-        `questions[${i}].answers[${j}].isCorrect`,
-        String(answer.isCorrect)
+        `questions[${i}].answers[${j}].correct`,
+        String(answer.correct),
       );
       if (answer.imageUrl)
         formData.append(
           `questions[${i}].answers[${j}].imageUrl`,
-          answer.imageUrl
+          answer.imageUrl,
         );
     });
   });
@@ -43,7 +43,7 @@ export const createQuestions = (
 
 export const getAllQuestionByTopicDifficulty = (
   topicDifficultySlug: string,
-  request: PageRequest
+  request: PageRequest,
 ) => {
   return api.get("/question", { params: { topicDifficultySlug, ...request } });
 };

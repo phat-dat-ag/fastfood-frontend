@@ -1,7 +1,7 @@
 export interface AnswerCreateRequest {
   content: string;
   imageUrl: File | null;
-  isCorrect: boolean;
+  correct: boolean;
 }
 
 export interface Answer {
