@@ -39,7 +39,7 @@ const handleSubmit = (formValues: any) => {
         const formData: TopicCreateRequest = {
             name: formValues.name,
             description: formValues.description,
-            isActivated: formValues.isActivated,
+            activated: formValues.isActivated,
         }
         emit('create-topic', formData);
     } else {
@@ -51,7 +51,7 @@ const handleSubmit = (formValues: any) => {
             id: topicStore.topic.id,
             name: formValues.name,
             description: formValues.description,
-            isActivated: formValues.isActivated,
+            activated: formValues.isActivated,
         }
         emit('update-topic', formData);
     }

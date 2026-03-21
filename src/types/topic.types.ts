@@ -3,14 +3,14 @@ import type { TopicDifficultyDisplay } from "./topic-difficulty.types";
 export interface TopicCreateRequest {
   name: string;
   description: string;
-  isActivated: boolean;
+  activated: boolean;
 }
 
 export interface TopicUpdateRequest {
   id: number;
   name: string;
   description: string;
-  isActivated: boolean;
+  activated: boolean;
 }
 
 export interface Topic {

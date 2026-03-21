@@ -52,7 +52,7 @@ const handleSubmit = (formValues: any) => {
         const formData: TopicDifficultyCreateRequest = {
             name: formValues.name,
             description: formValues.description,
-            isActivated: formValues.isActivated,
+            activated: formValues.isActivated,
             duration: formValues.duration,
             questionCount: formValues.questionCount,
             minCorrectToReward: formValues.minCorrectToReward,
@@ -67,7 +67,7 @@ const handleSubmit = (formValues: any) => {
             id: topicDifficultyStore.topicDifficulty.id,
             name: formValues.name,
             description: formValues.description,
-            isActivated: formValues.isActivated,
+            activated: formValues.isActivated,
         }
         emit('update-topic-difficulty', formData);
     }
