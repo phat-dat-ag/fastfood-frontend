@@ -10,10 +10,7 @@ export const createQuestions = (
 
   questions.forEach((question, i) => {
     formData.append(`questions[${i}].content`, question.content);
-    formData.append(
-      `questions[${i}].isActivated`,
-      String(question.isActivated),
-    );
+    formData.append(`questions[${i}].isActivated`, String(question.activated));
 
     if (question.imageUrl)
       formData.append(`questions[${i}].imageUrl`, question.imageUrl);

@@ -22,7 +22,7 @@ function makeEmptyQuestion(): QuestionPrimaryData {
         content: "",
         imageUrl: null,
         audioUrl: null,
-        isActivated: true,
+        activated: true,
         answerType: "text",
         answers: [
             { content: "", imageUrl: null, correct: true },
@@ -123,7 +123,7 @@ async function handleSubmitAll(): Promise<void> {
         content: q.content,
         imageUrl: q.imageUrl ? q.imageUrl : null,
         audioUrl: q.audioUrl ? q.audioUrl : null,
-        isActivated: q.isActivated,
+        activated: q.activated,
         answers: q.answers.map(a => ({
             content: a.content || "",
             imageUrl: a.imageUrl ? a.imageUrl : null,
@@ -199,7 +199,7 @@ function getObjectURL(file: File | null): string | undefined {
 
             <div class="mt-4 flex items-center gap-2">
                 <span class="text-sm text-gray-700">Kích hoạt câu hỏi:</span>
-                <ElSwitch v-model="q.isActivated" />
+                <ElSwitch v-model="q.activated" />
             </div>
 
             <div class="mt-5 flex gap-6 items-center">

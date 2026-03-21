@@ -4,7 +4,7 @@ export interface QuestionPrimaryData {
   content: string;
   imageUrl: File | null;
   audioUrl: File | null;
-  isActivated: boolean;
+  activated: boolean;
   answerType: "text" | "image";
   answers: AnswerCreateRequest[];
 }
@@ -13,7 +13,7 @@ export interface QuestionCreateRequest {
   content: string;
   imageUrl: File | null;
   audioUrl: File | null;
-  isActivated: boolean;
+  activated: boolean;
   answers: AnswerCreateRequest[];
 }
 
