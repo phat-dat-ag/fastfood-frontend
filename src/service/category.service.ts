@@ -6,7 +6,7 @@ import type {
 import type { PageRequest } from "../types/pagination.types";
 
 function buildCategoryFormData(
-  data: CategoryCreateRequest | CategoryUpdateRequest
+  data: CategoryCreateRequest | CategoryUpdateRequest,
 ): FormData {
   const formData = new FormData();
   if ("id" in data && data.id !== undefined) {
@@ -49,12 +49,13 @@ export const updateCategory = (data: CategoryUpdateRequest) => {
   });
 };
 
-export const activateCategory = (id: number) => {
-  return api.put("/admin/category/activate", null, { params: { id } });
-};
-
-export const deactivateCategory = (id: number) => {
-  return api.put("/admin/category/deactivate", null, { params: { id } });
+export const updateActivationCategory = (
+  categoryId: number,
+  activated: boolean,
+) => {
+  return api.patch(`/admin/category/${categoryId}/activation`, {
+    activated,
+  });
 };
 
 export const deleteCategory = (id: number) => {
