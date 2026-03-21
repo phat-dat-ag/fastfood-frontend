@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import CategoryModal from './components/CategoryModal.vue'
-import { createCategory, deleteCategory, getCategories, updateActivationCategory, updateCategory } from '../../service/category.service'
+import { createCategory, deleteCategory, getCategories, updateCategoryActivation, updateCategory } from '../../service/category.service'
 import type { Category, CategoryCreateRequest, CategoryPageResponse, CategoryUpdateRequest } from '../../types/category.types'
 import { useCategoryStore } from '../../store/useCategoryStore.store'
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils'
@@ -124,7 +124,7 @@ const goToProductsManagementPage = (categorySlug: string) => {
 async function handleActivateCategory(categoryId: number) {
   const page: number = categoryResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => updateActivationCategory(categoryId, true),
+    () => updateCategoryActivation(categoryId, true),
     {
       loading: "Đang kích hoạt danh mục",
       error: "Lỗi kích hoạt danh mục",
@@ -137,7 +137,7 @@ async function handleActivateCategory(categoryId: number) {
 async function handleDeactivateCategory(categoryId: number) {
   const page: number = categoryResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => updateActivationCategory(categoryId, false),
+    () => updateCategoryActivation(categoryId, false),
     {
       loading: "Đang vô hiệu hóa danh mục",
       error: "Lỗi vô hiệu hóa danh mục",

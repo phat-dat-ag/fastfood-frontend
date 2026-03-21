@@ -49,7 +49,7 @@ export const updateCategory = (data: CategoryUpdateRequest) => {
   });
 };
 
-export const updateActivationCategory = (
+export const updateCategoryActivation = (
   categoryId: number,
   activated: boolean,
 ) => {

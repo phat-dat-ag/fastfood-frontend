@@ -9,7 +9,7 @@ import { AWARD_MESSAGE, TOPIC_DIFFICULTY_MESSAGE } from '../../constants/message
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
 import type { AwardCreateRequest, AwardPageResponse } from '../../types/award.types';
-import { activateAward, createAward, deactivateAward, deleteAward, getAllAwardsByTopicDifficulty } from '../../service/award.service';
+import { createAward, deleteAward, getAllAwardsByTopicDifficulty, updateAwardActivation } from '../../service/award.service';
 import AwardTable from './components/tables/AwardTable.vue';
 import AwardModal from './components/modals/AwardModal.vue';
 import type { PageRequest } from '../../types/pagination.types';
@@ -100,7 +100,7 @@ async function handleCreateAward(data: AwardCreateRequest) {
 async function handleActivateAward(awardId: number) {
     const page = awardResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => activateAward(awardId),
+        () => updateAwardActivation(awardId, true),
         {
             loading: "Đang kích hoạt phần thưởng",
             error: "Lỗi kích hoạt phần thưởng"
@@ -113,7 +113,7 @@ async function handleActivateAward(awardId: number) {
 async function handleDeactivateAward(awardId: number) {
     const page = awardResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => deactivateAward(awardId),
+        () => updateAwardActivation(awardId, false),
         {
             loading: "Đang hủy kích hoạt phần thưởng",
             error: "Lỗi hủy kích hoạt phần thưởng"
