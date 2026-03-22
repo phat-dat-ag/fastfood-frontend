@@ -12,7 +12,6 @@ import type { Promotion, PromotionOrderResponse } from '../../types/promotion.ty
 import { notifyError, notifySuccess } from '../../utils/notification.utils';
 import type { Address, AddressesResponse } from '../../types/geocode.types';
 import { getAddresses } from '../../service/address.service';
-import type { DeliveryRequest } from '../../types/delivery.types';
 import { PAYMENT_METHODS, type PaymentMethodType } from '../../constants/payment-methods';
 import CheckoutModal from './components/CheckoutModal.vue';
 import type { Order, OrderCreateRequest, OrderResponse } from '../../types/order.types';
@@ -28,7 +27,7 @@ const selectedPromotionCode = ref<string>("");
 
 const cartDetail = ref<CartDetailResponse | null>(null);
 
-const deliveryRequest = ref<DeliveryRequest | null>(null);
+const addressId = ref<number | null>(null);
 
 const selectedPaymentMethod = ref<PaymentMethodType | null>(null);
 
@@ -45,14 +44,14 @@ function handleCartResponse(data: CartDetailResponse) {
     if (cartDetail.value.deliveryInformation.success) {
         notifySuccess(deliveryMessage);
     } else {
-        if (deliveryRequest.value)
+        if (addressId.value)
             notifyError(deliveryMessage);
     }
 }
 
 async function loadCarts() {
     await useApiHandler<CartDetailResponse>(
-        () => getCartDetail(selectedPromotionCode.value, deliveryRequest.value),
+        () => getCartDetail(selectedPromotionCode.value, addressId.value),
         {
             loading: CART_MESSAGE.get,
             error: CART_MESSAGE.getError,
@@ -98,7 +97,7 @@ async function handleQuantityChange({ newQuantity, productId }: { newQuantity: n
         return;
     }
     await useApiHandler(
-        () => updateCart({ productId, quantity: newQuantity }),
+        () => updateCart(productId, newQuantity),
         {
             loading: CART_MESSAGE.update,
             success: CART_MESSAGE.updateSuccess,
@@ -131,11 +130,8 @@ async function onPromotionCodeChange(promotionCode: string) {
     await loadCarts();
 }
 
-async function onAddressChange(addressId: number) {
-    const dataRequest: DeliveryRequest = {
-        addressId: addressId,
-    };
-    deliveryRequest.value = dataRequest;
+async function onAddressChange(newAddressId: number) {
+    addressId.value = newAddressId;
     await loadCarts();
 }
 
@@ -152,7 +148,7 @@ const isCheckoutModalVisible = ref(false);
 const clientSecret = ref<string | null>(null);
 
 async function placeOrder(userNote: string) {
-    if (!deliveryRequest.value) {
+    if (!addressId.value) {
         notifyError("Vui lòng chọn địa chỉ giao hàng!");
         return;
     }
@@ -170,7 +166,7 @@ async function placeOrder(userNote: string) {
     }
     const dataRequest: OrderCreateRequest = {
         promotionCode: selectedPromotionCode.value,
-        addressId: deliveryRequest.value.addressId,
+        addressId: addressId.value,
         userNote,
         paymentMethod: selectedPaymentMethod.value
     }

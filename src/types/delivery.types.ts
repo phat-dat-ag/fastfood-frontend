@@ -1,7 +1,3 @@
-export interface DeliveryRequest {
-  addressId: number;
-}
-
 export interface DeliveryResponse {
   success: boolean;
   message: string;

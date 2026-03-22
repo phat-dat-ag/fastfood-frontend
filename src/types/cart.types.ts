@@ -8,11 +8,6 @@ export interface CartCreateRequest {
   quantity: number;
 }
 
-export interface CartUpdateRequest {
-  productId: number;
-  quantity: number;
-}
-
 export interface Cart {
   quantity: number;
   product: Product;

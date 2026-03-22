@@ -1,23 +1,22 @@
 import api from "../api/axios";
-import type { CartCreateRequest, CartUpdateRequest } from "../types/cart.types";
-import type { DeliveryRequest } from "../types/delivery.types";
+import type { CartCreateRequest } from "../types/cart.types";
 
 export const addProductToCart = (data: CartCreateRequest) => {
-  return api.post("/cart", data);
+  return api.post("/carts", data);
 };
 
 export const getCartDetail = (
   promotionCode: string,
-  data: DeliveryRequest | null
+  addressId: number | null,
 ) => {
   const code: string = promotionCode ?? "";
-  return api.post("/cart/my-cart", data, { params: { code } });
+  return api.get("/carts/me", { params: { code, addressId } });
 };
 
-export const updateCart = (data: CartUpdateRequest) => {
-  return api.put("/cart", data);
+export const updateCart = (productId: number, quantity: number) => {
+  return api.patch(`/carts/me/items/${productId}`, { quantity });
 };
 
 export const deleteProductFromCart = (productId: number) => {
-  return api.delete("/cart", { params: { productId } });
+  return api.delete(`/carts/me/items/${productId}`);
 };
