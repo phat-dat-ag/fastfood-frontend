@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import type { PromotionQueryType } from "../constants/promotion-query";
 import type { PageRequest } from "../types/pagination.types";
 import type { PromotionCreateRequest } from "../types/promotion.types";
 
@@ -8,16 +9,15 @@ export const createPromotion = (
   return api.post("/admin/promotion", promotionCreateRequest);
 };
 
-export const getPromotionCategory = (pageRequest: PageRequest) => {
-  return api.get("/admin/promotion/category", { params: pageRequest });
-};
-
-export const getPromotionProduct = (pageRequest: PageRequest) => {
-  return api.get("/admin/promotion/product", { params: pageRequest });
-};
-
-export const getPromotionOrder = (pageRequest: PageRequest) => {
-  return api.get("/admin/promotion/order", { params: pageRequest });
+export const getPromotions = (
+  pageRequest: PageRequest,
+  promotionQueryType: PromotionQueryType,
+) => {
+  const params = {
+    ...pageRequest,
+    promotionQueryType,
+  };
+  return api.get("/admin/promotion", { params });
 };
 
 export const getValidPromotionOrder = () => {

@@ -6,12 +6,13 @@ import type { PromotionPageResponse } from '../../types/promotion.types';
 import { PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { activatePromotion, deactivatePromotion, deletePromotion, getPromotionProduct } from '../../service/promotion.service';
+import { activatePromotion, deactivatePromotion, deletePromotion, getPromotions } from '../../service/promotion.service';
 import PromotionByProductTable from './components/tables/PromotionByProductTable.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { PROMOTION_QUERY } from '../../constants/promotion-query';
 
 const filterOptions: Filter[] = [
   { label: 'Thêm gần đây', value: 'recently-added' },
@@ -42,7 +43,7 @@ async function loadPromotions(page: number = 0) {
     size: PAGE_SIZE.PROMOTION.BY_PRODUCT,
   }
   await useApiHandler<PromotionPageResponse>(
-    () => getPromotionProduct(request),
+    () => getPromotions(request, PROMOTION_QUERY.PRODUCT),
     {
       loading: PROMOTION_PRODUCT_MESSAGE.get,
       error: PROMOTION_PRODUCT_MESSAGE.getError,

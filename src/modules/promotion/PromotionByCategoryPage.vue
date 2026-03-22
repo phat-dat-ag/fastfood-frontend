@@ -4,7 +4,7 @@ import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionByCategoryTable from './components/tables/PromotionByCategoryTable.vue';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { activatePromotion, deactivatePromotion, deletePromotion, getPromotionCategory } from '../../service/promotion.service';
+import { activatePromotion, deactivatePromotion, deletePromotion, getPromotions } from '../../service/promotion.service';
 import type { PromotionPageResponse } from '../../types/promotion.types';
 import { PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -12,6 +12,7 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { PROMOTION_QUERY } from '../../constants/promotion-query';
 
 const filterOptions: Filter[] = [
   { label: 'Thêm gần đây', value: 'recently-added' },
@@ -42,7 +43,7 @@ async function loadPromotions(page: number = 0) {
     size: PAGE_SIZE.PROMOTION.BY_CATEGORY,
   }
   await useApiHandler<PromotionPageResponse>(
-    () => getPromotionCategory(request),
+    () => getPromotions(request, PROMOTION_QUERY.CATEGORY),
     {
       loading: PROMOTION_CATEGORY_MESSAGE.get,
       error: PROMOTION_CATEGORY_MESSAGE.getError,
