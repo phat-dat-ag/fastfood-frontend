@@ -43,3 +43,7 @@ export const deactivateAccount = (userId: number) => {
 export const deleteUser = (phone: string) => {
   return api.delete("/user/manage", { params: { phone } });
 };
+
+export const getValidPromotions = () => {
+  return api.get("/user/me/promotions/valid");
+};

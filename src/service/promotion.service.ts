@@ -20,10 +20,6 @@ export const getPromotions = (
   return api.get("/admin/promotion", { params });
 };
 
-export const getValidPromotionOrder = () => {
-  return api.get("/admin/promotion/order/valid");
-};
-
 export const activatePromotion = (promotionId: number) => {
   return api.put("/admin/promotion/activate", null, {
     params: { promotionId },

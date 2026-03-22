@@ -13,7 +13,7 @@ const selectedAddressId = ref<number | undefined>(undefined);
 
 function onAddressChange(value: number) {
     if (!value) return;
-    emit("change-address", selectedAddressId);
+    emit("change-address", selectedAddressId.value);
 }
 
 </script>

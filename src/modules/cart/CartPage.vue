@@ -7,7 +7,6 @@ import { ADDRESS_MESSAGE, CART_MESSAGE, CASH_ON_DELIVERY_ORDER, PROMOTION_ORDER_
 import CartList from './components/CartList.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import CheckoutSummary from './components/CheckoutSummary.vue';
-import { getValidPromotionOrder } from '../../service/promotion.service';
 import type { Promotion, PromotionOrderResponse } from '../../types/promotion.types';
 import { notifyError, notifySuccess } from '../../utils/notification.utils';
 import type { Address, AddressesResponse } from '../../types/geocode.types';
@@ -20,6 +19,7 @@ import { useRouter } from 'vue-router';
 import { CART_AMOUNT_LIMIT } from '../../constants/cart';
 import { formatCurrencyVND } from '../../utils/currency.utils';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { getValidPromotions } from '../../service/user.service';
 
 const router = useRouter();
 
@@ -64,7 +64,7 @@ onMounted(loadCarts);
 const promotions = ref<Promotion[]>([]);
 async function loadPromotions() {
     await useApiHandler<PromotionOrderResponse>(
-        getValidPromotionOrder,
+        getValidPromotions,
         {
             loading: PROMOTION_ORDER_MESSAGE.get,
             error: PROMOTION_ORDER_MESSAGE.getError,
