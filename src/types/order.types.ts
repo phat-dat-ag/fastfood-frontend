@@ -1,4 +1,5 @@
 import type { OrderStatus } from "../constants/order-status";
+import type { PaymentMethodType } from "../constants/payment-methods";
 import type { Address } from "./geocode.types";
 import type { OrderDetail } from "./order-detail.types";
 import type { OrderNote } from "./order-note.types";
@@ -10,6 +11,7 @@ export interface OrderCreateRequest {
   userNote: string;
   promotionCode: string;
   addressId: number;
+  paymentMethod: PaymentMethodType;
 }
 
 export interface OrderStatusUpdateRequest {

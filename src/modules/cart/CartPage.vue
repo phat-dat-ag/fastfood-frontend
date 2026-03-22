@@ -13,10 +13,10 @@ import { notifyError, notifySuccess } from '../../utils/notification.utils';
 import type { Address, AddressesResponse } from '../../types/geocode.types';
 import { getAddresses } from '../../service/address.service';
 import type { DeliveryRequest } from '../../types/delivery.types';
-import { PAYMENT_METHODS } from '../../constants/payment-methods';
+import { PAYMENT_METHODS, type PaymentMethodType } from '../../constants/payment-methods';
 import CheckoutModal from './components/CheckoutModal.vue';
 import type { Order, OrderCreateRequest, OrderResponse } from '../../types/order.types';
-import { createCashOnDeliveryOrder, createStripePaymentOrder } from '../../service/order.service';
+import { createOrder } from '../../service/order.service';
 import { useRouter } from 'vue-router';
 import { CART_AMOUNT_LIMIT } from '../../constants/cart';
 import { formatCurrencyVND } from '../../utils/currency.utils';
@@ -30,7 +30,7 @@ const cartDetail = ref<CartDetailResponse | null>(null);
 
 const deliveryRequest = ref<DeliveryRequest | null>(null);
 
-const selectedPaymentMethod = ref<string>("");
+const selectedPaymentMethod = ref<PaymentMethodType | null>(null);
 
 function handleCartResponse(data: CartDetailResponse) {
     cartDetail.value = data;
@@ -143,7 +143,7 @@ function onPaymentMethodChange(paymentMethod: string) {
     if (paymentMethod === PAYMENT_METHODS.BANK_TRANSFER || paymentMethod === PAYMENT_METHODS.CASH_ON_DELIVERY)
         selectedPaymentMethod.value = paymentMethod;
     else {
-        selectedPaymentMethod.value = "";
+        selectedPaymentMethod.value = null;
         notifyError("Lỗi chọn phương thức thanh toán. Hãy thử lại")
     }
 }
@@ -172,6 +172,7 @@ async function placeOrder(userNote: string) {
         promotionCode: selectedPromotionCode.value,
         addressId: deliveryRequest.value.addressId,
         userNote,
+        paymentMethod: selectedPaymentMethod.value
     }
     if (selectedPaymentMethod.value == PAYMENT_METHODS.CASH_ON_DELIVERY) {
         if (Number(cartDetail.value.totalPrice) > CART_AMOUNT_LIMIT.MAX_CASH_ON_DELIVERY_AMOUNT) {
@@ -179,7 +180,7 @@ async function placeOrder(userNote: string) {
             return;
         }
         await useApiHandler<Order>(
-            () => createCashOnDeliveryOrder(dataRequest),
+            () => createOrder(dataRequest),
             {
                 loading: CASH_ON_DELIVERY_ORDER.create,
                 error: CASH_ON_DELIVERY_ORDER.createError,
@@ -189,7 +190,7 @@ async function placeOrder(userNote: string) {
         )
     } else {
         await useApiHandler<OrderResponse>(
-            () => createStripePaymentOrder(dataRequest),
+            () => createOrder(dataRequest),
             {
                 loading: STRIPE_PAYMENT_ORDER.create,
                 error: STRIPE_PAYMENT_ORDER.createError,

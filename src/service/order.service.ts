@@ -6,12 +6,8 @@ import type {
 } from "../types/order.types";
 import type { PageRequest } from "../types/pagination.types";
 
-export const createCashOnDeliveryOrder = (data: OrderCreateRequest) => {
-  return api.post("/order/cash-on-delivery", data);
-};
-
-export const createStripePaymentOrder = (data: OrderCreateRequest) => {
-  return api.post("/order/stripe-payment", data);
+export const createOrder = (orderCreateRequest: OrderCreateRequest) => {
+  return api.post("/order", orderCreateRequest);
 };
 
 export const getPaymentIntent = (orderId: number) => {
