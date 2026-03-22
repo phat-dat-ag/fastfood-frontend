@@ -7,29 +7,29 @@ import type {
 import type { PageRequest } from "../types/pagination.types";
 
 export const createOrder = (orderCreateRequest: OrderCreateRequest) => {
-  return api.post("/order", orderCreateRequest);
+  return api.post("/orders", orderCreateRequest);
 };
 
 export const getPaymentIntent = (orderId: number) => {
-  return api.get("/order/payment-intent", { params: { orderId } });
+  return api.get(`/orders/${orderId}/payment-intent`);
 };
 
-export const updateOrderStatus = (
+export const updateOrder = (
   orderId: number,
   orderStatusUpdateRequest: OrderStatusUpdateRequest,
 ) => {
-  return api.patch(`/order/${orderId}/status`, orderStatusUpdateRequest);
+  return api.patch(`/orders/${orderId}`, orderStatusUpdateRequest);
 };
 
 export const getOrder = (orderId: number) => {
-  return api.get(`/order/${orderId}`);
+  return api.get(`/orders/${orderId}`);
 };
 
 export const getOrders = (
   pageRequest: PageRequest,
   orderQueryType: OrderQueryType = ORDER_QUERY.ACTIVE,
 ) => {
-  return api.get("/order", {
+  return api.get("/orders", {
     params: {
       ...pageRequest,
       orderQueryType,

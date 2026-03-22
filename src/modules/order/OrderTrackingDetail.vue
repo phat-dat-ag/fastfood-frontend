@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import type { Order, OrderResponse } from '../../types/order.types';
-import { updateOrderStatus, getOrder, getPaymentIntent } from '../../service/order.service';
+import { updateOrder, getOrder, getPaymentIntent } from '../../service/order.service';
 import { ORDER_TRACKING_DETAIL_MESSAGE } from '../../constants/messages';
 import { PAYMENT_STATUS } from '../../constants/payment-status';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
@@ -77,7 +77,7 @@ async function handleCancelOrder(order: Order) {
     const reason: string | null = await openCancelOrderConfirm();
     if (!reason) return;
     await useApiHandler<Order>(
-        () => updateOrderStatus(order.id, { status: ORDER_STATUS.CANCELLED, reason }),
+        () => updateOrder(order.id, { status: ORDER_STATUS.CANCELLED, reason }),
         {
             loading: "Đang hủy đơn",
             error: "Lỗi hủy đơn",

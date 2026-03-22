@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STAFF_MANAGEMENT_ORDER_MESSAGE } from '../../constants/messages';
-import { updateOrderStatus, getOrders } from '../../service/order.service';
+import { updateOrder, getOrders } from '../../service/order.service';
 import { onMounted, ref } from 'vue';
 import type { Order, OrderPageResponse } from '../../types/order.types';
 import StaffOrderTable from './components/tables/StaffOrderTable.vue';
@@ -53,7 +53,7 @@ async function handleCancelOrder(order: Order) {
     const reason: string | null = await openCancelOrderConfirm();
     if (!reason) return;
     await useApiHandler<Order>(
-        () => updateOrderStatus(order.id, { status: ORDER_STATUS.CANCELLED, reason }),
+        () => updateOrder(order.id, { status: ORDER_STATUS.CANCELLED, reason }),
         {
             loading: "Đang hủy đơn cho khách",
             error: "Lỗi hủy đơn cho khách",
