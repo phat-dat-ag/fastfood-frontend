@@ -6,20 +6,20 @@ export const createAward = (
   topicDifficultySlug: string,
   data: AwardCreateRequest,
 ) => {
-  return api.post("/award", data, { params: { topicDifficultySlug } });
+  return api.post(`/awards/${topicDifficultySlug}`, data);
 };
 
 export const getAllAwardsByTopicDifficulty = (
   topicDifficultySlug: string,
   request: PageRequest,
 ) => {
-  return api.get("/award", { params: { topicDifficultySlug, ...request } });
+  return api.get("/awards", { params: { topicDifficultySlug, ...request } });
 };
 
 export const updateAwardActivation = (awardId: number, activated: boolean) => {
-  return api.patch(`/award/${awardId}/activation`, { activated });
+  return api.patch(`/awards/${awardId}`, { activated });
 };
 
 export const deleteAward = (awardId: number) => {
-  return api.delete("/award", { params: { awardId } });
+  return api.delete(`/awards/${awardId}`);
 };
