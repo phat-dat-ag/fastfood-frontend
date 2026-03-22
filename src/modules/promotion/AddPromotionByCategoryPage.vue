@@ -6,8 +6,8 @@ import { getDisplayableCategories } from '../../service/category.service';
 import { CATEGORY_MESSAGES, PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
 import PromotionFormBase from './components/PromotionFormBase.vue';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
-import type { PromotionCategoryCreateRequest } from '../../types/promotion.types';
-import { createPromotionCategory } from '../../service/promotion.service';
+import type { PromotionCreateRequest } from '../../types/promotion.types';
+import { createPromotion } from '../../service/promotion.service';
 import router from '../../router';
 
 const categories = ref<Category[]>([]);
@@ -29,7 +29,7 @@ async function handleSubmitPromotionCategory(formValues: any) {
     const startAt = toVietnamTimezoneISOString(new Date(formValues.startAt), false);
     const endAt = toVietnamTimezoneISOString(new Date(formValues.endAt), true);
 
-    const data: PromotionCategoryCreateRequest = {
+    const data: PromotionCreateRequest = {
         categoryId: formValues.id,
         type: formValues.type,
         value: formValues.value,
@@ -38,13 +38,12 @@ async function handleSubmitPromotionCategory(formValues: any) {
         quantity: formValues.quantity,
         maxDiscountAmount: formValues.maxDiscountAmount,
         minSpendAmount: 0,
-        global: false,
         activated: formValues.isActivated,
         code: formValues.code,
     }
 
     await useApiHandler(
-        () => createPromotionCategory(data),
+        () => createPromotion(data),
         {
             loading: PROMOTION_CATEGORY_MESSAGE.create,
             success: PROMOTION_CATEGORY_MESSAGE.createSuccess,

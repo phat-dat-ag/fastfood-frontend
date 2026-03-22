@@ -1,5 +1,6 @@
-export interface PromotionCategoryCreateRequest {
-  categoryId: number;
+export interface PromotionCreateRequest {
+  categoryId?: number;
+  productId?: number;
   type: string;
   value: number;
   startAt: string;
@@ -7,34 +8,6 @@ export interface PromotionCategoryCreateRequest {
   quantity: number;
   maxDiscountAmount: number;
   minSpendAmount: number;
-  global: boolean;
-  activated: boolean;
-  code: string;
-}
-
-export interface PromotionProductCreateRequest {
-  productId: number;
-  type: string;
-  value: number;
-  startAt: string;
-  endAt: string;
-  quantity: number;
-  maxDiscountAmount: number;
-  minSpendAmount: number;
-  global: boolean;
-  activated: boolean;
-  code: string;
-}
-
-export interface PromotionOrderCreateRequest {
-  type: string;
-  value: number;
-  startAt: string;
-  endAt: string;
-  quantity: number;
-  maxDiscountAmount: number;
-  minSpendAmount: number;
-  global: boolean;
   activated: boolean;
   code: string;
 }

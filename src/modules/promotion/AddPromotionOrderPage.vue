@@ -2,8 +2,8 @@
 import { useApiHandler } from '../../composables/useApiHandler';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import router from '../../router';
-import { createPromotionOrder } from '../../service/promotion.service';
-import type { PromotionOrderCreateRequest } from '../../types/promotion.types';
+import { createPromotion } from '../../service/promotion.service';
+import type { PromotionCreateRequest } from '../../types/promotion.types';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import PromotionFormBase from './components/PromotionFormBase.vue';
 
@@ -11,7 +11,7 @@ async function handleSubmitPromotionOrder(formValues: any) {
     const startAt = toVietnamTimezoneISOString(new Date(formValues.startAt), false);
     const endAt = toVietnamTimezoneISOString(new Date(formValues.endAt), true);
 
-    const data: PromotionOrderCreateRequest = {
+    const data: PromotionCreateRequest = {
         type: formValues.type,
         value: formValues.value,
         startAt: startAt,
@@ -19,13 +19,12 @@ async function handleSubmitPromotionOrder(formValues: any) {
         quantity: formValues.quantity,
         maxDiscountAmount: formValues.maxDiscountAmount,
         minSpendAmount: formValues.minSpendAmount,
-        global: true,
         activated: formValues.isActivated,
         code: formValues.code,
     }
 
     await useApiHandler(
-        () => createPromotionOrder(data),
+        () => createPromotion(data),
         {
             loading: PROMOTION_ORDER_MESSAGE.create,
             success: PROMOTION_ORDER_MESSAGE.createSuccess,

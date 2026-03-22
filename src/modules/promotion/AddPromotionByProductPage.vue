@@ -5,8 +5,8 @@ import { PRODUCT_MESSAGES, PROMOTION_PRODUCT_MESSAGE } from '../../constants/mes
 import type { Product, ProductDisplayResponse } from '../../types/product.types';
 import { getAllDisplayableProducts } from '../../service/product.service';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
-import type { PromotionProductCreateRequest } from '../../types/promotion.types';
-import { createPromotionProduct } from '../../service/promotion.service';
+import type { PromotionCreateRequest } from '../../types/promotion.types';
+import { createPromotion } from '../../service/promotion.service';
 import router from '../../router';
 import PromotionFormBase from './components/PromotionFormBase.vue';
 
@@ -29,7 +29,7 @@ async function handleSubmitPromotionProduct(formValues: any) {
     const startAt = toVietnamTimezoneISOString(new Date(formValues.startAt), false);
     const endAt = toVietnamTimezoneISOString(new Date(formValues.endAt), true);
 
-    const data: PromotionProductCreateRequest = {
+    const data: PromotionCreateRequest = {
         productId: formValues.id,
         type: formValues.type,
         value: formValues.value,
@@ -38,13 +38,12 @@ async function handleSubmitPromotionProduct(formValues: any) {
         quantity: formValues.quantity,
         maxDiscountAmount: formValues.maxDiscountAmount,
         minSpendAmount: 0,
-        global: false,
         activated: formValues.isActivated,
         code: formValues.code,
     }
 
     await useApiHandler(
-        () => createPromotionProduct(data),
+        () => createPromotion(data),
         {
             loading: PROMOTION_PRODUCT_MESSAGE.create,
             success: PROMOTION_PRODUCT_MESSAGE.createSuccess,
