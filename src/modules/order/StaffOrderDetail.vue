@@ -4,7 +4,7 @@ import type { Order, OrderResponse } from '../../types/order.types';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { updateOrderStatus, getUnfinishedOrder, } from '../../service/order.service';
+import { updateOrderStatus, getOrder, } from '../../service/order.service';
 import { STAFF_MANAGEMENT_ORDER_DETAIL_MESSAGE } from '../../constants/messages';
 import { PAYMENT_STATUS } from '../../constants/payment-status';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
@@ -31,7 +31,7 @@ async function loadUnfinishedOrder() {
         return;
     }
     await useApiHandler<OrderResponse>(
-        () => getUnfinishedOrder(orderId),
+        () => getOrder(orderId),
         {
             loading: STAFF_MANAGEMENT_ORDER_DETAIL_MESSAGE.get,
             error: STAFF_MANAGEMENT_ORDER_DETAIL_MESSAGE.getError,

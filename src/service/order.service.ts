@@ -18,14 +18,6 @@ export const getPaymentIntent = (orderId: number) => {
   return api.get("/order/payment-intent", { params: { orderId } });
 };
 
-export const getOrderById = (orderId: number) => {
-  return api.get("/order/by-order-id", { params: { orderId } });
-};
-
-export const getUnfinishedOrder = (orderId: number) => {
-  return api.get("/order/staff/unfinished-order", { params: { orderId } });
-};
-
 export const updateOrderStatus = (
   orderId: number,
   orderStatusUpdateRequest: OrderStatusUpdateRequest,
@@ -33,12 +25,8 @@ export const updateOrderStatus = (
   return api.patch(`/order/${orderId}/status`, orderStatusUpdateRequest);
 };
 
-export const getActiveOrder = (orderId: number) => {
-  return api.get("/order/active-order", { params: { orderId } });
-};
-
-export const getOrderHistory = (orderId: number) => {
-  return api.get("/order/order-history", { params: { orderId } });
+export const getOrder = (orderId: number) => {
+  return api.get(`/order/${orderId}`);
 };
 
 export const getOrders = (

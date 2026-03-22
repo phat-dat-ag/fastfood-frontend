@@ -2,7 +2,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getOrderById } from '../../service/order.service';
+import { getOrder } from '../../service/order.service';
 import { ORDER_MESSAGE, REVIEW_MESSAGE } from '../../constants/messages';
 import { notifyError } from '../../utils/notification.utils';
 import type { Order, OrderResponse } from '../../types/order.types';
@@ -19,7 +19,7 @@ const reviews = ref<Record<number, ReviewCreateRequest>>({});
 
 async function loadOrder(orderId: number) {
     await useApiHandler<OrderResponse>(
-        () => getOrderById(orderId),
+        () => getOrder(orderId),
         { loading: ORDER_MESSAGE.get, error: ORDER_MESSAGE.getError },
         (data: OrderResponse) => {
             order.value = data.order;

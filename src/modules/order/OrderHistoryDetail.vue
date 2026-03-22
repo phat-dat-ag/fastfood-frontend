@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getOrderHistory } from '../../service/order.service';
+import { getOrder } from '../../service/order.service';
 import { ORDER_HISTORY_DETAIL_MESSAGE } from '../../constants/messages';
 import type { Order, OrderResponse } from '../../types/order.types';
 import OrderInvoiceSummary from './components/OrderInvoiceSummary.vue';
@@ -19,7 +19,7 @@ const order = ref<Order | null>(null);
 
 async function loadOrderHistory(orderId: number) {
     await useApiHandler<OrderResponse>(
-        () => getOrderHistory(orderId),
+        () => getOrder(orderId),
         {
             loading: ORDER_HISTORY_DETAIL_MESSAGE.get,
             error: ORDER_HISTORY_DETAIL_MESSAGE.getError,

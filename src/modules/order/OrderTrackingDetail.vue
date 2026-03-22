@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import type { Order, OrderResponse } from '../../types/order.types';
-import { updateOrderStatus, getActiveOrder, getPaymentIntent } from '../../service/order.service';
+import { updateOrderStatus, getOrder, getPaymentIntent } from '../../service/order.service';
 import { ORDER_TRACKING_DETAIL_MESSAGE } from '../../constants/messages';
 import { PAYMENT_STATUS } from '../../constants/payment-status';
 import { PAYMENT_METHODS } from '../../constants/payment-methods';
@@ -31,7 +31,7 @@ async function loadActiveOrder() {
         return;
     }
     await useApiHandler<OrderResponse>(
-        () => getActiveOrder(orderId),
+        () => getOrder(orderId),
         {
             loading: ORDER_TRACKING_DETAIL_MESSAGE.get,
             error: ORDER_TRACKING_DETAIL_MESSAGE.getError,
