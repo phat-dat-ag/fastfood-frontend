@@ -4,7 +4,7 @@ import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionOrderTable from './components/tables/PromotionOrderTable.vue';
 import type { PromotionPageResponse } from '../../types/promotion.types';
-import { activatePromotion, deactivatePromotion, deletePromotion, getPromotions } from '../../service/promotion.service';
+import { updatePromotionActivation, deletePromotion, getPromotions } from '../../service/promotion.service';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -75,7 +75,7 @@ async function handlePageChange(page: number) {
 async function handleActivatePromotion(promotionId: number) {
     const page: number = promotionResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => activatePromotion(promotionId),
+        () => updatePromotionActivation(promotionId, true),
         {
             loading: "Đang kích hoạt mã khuyến mãi cho đơn hàng",
             error: "Lỗi kích hoạt mã khuyến mãi cho đơn hàng",
@@ -89,7 +89,7 @@ async function handleActivatePromotion(promotionId: number) {
 async function handleDeactivatePromotion(promotionId: number) {
     const page: number = promotionResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => deactivatePromotion(promotionId),
+        () => updatePromotionActivation(promotionId, false),
         {
             loading: "Đang hủy kích hoạt mã khuyến mãi cho đơn hàng",
             error: "Lỗi hủy kích hoạt mã khuyến mãi cho đơn hàng",

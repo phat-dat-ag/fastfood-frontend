@@ -6,7 +6,7 @@ import type { PromotionCreateRequest } from "../types/promotion.types";
 export const createPromotion = (
   promotionCreateRequest: PromotionCreateRequest,
 ) => {
-  return api.post("/admin/promotion", promotionCreateRequest);
+  return api.post("/admin/promotions", promotionCreateRequest);
 };
 
 export const getPromotions = (
@@ -17,21 +17,16 @@ export const getPromotions = (
     ...pageRequest,
     promotionQueryType,
   };
-  return api.get("/admin/promotion", { params });
+  return api.get("/admin/promotions", { params });
 };
 
-export const activatePromotion = (promotionId: number) => {
-  return api.put("/admin/promotion/activate", null, {
-    params: { promotionId },
-  });
-};
-
-export const deactivatePromotion = (promotionId: number) => {
-  return api.put("/admin/promotion/deactivate", null, {
-    params: { promotionId },
-  });
+export const updatePromotionActivation = (
+  promotionId: number,
+  activated: boolean,
+) => {
+  return api.patch(`/admin/promotions/${promotionId}`, { activated });
 };
 
 export const deletePromotion = (promotionId: number) => {
-  return api.delete("/admin/promotion", { params: { promotionId } });
+  return api.delete(`/admin/promotions/${promotionId}`);
 };

@@ -6,7 +6,7 @@ import type { PromotionPageResponse } from '../../types/promotion.types';
 import { PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { activatePromotion, deactivatePromotion, deletePromotion, getPromotions } from '../../service/promotion.service';
+import { updatePromotionActivation, deletePromotion, getPromotions } from '../../service/promotion.service';
 import PromotionByProductTable from './components/tables/PromotionByProductTable.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
@@ -75,7 +75,7 @@ async function handlePageChange(page: number) {
 async function handleActivatePromotion(promotionId: number) {
   const page: number = promotionResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => activatePromotion(promotionId),
+    () => updatePromotionActivation(promotionId, true),
     {
       loading: "Đang kích hoạt mã khuyến mãi cho sản phẩm",
       error: "Lỗi kích hoạt mã khuyến mãi cho sản phẩm",
@@ -89,7 +89,7 @@ async function handleActivatePromotion(promotionId: number) {
 async function handleDeactivatePromotion(promotionId: number) {
   const page: number = promotionResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => deactivatePromotion(promotionId),
+    () => updatePromotionActivation(promotionId, false),
     {
       loading: "Đang hủy kích hoạt mã khuyến mãi cho sản phẩm",
       error: "Lỗi hủy kích hoạt mã khuyến mãi cho sản phẩm",
