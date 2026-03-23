@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { ElDialog, ElButton, ElUpload } from 'element-plus'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from "yup"
@@ -56,7 +56,7 @@ const schema = yup.object({
 const handleSubmit = (formValues: any) => {
     if (props.isCreatingProduct) {
         const formData: ProductCreateRequest = {
-            categorId: formValues.category_id,
+            categoryId: formValues.category_id,
             name: formValues.name,
             description: formValues.description,
             price: formValues.price,

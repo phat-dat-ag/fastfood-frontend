@@ -2,24 +2,24 @@
 import { onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { PRODUCT_MESSAGES, PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
-import type { Product, ProductDisplayResponse } from '../../types/product.types';
-import { getAllDisplayableProducts } from '../../service/product.service';
+import type { ProductSelection, ProductSelectionResponse } from '../../types/product.types';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import type { PromotionCreateRequest } from '../../types/promotion.types';
 import { createPromotion } from '../../service/promotion.service';
 import router from '../../router';
 import PromotionFormBase from './components/PromotionFormBase.vue';
+import { getProductSelections } from '../../service/admin-product.service';
 
-const products = ref<Product[]>([]);
+const products = ref<ProductSelection[]>([]);
 
 async function loadProducts() {
-    await useApiHandler<ProductDisplayResponse>(
-        getAllDisplayableProducts,
+    await useApiHandler<ProductSelectionResponse>(
+        getProductSelections,
         {
             loading: PRODUCT_MESSAGES.get,
             error: PRODUCT_MESSAGES.getError,
         },
-        (data: ProductDisplayResponse) => products.value = data.displayableProducts,
+        (data: ProductSelectionResponse) => products.value = data.selectiveProducts,
     )
 }
 

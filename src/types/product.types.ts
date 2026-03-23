@@ -2,7 +2,7 @@ import type { Promotion } from "./promotion.types";
 import type { Review } from "./review.types";
 
 export interface ProductCreateRequest {
-  categorId: number;
+  categoryId: number;
   name: string;
   description: string;
   price: string;
@@ -58,4 +58,13 @@ export interface ProductPageResponse {
   totalItems: number;
   totalPages: number;
   products: Product[];
+}
+
+export interface ProductSelection {
+  id: number;
+  name: string;
+}
+
+export interface ProductSelectionResponse {
+  selectiveProducts: ProductSelection[];
 }

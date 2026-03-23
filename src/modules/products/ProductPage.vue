@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useApiHandler } from '../../composables/useApiHandler';
 import type { Product, ProductDisplayResponse } from '../../types/product.types';
-import { getAllDisplayableProductsByCategory } from '../../service/product.service';
+import { getDisplayableProducts } from '../../service/product.service';
 import { CART_MESSAGE, PRODUCT_MESSAGES } from '../../constants/messages';
 import { useUserStore } from '../../store/useUserStore.store';
 import { notifyError } from '../../utils/notification.utils';
@@ -18,7 +18,7 @@ const products = ref<Product[]>([]);
 
 async function loadProducts() {
     await useApiHandler<ProductDisplayResponse>(
-        () => getAllDisplayableProductsByCategory(slug.value),
+        () => getDisplayableProducts(slug.value),
         {
             loading: PRODUCT_MESSAGES.get,
             error: PRODUCT_MESSAGES.getError,

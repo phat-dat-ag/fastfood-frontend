@@ -7,7 +7,6 @@ import ProductModal from './components/ProductModal.vue';
 import type { Product, ProductCreateRequest, ProductPageResponse, ProductUpdateRequest } from '../../types/product.types';
 import type { Category, CategoryDisplayResponse } from '../../types/category.types';
 import { getDisplayableCategories } from '../../service/category.service';
-import { activateProduct, createProduct, deactivateProduct, deleteProduct, getProducts, updateProduct } from '../../service/product.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -18,6 +17,7 @@ import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { createProduct, deleteProduct, getProductPage, updateProduct, updateProductActivation } from '../../service/admin-product.service';
 
 const categories = ref<Category[]>([]);
 
@@ -43,7 +43,7 @@ async function loadProducts(page: number = 0) {
   }
   const categorySlug = String(route.params.categorySlug || "");
   await useApiHandler<ProductPageResponse>(
-    () => getProducts(request, categorySlug),
+    () => getProductPage(request, categorySlug),
     {
       loading: PRODUCT_MESSAGES.get,
       error: PRODUCT_MESSAGES.getError,
@@ -140,7 +140,7 @@ const handleDeleteProduct = async (id: number) => {
 async function handleActivateProduct(productId: number) {
   const page: number = productResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => activateProduct(productId),
+    () => updateProductActivation(productId, true),
     {
       loading: "Đang kích hoạt sản phẩm",
       error: "Lỗi kích hoạt sản phẩm",
@@ -153,7 +153,7 @@ async function handleActivateProduct(productId: number) {
 async function handleDeactivateProduct(productId: number) {
   const page: number = productResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => deactivateProduct(productId),
+    () => updateProductActivation(productId, false),
     {
       loading: "Đang vô hiệu hóa sản phẩm",
       error: "Lỗi vô hiệu hóa sản phẩm",
