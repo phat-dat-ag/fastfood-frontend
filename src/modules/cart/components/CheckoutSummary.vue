@@ -82,8 +82,7 @@ function placeOrder() {
         <span>{{ formatCurrencyVND(cartDetail.deliveryFee) }}</span>
       </p>
 
-      <p v-if="cartDetail.applyPromotionResult && cartDetail.applyPromotionResult.promotion"
-        class="flex justify-between text-green-600">
+      <p v-if="cartDetail.promotion" class="flex justify-between text-green-600">
         <span>Khuyến mãi:</span>
         <span>
           -{{ formatCurrencyVND((Number(cartDetail.subtotalPrice) - (Number(cartDetail.totalPrice) -

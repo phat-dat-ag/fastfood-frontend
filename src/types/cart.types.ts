@@ -14,18 +14,12 @@ export interface Cart {
   user: User;
 }
 
-export interface PromotionCodeCheckResult {
-  success: boolean;
-  message: string;
-  promotion: Promotion | null;
-}
-
 export interface CartDetailResponse {
   carts: Cart[];
   originalPrice: string;
   subtotalPrice: string;
   totalPrice: string;
-  applyPromotionResult: PromotionCodeCheckResult | null;
+  promotion: Promotion;
   deliveryInformation: DeliveryResponse;
   deliveryFee: string;
 }

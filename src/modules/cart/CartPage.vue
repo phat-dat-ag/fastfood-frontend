@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { CartDetailResponse, PromotionCodeCheckResult } from '../../types/cart.types';
+import type { CartDetailResponse } from '../../types/cart.types';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { deleteProductFromCart, getCartDetail, updateCart } from '../../service/cart.service';
 import { ADDRESS_MESSAGE, CART_MESSAGE, CASH_ON_DELIVERY_ORDER, PROMOTION_ORDER_MESSAGE, STRIPE_PAYMENT_ORDER } from '../../constants/messages';
@@ -33,12 +33,8 @@ const selectedPaymentMethod = ref<PaymentMethodType | null>(null);
 
 function handleCartResponse(data: CartDetailResponse) {
     cartDetail.value = data;
-    if (cartDetail.value.applyPromotionResult) {
-        const result: PromotionCodeCheckResult = cartDetail.value.applyPromotionResult;
-        if (result.success)
-            notifySuccess(result.message);
-        else
-            notifyError(result.message);
+    if (cartDetail.value.promotion) {
+        notifySuccess("Đã áp dụng khuyến mãi");
     }
     const deliveryMessage: string = cartDetail.value.deliveryInformation.message;
     if (cartDetail.value.deliveryInformation.success) {
