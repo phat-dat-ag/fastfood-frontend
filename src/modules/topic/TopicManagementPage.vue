@@ -6,7 +6,7 @@ import TopicTable from './components/tables/TopicTable.vue';
 import TopicModal from './components/modals/TopicModal.vue';
 import type { Topic, TopicCreateRequest, TopicPageResponse, TopicUpdateRequest } from '../../types/topic.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { activateTopic, createTopic, deactivateTopic, deleteTopic, getAllTopics, updateTopic } from '../../service/topic.service';
+import { createTopic, deleteTopic, getTopics, updateTopic, updateTopicActivation } from '../../service/admin-topic.service';
 import { TOPIC_MESSAGE } from '../../constants/messages';
 import { useTopicStore } from '../../store/useTopicStore.store';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -25,7 +25,7 @@ async function loadTopics(page: number = 0) {
         size: PAGE_SIZE.TOPIC,
     }
     await useApiHandler<TopicPageResponse>(
-        () => getAllTopics(request),
+        () => getTopics(request),
         {
             loading: TOPIC_MESSAGE.get,
             error: TOPIC_MESSAGE.getError,
@@ -100,7 +100,7 @@ const handleUpdateTopic = async (topicInformation: TopicUpdateRequest) => {
 async function handleActivateTopic(topicId: number) {
     const page: number = topicPageResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => activateTopic(topicId),
+        () => updateTopicActivation(topicId, true),
         {
             loading: "Đang kích hoạt chủ đề",
             error: "Lỗi kích hoạt chủ đề",
@@ -113,7 +113,7 @@ async function handleActivateTopic(topicId: number) {
 async function handleDeactivateTopic(topicId: number) {
     const page: number = topicPageResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => deactivateTopic(topicId),
+        () => updateTopicActivation(topicId, false),
         {
             loading: "Đang kích hoạt chủ đề",
             error: "Lỗi kích hoạt chủ đề",

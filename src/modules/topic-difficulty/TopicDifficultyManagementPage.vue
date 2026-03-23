@@ -9,11 +9,11 @@ import { TOPIC_DIFFICULTY_MESSAGE, TOPIC_MESSAGE } from '../../constants/message
 import { ROUTE_NAMES } from '../../constants/route-names';
 import TopicDifficultyTable from './components/tables/TopicDifficultyTable.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
-import { activateTopicDifficulty, createTopicDifficulty, deactivateTopicDifficulty, deleteTopicDifficulty, getAllTopicDifficultiesByTopic, updateTopicDifficulty } from '../../service/topic-difficulty.service';
+import { deleteTopicDifficulty, updateTopicDifficulty, updateTopicDifficultyActivation } from '../../service/topic-difficulty.service';
 import { useTopicDifficultyStore } from '../../store/useTopicDifficultyStore.store';
 import TopicDifficultyModal from './components/modals/TopicDifficultyModal.vue';
 import type { Topic, TopicResponse } from '../../types/topic.types';
-import { getTopicBySlug } from '../../service/topic.service';
+import { createTopicDifficulty, getAllTopicDifficultiesByTopic, getTopicBySlug } from '../../service/admin-topic.service';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
@@ -123,7 +123,7 @@ const handleUpdateTopic = async (topicInformation: TopicDifficultyUpdateRequest)
 async function handleActivateTopicDifficulty(topicDifficultyId: number) {
     const page: number = topicDifficultyResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => activateTopicDifficulty(topicDifficultyId),
+        () => updateTopicDifficultyActivation(topicDifficultyId, true),
         {
             loading: "Đang kích hoạt độ khó",
             error: "Lỗi kích hoạt độ khó",
@@ -136,7 +136,7 @@ async function handleActivateTopicDifficulty(topicDifficultyId: number) {
 async function handleDeactivateTopicDifficulty(topicDifficultyId: number) {
     const page: number = topicDifficultyResponse.value?.currentPage || 0;
     await useApiHandler(
-        () => deactivateTopicDifficulty(topicDifficultyId),
+        () => updateTopicDifficultyActivation(topicDifficultyId, false),
         {
             loading: "Đang vô hiệu hóa độ khó",
             error: "Lỗi vô hiệu hóa độ khó",

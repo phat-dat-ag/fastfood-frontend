@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import type { TopicDisplay, TopicDisplayResponse } from '../../types/topic.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getAllDisplayableTopics } from '../../service/topic.service';
+import { getDisplayableTopics } from '../../service/topic.service';
 import { TOPIC_MESSAGE } from '../../constants/messages';
 import { useRouter } from 'vue-router';
 import { ROUTE_NAMES } from '../../constants/route-names';
@@ -22,7 +22,7 @@ const selectedDifficulty = ref<TopicDifficultyDisplay | null>(null);
 
 async function loadDisplayableTopics() {
     await useApiHandler<TopicDisplayResponse>(
-        getAllDisplayableTopics,
+        getDisplayableTopics,
         {
             loading: TOPIC_MESSAGE.get,
             error: TOPIC_MESSAGE.getError,
