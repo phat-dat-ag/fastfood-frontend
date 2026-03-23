@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import CategoryModal from './components/CategoryModal.vue'
-import { createCategory, deleteCategory, getCategories, updateCategoryActivation, updateCategory } from '../../service/category.service'
 import type { Category, CategoryCreateRequest, CategoryPageResponse, CategoryUpdateRequest } from '../../types/category.types'
 import { useCategoryStore } from '../../store/useCategoryStore.store'
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils'
@@ -16,6 +15,7 @@ import Pagination from '../../components/Pagination.vue'
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES } from '../../constants/route-names'
 import EmptyPage from '../../components/EmptyPage.vue'
+import { createCategory, deleteCategory, getCategoryPage, updateCategory, updateCategoryActivation } from '../../service/admin-category.service'
 
 
 const isCategoryModalVisible = ref(false);
@@ -29,7 +29,7 @@ async function loadCategories(page: number = 0) {
     size: PAGE_SIZE.CATEGORY,
   }
   await useApiHandler<CategoryPageResponse>(
-    () => getCategories(request),
+    () => getCategoryPage(request),
     {
       loading: CATEGORY_MESSAGES.get,
       error: CATEGORY_MESSAGES.getError,

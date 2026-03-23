@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { Category, CategoryDisplayResponse } from '../../types/category.types';
+import type { CategorySelection, CategorySelectionResponse } from '../../types/category.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getDisplayableCategories } from '../../service/category.service';
+import { getCategorySelections } from '../../service/admin-category.service';
 import { CATEGORY_MESSAGES, PROMOTION_CATEGORY_MESSAGE } from '../../constants/messages';
 import PromotionFormBase from './components/PromotionFormBase.vue';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
@@ -10,16 +10,16 @@ import type { PromotionCreateRequest } from '../../types/promotion.types';
 import { createPromotion } from '../../service/promotion.service';
 import router from '../../router';
 
-const categories = ref<Category[]>([]);
+const categories = ref<CategorySelection[]>([]);
 
 async function loadCategories() {
-    await useApiHandler<CategoryDisplayResponse>(
-        getDisplayableCategories,
+    await useApiHandler<CategorySelectionResponse>(
+        getCategorySelections,
         {
             loading: CATEGORY_MESSAGES.get,
             error: CATEGORY_MESSAGES.getError,
         },
-        (data: CategoryDisplayResponse) => categories.value = data.displayableCategories,
+        (data: CategorySelectionResponse) => categories.value = data.selectiveCategories,
     )
 }
 

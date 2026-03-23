@@ -6,7 +6,7 @@ import * as yup from "yup"
 import SecondaryButton from '../../../components/buttons/SecondaryButton.vue'
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue'
 import type { ProductCreateRequest, ProductUpdateRequest } from '../../../types/product.types'
-import type { Category } from '../../../types/category.types'
+import type { CategorySelection } from '../../../types/category.types'
 import { useProductStore } from '../../../store/useProductStore.store'
 import { notifyError } from '../../../utils/notification.utils'
 import Container3D from '../../3DModel/Container3D.vue'
@@ -14,7 +14,7 @@ import Container3D from '../../3DModel/Container3D.vue'
 
 interface ProductModalProps {
     isCreatingProduct: boolean;
-    categories: Category[];
+    categories: CategorySelection[];
 }
 
 const props = defineProps<ProductModalProps>();

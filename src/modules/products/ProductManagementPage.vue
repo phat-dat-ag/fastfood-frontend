@@ -5,8 +5,8 @@ import type { Filter } from '../../types/filter.types';
 import ProductTable from './components/ProductTable.vue';
 import ProductModal from './components/ProductModal.vue';
 import type { Product, ProductCreateRequest, ProductPageResponse, ProductUpdateRequest } from '../../types/product.types';
-import type { Category, CategoryDisplayResponse } from '../../types/category.types';
-import { getDisplayableCategories } from '../../service/category.service';
+import type { CategorySelection, CategorySelectionResponse } from '../../types/category.types';
+import { getCategorySelections } from '../../service/admin-category.service';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { CATEGORY_MESSAGES, PRODUCT_MESSAGES } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
@@ -19,16 +19,16 @@ import Pagination from '../../components/Pagination.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 import { createProduct, deleteProduct, getProductPage, updateProduct, updateProductActivation } from '../../service/admin-product.service';
 
-const categories = ref<Category[]>([]);
+const categories = ref<CategorySelection[]>([]);
 
 async function loadCategories() {
-  await useApiHandler<CategoryDisplayResponse>(
-    getDisplayableCategories,
+  await useApiHandler<CategorySelectionResponse>(
+    getCategorySelections,
     {
       loading: CATEGORY_MESSAGES.get,
       error: CATEGORY_MESSAGES.getError,
     },
-    (data: CategoryDisplayResponse) => categories.value = data.displayableCategories,
+    (data: CategorySelectionResponse) => categories.value = data.selectiveCategories,
   )
 }
 

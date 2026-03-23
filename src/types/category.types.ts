@@ -35,3 +35,12 @@ export interface CategoryPageResponse {
 export interface CategoryDisplayResponse {
   displayableCategories: Category[];
 }
+
+export interface CategorySelection {
+  id: number;
+  name: string;
+}
+
+export interface CategorySelectionResponse {
+  selectiveCategories: CategorySelection[];
+}

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { Category, CategoryDisplayResponse } from '../../types/category.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getDisplayableCategories } from '../../service/category.service';
+import { getAllDisplayableCategories } from '../../service/category.service';
 import { CATEGORY_MESSAGES } from '../../constants/messages';
 import ProductSegment from './components/ProductSegment.vue';
 import { useUserStore } from '../../store/useUserStore.store';
@@ -14,7 +14,7 @@ import EmptyPage from '../../components/EmptyPage.vue';
 const categories = ref<Category[]>([]);
 async function loadCategories() {
   await useApiHandler<CategoryDisplayResponse>(
-    getDisplayableCategories,
+    getAllDisplayableCategories,
     {
       loading: CATEGORY_MESSAGES.get,
       error: CATEGORY_MESSAGES.getError,
