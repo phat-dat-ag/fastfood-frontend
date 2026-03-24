@@ -5,5 +5,9 @@ export const getDisplayableProducts = (categorySlug: string) => {
 };
 
 export const getProductBySlug = (slug: string) => {
-  return api.get(`/products/${slug}`);
+  return api.get(`/products/slug/${slug}`);
+};
+
+export const getAllReviewsByProduct = (productId: number) => {
+  return api.get(`/products/${productId}/reviews`);
 };

@@ -4,7 +4,7 @@ import type { ReviewPageResponse } from '../../types/review.types';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { deleteReview, getAllReviewsByAdmin } from '../../service/review.service';
+import { deleteReview, getAllReviewsByAdmin } from '../../service/admin-review.service';
 import { ADMIN_MANAGEMENT_REVIEW_MESSAGE } from '../../constants/messages';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';

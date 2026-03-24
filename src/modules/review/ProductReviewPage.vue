@@ -2,13 +2,12 @@
 import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getOrder } from '../../service/order.service';
+import { createProductReview, getOrder } from '../../service/order.service';
 import { ORDER_MESSAGE, REVIEW_MESSAGE } from '../../constants/messages';
 import { notifyError } from '../../utils/notification.utils';
 import type { Order, OrderResponse } from '../../types/order.types';
 import type { ReviewCreateRequest } from '../../types/review.types';
 import ProductReviewFormItem from './components/ProductReviewFormItem.vue';
-import { createProductReview } from '../../service/review.service';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
 

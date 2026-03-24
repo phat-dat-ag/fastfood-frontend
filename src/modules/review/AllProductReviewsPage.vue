@@ -4,11 +4,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { notifyError } from '../../utils/notification.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
 import type { Review, ReviewProductsResponse } from '../../types/review.types';
-import { getAllReviewsByProduct } from '../../service/review.service';
 import { ALL_PRODUCT_REVIEW_MESSAGE } from '../../constants/messages';
 import ProductReviewList from './components/ProductReviewList.vue';
 import HeaderCard from '../../components/HeaderCard.vue';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { getAllReviewsByProduct } from '../../service/product.service';
 
 const route = useRoute();
 const router = useRouter();
