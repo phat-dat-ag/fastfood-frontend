@@ -11,8 +11,8 @@ import AddButton from "../../../components/buttons/AddButton.vue";
 import PrimaryButton from "../../../components/buttons/PrimaryButton.vue";
 import type { QuestionCreateRequest, QuestionPrimaryData } from "../../../types/question.types";
 import { useApiHandler } from "../../../composables/useApiHandler";
-import { createQuestions } from "../../../service/question.service";
 import { QUESTION_MESSAGE } from "../../../constants/messages";
+import { createQuestions } from "../../../service/topic-difficulty.service";
 
 const route = useRoute();
 const router = useRouter();

@@ -1,58 +1,12 @@
 import api from "../api/axios";
-import type { PageRequest } from "../types/pagination.types";
-import type { QuestionCreateRequest } from "../types/question.types";
 
-export const createQuestions = (
-  questions: QuestionCreateRequest[],
-  topicDifficultySlug: string,
+export const updateQuestionActivation = (
+  questionId: number,
+  activated: boolean,
 ) => {
-  const formData = new FormData();
-
-  questions.forEach((question, i) => {
-    formData.append(`questions[${i}].content`, question.content);
-    formData.append(`questions[${i}].isActivated`, String(question.activated));
-
-    if (question.imageUrl)
-      formData.append(`questions[${i}].imageUrl`, question.imageUrl);
-    if (question.audioUrl)
-      formData.append(`questions[${i}].audioUrl`, question.audioUrl);
-
-    question.answers.forEach((answer, j) => {
-      formData.append(`questions[${i}].answers[${j}].content`, answer.content);
-      formData.append(
-        `questions[${i}].answers[${j}].correct`,
-        String(answer.correct),
-      );
-      if (answer.imageUrl)
-        formData.append(
-          `questions[${i}].answers[${j}].imageUrl`,
-          answer.imageUrl,
-        );
-    });
-  });
-
-  formData.append("topicDifficultySlug", topicDifficultySlug);
-
-  return api.post("/question", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-};
-
-export const getAllQuestionByTopicDifficulty = (
-  topicDifficultySlug: string,
-  request: PageRequest,
-) => {
-  return api.get("/question", { params: { topicDifficultySlug, ...request } });
-};
-
-export const activateQuestion = (questionId: number) => {
-  return api.put("/question/activate", null, { params: { questionId } });
-};
-
-export const deactivateQuestion = (questionId: number) => {
-  return api.put("/question/deactivate", null, { params: { questionId } });
+  return api.patch(`/admin/questions/${questionId}`, { activated });
 };
 
 export const deleteQuestion = (questionId: number) => {
-  return api.delete("/question", { params: { questionId } });
+  return api.delete(`/admin/questions/${questionId}`);
 };

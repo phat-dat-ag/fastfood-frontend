@@ -4,7 +4,7 @@ import AddButton from '../../../components/buttons/AddButton.vue';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useApiHandler } from '../../../composables/useApiHandler';
 import type { QuestionPageResponse } from '../../../types/question.types';
-import { activateQuestion, deactivateQuestion, deleteQuestion, getAllQuestionByTopicDifficulty } from '../../../service/question.service';
+import { deleteQuestion, updateQuestionActivation } from '../../../service/question.service';
 import { QUESTION_MESSAGE } from '../../../constants/messages';
 import { onMounted, ref } from 'vue';
 import { ElCard } from 'element-plus';
@@ -15,6 +15,7 @@ import Pagination from '../../../components/Pagination.vue';
 import Switch from '../../../components/buttons/Switch.vue';
 import { openConfirmDeleteMessage } from '../../../utils/confirmation.utils';
 import type { SwitchResponse } from '../../../types/switch-button.types';
+import { getAllQuestionByTopicDifficulty } from '../../../service/topic-difficulty.service';
 
 const route = useRoute();
 const router = useRouter();
@@ -42,7 +43,7 @@ onMounted(loadQuestions);
 async function handleActivateQuestion(payload: SwitchResponse) {
   const page = questionResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => activateQuestion(payload.targetId),
+    () => updateQuestionActivation(payload.targetId, true),
     {
       loading: "Đang kích hoạt câu hỏi",
       error: "Lỗi kích hoạt câu hỏi",
@@ -55,7 +56,7 @@ async function handleActivateQuestion(payload: SwitchResponse) {
 async function handleDeactivateQuestion(payload: SwitchResponse) {
   const page = questionResponse.value?.currentPage || 0;
   await useApiHandler(
-    () => deactivateQuestion(payload.targetId),
+    () => updateQuestionActivation(payload.targetId, false),
     {
       loading: "Đang hủy kích hoạt câu hỏi",
       error: "Lỗi hủy kích hoạt câu hỏi",
