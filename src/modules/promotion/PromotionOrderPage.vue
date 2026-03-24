@@ -4,7 +4,7 @@ import type { Filter } from '../../types/filter.types';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import PromotionOrderTable from './components/tables/PromotionOrderTable.vue';
 import type { PromotionPageResponse } from '../../types/promotion.types';
-import { updatePromotionActivation, deletePromotion, getPromotions } from '../../service/promotion.service';
+import { updatePromotionActivation, deletePromotion, getPromotions } from '../../service/admin-promotion.service';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';

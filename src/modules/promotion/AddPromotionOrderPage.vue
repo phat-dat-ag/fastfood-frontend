@@ -2,7 +2,7 @@
 import { useApiHandler } from '../../composables/useApiHandler';
 import { PROMOTION_ORDER_MESSAGE } from '../../constants/messages';
 import router from '../../router';
-import { createPromotion } from '../../service/promotion.service';
+import { createPromotion } from '../../service/admin-promotion.service';
 import type { PromotionCreateRequest } from '../../types/promotion.types';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import PromotionFormBase from './components/PromotionFormBase.vue';

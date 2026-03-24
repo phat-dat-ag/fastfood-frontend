@@ -6,7 +6,7 @@ import type { PromotionPageResponse } from '../../types/promotion.types';
 import { PROMOTION_PRODUCT_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { updatePromotionActivation, deletePromotion, getPromotions } from '../../service/promotion.service';
+import { updatePromotionActivation, deletePromotion, getPromotions } from '../../service/admin-promotion.service';
 import PromotionByProductTable from './components/tables/PromotionByProductTable.vue';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';

@@ -5,7 +5,7 @@ import { PRODUCT_MESSAGES, PROMOTION_PRODUCT_MESSAGE } from '../../constants/mes
 import type { ProductSelection, ProductSelectionResponse } from '../../types/product.types';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import type { PromotionCreateRequest } from '../../types/promotion.types';
-import { createPromotion } from '../../service/promotion.service';
+import { createPromotion } from '../../service/admin-promotion.service';
 import router from '../../router';
 import PromotionFormBase from './components/PromotionFormBase.vue';
 import { getProductSelections } from '../../service/admin-product.service';

@@ -7,7 +7,7 @@ import { CATEGORY_MESSAGES, PROMOTION_CATEGORY_MESSAGE } from '../../constants/m
 import PromotionFormBase from './components/PromotionFormBase.vue';
 import { toVietnamTimezoneISOString } from '../../utils/time.utils';
 import type { PromotionCreateRequest } from '../../types/promotion.types';
-import { createPromotion } from '../../service/promotion.service';
+import { createPromotion } from '../../service/admin-promotion.service';
 import router from '../../router';
 
 const categories = ref<CategorySelection[]>([]);
