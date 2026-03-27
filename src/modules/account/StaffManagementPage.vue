@@ -4,7 +4,6 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import type { UserPageResponse } from '../../types/user.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { activateAccount, deactivateAccount, deleteUser, getAllStaffAccounts } from '../../service/user.service';
 import { STAFF_ACCOUNT_MESSAGES } from '../../constants/messages';
 import AccountTable from './components/AccountTable.vue';
 import type { PageRequest } from '../../types/pagination.types';
@@ -12,6 +11,8 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { deleteUser, getAccounts, updateUserActivation } from '../../service/admin-user.service';
+import { USER_QUERY } from '../../constants/user-query';
 
 const userReponse = ref<UserPageResponse | null>(null);
 
@@ -21,7 +22,7 @@ async function loadStaffAccounts(page: number = 0) {
         size: PAGE_SIZE.ACCOUNTS.STAFF,
     }
     await useApiHandler<UserPageResponse>(
-        () => getAllStaffAccounts(pageRequest),
+        () => getAccounts(pageRequest, USER_QUERY.STAFF),
         {
             loading: STAFF_ACCOUNT_MESSAGES.get,
             error: STAFF_ACCOUNT_MESSAGES.getError,
@@ -52,12 +53,12 @@ function handleSearchChange(searchText: string) {
     console.log(search.value);
 }
 
-async function deleteStaffAccount(phone: string) {
+async function deleteStaffAccount(userId: number) {
     const confirmed: boolean = await openConfirmDeleteMessage("Bạn muốn xóa tài khoản nhân viên này?");
     if (!confirmed) return;
 
     await useApiHandler(
-        () => deleteUser(phone),
+        () => deleteUser(userId),
         {
             loading: STAFF_ACCOUNT_MESSAGES.delete,
             success: STAFF_ACCOUNT_MESSAGES.deleteSuccess,
@@ -71,7 +72,7 @@ async function deleteStaffAccount(phone: string) {
 async function handleActivateAccount(userId: number) {
     const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
-        () => activateAccount(userId),
+        () => updateUserActivation(userId, true),
         {
             loading: "Đang kích hoạt tài khoản nhân viên",
             error: "Lỗi kích hoạt tài khoản nhân viên",
@@ -84,7 +85,7 @@ async function handleActivateAccount(userId: number) {
 async function handleDeactivateAccount(userId: number) {
     const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
-        () => deactivateAccount(userId),
+        () => updateUserActivation(userId, false),
         {
             loading: "Đang vô hiệu hóa tài khoản nhân viên",
             error: "Lỗi vô hiệu hóa tài khoản nhân viên",

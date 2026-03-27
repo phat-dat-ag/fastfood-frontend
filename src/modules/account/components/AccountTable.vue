@@ -13,8 +13,8 @@ interface AccountTableProps {
 const props = defineProps<AccountTableProps>();
 const emit = defineEmits(["delete-account", "activate-account", "deactivate-account"]);
 
-function handleDeleteAccount(phone: string) {
-    emit("delete-account", phone);
+function handleDeleteAccount(userId: number) {
+    emit("delete-account", userId);
 }
 
 async function handleActivateAccount(payload: SwitchResponse) {
@@ -67,7 +67,7 @@ async function handleDeactivateAccount(payload: SwitchResponse) {
             <ElTableColumn label="Thao tác">
                 <template #default="scope">
                     <div class="flex gap-2 justify-evenly">
-                        <DeleteButton :onClick="() => handleDeleteAccount(scope.row.phone)" label="Xóa" />
+                        <DeleteButton :onClick="() => handleDeleteAccount(scope.row.id)" label="Xóa" />
                     </div>
                 </template>
             </ElTableColumn>

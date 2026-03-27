@@ -4,7 +4,6 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import type { UserPageResponse } from '../../types/user.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { activateAccount, deactivateAccount, deleteUser, getAllCustomerAccounts } from '../../service/user.service';
 import { CUSTOMER_ACCOUNT_MESSAGES } from '../../constants/messages';
 import AccountTable from './components/AccountTable.vue';
 import type { PageRequest } from '../../types/pagination.types';
@@ -12,6 +11,8 @@ import { PAGE_SIZE } from '../../constants/pagination';
 import Pagination from '../../components/Pagination.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
 import EmptyPage from '../../components/EmptyPage.vue';
+import { USER_QUERY } from '../../constants/user-query';
+import { deleteUser, getAccounts, updateUserActivation } from '../../service/admin-user.service';
 
 const userReponse = ref<UserPageResponse | null>(null);
 
@@ -21,7 +22,7 @@ async function loadCustomerAccounts(page: number = 0) {
         size: PAGE_SIZE.ACCOUNTS.CUSTOMER,
     }
     await useApiHandler<UserPageResponse>(
-        () => getAllCustomerAccounts(pageRequest),
+        () => getAccounts(pageRequest, USER_QUERY.USER),
         {
             loading: CUSTOMER_ACCOUNT_MESSAGES.get,
             error: CUSTOMER_ACCOUNT_MESSAGES.getError,
@@ -52,12 +53,12 @@ function handleSearchChange(searchText: string) {
     console.log(search.value);
 }
 
-async function deleteCustomerAccount(phone: string) {
+async function deleteCustomerAccount(userId: number) {
     const confirmed: boolean = await openConfirmDeleteMessage("Bạn muốn xóa tài khoản khách hàng này?");
     if (!confirmed) return;
 
     await useApiHandler(
-        () => deleteUser(phone),
+        () => deleteUser(userId),
         {
             loading: CUSTOMER_ACCOUNT_MESSAGES.delete,
             success: CUSTOMER_ACCOUNT_MESSAGES.deleteSuccess,
@@ -71,7 +72,7 @@ async function deleteCustomerAccount(phone: string) {
 async function handleActivateAccount(userId: number) {
     const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
-        () => activateAccount(userId),
+        () => updateUserActivation(userId, true),
         {
             loading: "Đang kích hoạt tài khoản khách hàng",
             error: "Lỗi kích hoạt tài khoản khách hàng",
@@ -84,7 +85,7 @@ async function handleActivateAccount(userId: number) {
 async function handleDeactivateAccount(userId: number) {
     const page: number = userReponse.value?.currentPage || 0;
     await useApiHandler(
-        () => deactivateAccount(userId),
+        () => updateUserActivation(userId, false),
         {
             loading: "Đang vô hiệu hóa tài khoản khách hàng",
             error: "Lỗi vô hiệu hóa tài khoản khách hàng",
