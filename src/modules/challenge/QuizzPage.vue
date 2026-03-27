@@ -2,7 +2,7 @@
 import { onMounted, ref, computed, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApiHandler } from "../../composables/useApiHandler";
-import { getQuiz, submitQuiz } from "../../service/quiz.service";
+import { submitQuiz } from "../../service/quiz.service";
 import { CHALLENGE_MESSAGE } from "../../constants/messages";
 import type { Quiz, QuizResponse, QuizSubmitRequest } from "../../types/quiz.types";
 import QuizProgress from "./components/QuizProgress.vue";
@@ -15,6 +15,7 @@ import { useUserStore } from "../../store/useUserStore.store";
 import { USER_ROLES } from "../../constants/user-roles";
 import { ROUTE_NAMES } from "../../constants/route-names";
 import EmptyPage from "../../components/EmptyPage.vue";
+import { getQuiz } from "../../service/topic-difficulty.service";
 
 const route = useRoute();
 const quiz = ref<Quiz | null>(null);

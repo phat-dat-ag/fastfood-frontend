@@ -5,25 +5,20 @@ import type {
   QuizSubmitRequest,
 } from "../types/quiz.types";
 
-export const getQuiz = (topicDifficultySlug: string) => {
-  return api.get("/quiz", { params: { topicDifficultySlug } });
-};
-
 export const submitQuiz = (quizSubmitRequest: QuizSubmitRequest) => {
-  return api.post("/quiz", quizSubmitRequest);
+  return api.post(`/quizzes`, quizSubmitRequest);
 };
 
 export const addFeedback = (addFeedbackRequest: QuizAddFeedbackRequest) => {
-  return api.put("/quiz", addFeedbackRequest);
+  return api.put(
+    `/quizzes/${addFeedbackRequest.quizId}/feedback`,
+    addFeedbackRequest,
+  );
 };
-export const getAllReviewQuizzesByUser = (request: PageRequest) => {
-  return api.get("/quiz/by-user", { params: request });
+export const getQuizHistories = (request: PageRequest) => {
+  return api.get(`/quizzes`, { params: request });
 };
 
-export const getQuizHistoryDetailByUser = (quizId: number) => {
-  return api.get("/quiz/by-user/detail", { params: { quizId } });
-};
-
-export const getAllFeedbackByAdmin = (request: PageRequest) => {
-  return api.get("/quiz/manage", { params: request });
+export const getQuizHistory = (quizId: number) => {
+  return api.get(`/quizzes/${quizId}`);
 };

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { QuizHistoryPageResponse } from '../../types/quiz.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getAllReviewQuizzesByUser } from '../../service/quiz.service';
+import { getQuizHistories } from '../../service/quiz.service';
 import { CHALLENGE_HISTORY_MESSAGE } from '../../constants/messages';
 import ChallengeHistoryTable from './components/ChallengeHistoryTable.vue';
 import { useRouter } from 'vue-router';
@@ -24,7 +24,7 @@ async function loadHistoryQuizzes(page: number = 0) {
         size: PAGE_SIZE.QUIZ_HISTORY,
     }
     await useApiHandler<QuizHistoryPageResponse>(
-        () => getAllReviewQuizzesByUser(request),
+        () => getQuizHistories(request),
         {
             loading: CHALLENGE_HISTORY_MESSAGE.get,
             error: CHALLENGE_HISTORY_MESSAGE.getError,

@@ -4,7 +4,7 @@ import type { QuizFeedbackPageResponse } from '../../types/quiz-feedback.types';
 import type { PageRequest } from '../../types/pagination.types';
 import { PAGE_SIZE } from '../../constants/pagination';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getAllFeedbackByAdmin } from '../../service/quiz.service';
+import { getAllQuizFeedbacks } from '../../service/admin-quiz.service';
 import { QUIZ_FEEDBACK_MESSAGE } from '../../constants/messages';
 import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import Pagination from '../../components/Pagination.vue';
@@ -20,7 +20,7 @@ async function loadFeedbacks(page: number = 0) {
         size: PAGE_SIZE.QUIZ_FEEDBACK,
     }
     await useApiHandler<QuizFeedbackPageResponse>(
-        () => getAllFeedbackByAdmin(request),
+        () => getAllQuizFeedbacks(request),
         {
             loading: QUIZ_FEEDBACK_MESSAGE.get,
             error: QUIZ_FEEDBACK_MESSAGE.getError,
