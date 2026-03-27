@@ -5,7 +5,7 @@ import AdminFilterHeader from '../../components/AdminFilterHeader.vue';
 import type { Filter } from '../../types/filter.types';
 import type { TopicDifficulty, TopicDifficultyResponse } from '../../types/topic-difficulty.types';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
+import { getTopicDifficultyBySlug } from '../../service/admin-topic-difficulty.service';
 import { TOPIC_DIFFICULTY_MESSAGE } from '../../constants/messages';
 import EmptyPage from '../../components/EmptyPage.vue';
 

@@ -9,7 +9,7 @@ import { TOPIC_DIFFICULTY_MESSAGE, TOPIC_MESSAGE } from '../../constants/message
 import { ROUTE_NAMES } from '../../constants/route-names';
 import TopicDifficultyTable from './components/tables/TopicDifficultyTable.vue';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
-import { deleteTopicDifficulty, updateTopicDifficulty, updateTopicDifficultyActivation } from '../../service/topic-difficulty.service';
+import { deleteTopicDifficulty, updateTopicDifficulty, updateTopicDifficultyActivation } from '../../service/admin-topic-difficulty.service';
 import { useTopicDifficultyStore } from '../../store/useTopicDifficultyStore.store';
 import TopicDifficultyModal from './components/modals/TopicDifficultyModal.vue';
 import type { Topic, TopicResponse } from '../../types/topic.types';

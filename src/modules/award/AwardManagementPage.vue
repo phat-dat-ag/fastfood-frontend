@@ -7,7 +7,7 @@ import type { TopicDifficulty, TopicDifficultyResponse } from '../../types/topic
 import { useApiHandler } from '../../composables/useApiHandler';
 import { AWARD_MESSAGE, TOPIC_DIFFICULTY_MESSAGE } from '../../constants/messages';
 import { openConfirmDeleteMessage } from '../../utils/confirmation.utils';
-import { createAward, getAllAwardsByTopicDifficulty, getTopicDifficultyBySlug } from '../../service/topic-difficulty.service';
+import { createAward, getAllAwardsByTopicDifficulty, getTopicDifficultyBySlug } from '../../service/admin-topic-difficulty.service';
 import type { AwardCreateRequest, AwardPageResponse } from '../../types/award.types';
 import { deleteAward, updateAwardActivation } from '../../service/award.service';
 import AwardTable from './components/tables/AwardTable.vue';

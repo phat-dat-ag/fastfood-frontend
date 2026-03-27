@@ -15,7 +15,7 @@ import Pagination from '../../../components/Pagination.vue';
 import Switch from '../../../components/buttons/Switch.vue';
 import { openConfirmDeleteMessage } from '../../../utils/confirmation.utils';
 import type { SwitchResponse } from '../../../types/switch-button.types';
-import { getAllQuestionByTopicDifficulty } from '../../../service/topic-difficulty.service';
+import { getAllQuestionByTopicDifficulty } from '../../../service/admin-topic-difficulty.service';
 
 const route = useRoute();
 const router = useRouter();
