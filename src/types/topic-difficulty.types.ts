@@ -49,3 +49,15 @@ export interface TopicDifficultyPageResponse {
   totalPages: number;
   topicDifficulties: TopicDifficulty[];
 }
+
+export interface TopicDifficultyStats {
+  id: number;
+  name: string;
+  totalQuizzesPlayed: number;
+  totalPromotionsReceived: number;
+  avgDurationSeconds: number;
+}
+
+export interface TopicDifficultyStatsResponse {
+  topicDifficultyStats: TopicDifficultyStats[];
+}

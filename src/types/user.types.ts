@@ -34,3 +34,16 @@ export interface ChangePasswordRequest {
   password: string;
   newPassword: string;
 }
+
+export interface UserStats {
+  totalStaff: number;
+  totalActivatedStaff: number;
+  totalUser: number;
+  totalActivatedUser: number;
+  staffJoinedThisMonth: number;
+  userJoinedThisMonth: number;
+}
+
+export interface UserStatsResponse {
+  userStats: UserStats;
+}

@@ -58,3 +58,7 @@ export const updateProductActivation = (
 export const deleteProduct = (productId: number) => {
   return api.delete(`/admin/products/${productId}`);
 };
+
+export const getProductStats = () => {
+  return api.get("/admin/products/stats");
+};

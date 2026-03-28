@@ -26,6 +26,10 @@ export const deleteTopicDifficulty = (topicDifficultyId: number) => {
   return api.delete(`/admin/topic-difficulties/${topicDifficultyId}`);
 };
 
+export const getTopicDifficultyStats = () => {
+  return api.get("/admin/topic-difficulties/stats");
+};
+
 export const createQuestions = (
   questions: QuestionCreateRequest[],
   topicDifficultySlug: string,

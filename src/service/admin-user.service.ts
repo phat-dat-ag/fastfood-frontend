@@ -17,3 +17,7 @@ export const updateUserActivation = (userId: number, activated: boolean) => {
 export const deleteUser = (userId: number) => {
   return api.delete(`/admin/users/${userId}`);
 };
+
+export const getUserStats = () => {
+  return api.get("/admin/users/stats");
+};

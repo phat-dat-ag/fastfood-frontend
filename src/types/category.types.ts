@@ -44,3 +44,13 @@ export interface CategorySelection {
 export interface CategorySelectionResponse {
   selectiveCategories: CategorySelection[];
 }
+
+export interface CategoryStats {
+  name: string;
+  totalRevenue: number;
+  totalQuantitySold: number;
+}
+
+export interface CategoryStatsResponse {
+  categoryStats: CategoryStats[];
+}

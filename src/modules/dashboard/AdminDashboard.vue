@@ -2,8 +2,6 @@
 import { ref, onMounted, computed, type Ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
 import { STATS_CATEGORY, STATS_ORDER, STATS_PRODUCT, STATS_TOPIC, STATS_TOPIC_DIFFICULTY, STATS_USER } from '../../constants/messages';
-import { getCategoryStats, getOrderStats, getProductStats, getTopicDifficultyStats, getTopicStats, getUserStats } from '../../service/dashboard.service';
-import type { CategoryStats, OrderStats, ProductStats, TopicDifficultyStats, TopicStats, UserStats } from '../../types/stats.types';
 import { ORDER_STATUS_TEXT } from '../../utils/order-display.utils';
 import { formatCurrencyVND } from '../../utils/currency.utils';
 
@@ -26,6 +24,18 @@ import {
 } from 'chart.js';
 import type { Chart, Plugin, ChartDataset } from 'chart.js';
 import { Pie, Bar } from 'vue-chartjs';
+import { getUserStats } from '../../service/admin-user.service';
+import type { UserStats, UserStatsResponse } from '../../types/user.types';
+import { getCategoryStats } from '../../service/admin-category.service';
+import type { CategoryStats, CategoryStatsResponse } from '../../types/category.types';
+import { getProductStats } from '../../service/admin-product.service';
+import type { ProductStats, ProductStatsResponse } from '../../types/product.types';
+import { getTopicDifficultyStats } from '../../service/admin-topic-difficulty.service';
+import type { TopicDifficultyStats, TopicDifficultyStatsResponse } from '../../types/topic-difficulty.types';
+import type { TopicStats, TopicStatsResponse } from '../../types/topic.types';
+import { getTopicStats } from '../../service/admin-topic.service';
+import { getOrderStats } from '../../service/admin-order.service';
+import type { OrderStats, OrderStatsResponse } from '../../types/order.types';
 
 type MixedBarLineData = ChartData<"bar" | "line", number[], string>;
 
@@ -218,23 +228,23 @@ const showCategoryChart = computed(() => categoryStats.value && categoryStats.va
 const showProductChart = computed(() => productStats.value && productStats.value.length > 0);
 
 async function loadUserStats() {
-  await useApiHandler<UserStats>(
+  await useApiHandler<UserStatsResponse>(
     getUserStats,
     { loading: STATS_USER.get, error: STATS_USER.getError },
-    data => userStats.value = data
+    data => userStats.value = data.userStats
   );
 }
 
 async function loadOrderStats() {
-  await useApiHandler<OrderStats>(
+  await useApiHandler<OrderStatsResponse>(
     getOrderStats,
     { loading: STATS_ORDER.get, error: STATS_ORDER.getError },
     data => {
-      orderStats.value = data;
+      orderStats.value = data.orderStats;
 
-      animateRevenue(Number(data.cashOnDeliveryRevenue), animatedCOD);
-      animateRevenue(Number(data.bankTransferRevenue), animatedBank);
-      animateRevenue(Number(data.totalRevenue), animatedTotal);
+      animateRevenue(Number(data.orderStats.cashOnDeliveryRevenue), animatedCOD);
+      animateRevenue(Number(data.orderStats.bankTransferRevenue), animatedBank);
+      animateRevenue(Number(data.orderStats.totalRevenue), animatedTotal);
 
       orderChartData.value = {
         labels: [
@@ -246,11 +256,11 @@ async function loadOrderStats() {
         ],
         datasets: [{
           data: [
-            data.pendingOrderAmount,
-            data.confirmedOrderAmount,
-            data.deliveringOrderAmount,
-            data.deliveredOrderAmount,
-            data.cancelledOrderAmount,
+            data.orderStats.pendingOrderAmount,
+            data.orderStats.confirmedOrderAmount,
+            data.orderStats.deliveringOrderAmount,
+            data.orderStats.deliveredOrderAmount,
+            data.orderStats.cancelledOrderAmount,
           ],
           backgroundColor: ['#FFA500', '#1E90FF', '#00CED1', '#32CD32', '#FF6347']
         }]
@@ -260,16 +270,16 @@ async function loadOrderStats() {
 }
 
 async function loadCategoryStats() {
-  await useApiHandler<CategoryStats[]>(
+  await useApiHandler<CategoryStatsResponse>(
     getCategoryStats,
     { loading: STATS_CATEGORY.get, error: STATS_CATEGORY.getError },
     data => {
-      categoryStats.value = data;
+      categoryStats.value = data.categoryStats;
       categoryChartData.value = {
-        labels: data.map(c => c.name),
+        labels: data.categoryStats.map(c => c.name),
         datasets: [{
           label: 'Doanh thu',
-          data: data.map(c => c.totalRevenue),
+          data: data.categoryStats.map(c => c.totalRevenue),
           backgroundColor: '#4CAF50'
         }]
       };
@@ -278,16 +288,16 @@ async function loadCategoryStats() {
 }
 
 async function loadProductStats() {
-  await useApiHandler<ProductStats[]>(
+  await useApiHandler<ProductStatsResponse>(
     getProductStats,
     { loading: STATS_PRODUCT.get, error: STATS_PRODUCT.getError },
     data => {
-      productStats.value = data;
+      productStats.value = data.productStats;
       productChartData.value = {
-        labels: data.map(p => p.name),
+        labels: data.productStats.map(p => p.name),
         datasets: [{
           label: 'Doanh thu',
-          data: data.map(p => p.totalRevenue),
+          data: data.productStats.map(p => p.totalRevenue),
           backgroundColor: '#FFA500'
         }]
       };
@@ -296,23 +306,23 @@ async function loadProductStats() {
 }
 
 async function loadTopicStats() {
-  await useApiHandler<TopicStats[]>(
+  await useApiHandler<TopicStatsResponse>(
     getTopicStats,
     { loading: STATS_TOPIC.get, error: STATS_TOPIC.getError },
     (data) => {
-      topicStats.value = data;
+      topicStats.value = data.topicStats;
 
       topicChartData.value = {
-        labels: data.map(t => t.name),
+        labels: data.topicStats.map(t => t.name),
         datasets: [
           {
             label: 'Phần thưởng nhận',
-            data: data.map(t => t.totalPromotionsReceived),
+            data: data.topicStats.map(t => t.totalPromotionsReceived),
             backgroundColor: '#1E90FF',
           },
           {
             label: 'Lượt tham gia',
-            data: data.map(t => t.totalQuizzesPlayed),
+            data: data.topicStats.map(t => t.totalQuizzesPlayed),
             backgroundColor: '#FFA500',
           }
         ]
@@ -322,33 +332,33 @@ async function loadTopicStats() {
 }
 
 async function loadTopicDifficultyStats() {
-  await useApiHandler<TopicDifficultyStats[]>(
+  await useApiHandler<TopicDifficultyStatsResponse>(
     getTopicDifficultyStats,
     { loading: STATS_TOPIC_DIFFICULTY.get, error: STATS_TOPIC_DIFFICULTY.getError },
     (data) => {
-      topicDifficultyStats.value = data;
+      topicDifficultyStats.value = data.topicDifficultyStats;
 
       difficultyChartData.value = {
-        labels: data.map(d => d.name),
+        labels: data.topicDifficultyStats.map(d => d.name),
         datasets: [
           {
             type: 'bar',
             label: 'Phần thưởng nhận',
-            data: data.map(d => d.totalPromotionsReceived),
+            data: data.topicDifficultyStats.map(d => d.totalPromotionsReceived),
             backgroundColor: '#4CAF50',
             yAxisID: 'y',
           },
           {
             type: 'bar',
             label: 'Lượt tham gia',
-            data: data.map(d => d.totalQuizzesPlayed),
+            data: data.topicDifficultyStats.map(d => d.totalQuizzesPlayed),
             backgroundColor: '#FFA500',
             yAxisID: 'y',
           },
           {
             type: 'line',
             label: 'Thời gian trung bình (giây)',
-            data: data.map(d => d.avgDurationSeconds),
+            data: data.topicDifficultyStats.map(d => d.avgDurationSeconds),
             borderColor: '#1E90FF',
             tension: 0.3,
             pointRadius: 3,

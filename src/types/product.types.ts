@@ -68,3 +68,13 @@ export interface ProductSelection {
 export interface ProductSelectionResponse {
   selectiveProducts: ProductSelection[];
 }
+
+export interface ProductStats {
+  name: string;
+  totalRevenue: number;
+  totalQuantitySold: number;
+}
+
+export interface ProductStatsResponse {
+  productStats: ProductStats[];
+}

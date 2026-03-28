@@ -46,3 +46,14 @@ export interface TopicPageResponse {
   totalPages: number;
   topics: Topic[];
 }
+
+export interface TopicStats {
+  id: number;
+  name: string;
+  totalQuizzesPlayed: number;
+  totalPromotionsReceived: number;
+}
+
+export interface TopicStatsResponse {
+  topicStats: TopicStats[];
+}

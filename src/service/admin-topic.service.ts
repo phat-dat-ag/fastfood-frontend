@@ -16,7 +16,7 @@ export const updateTopic = (data: TopicUpdateRequest) => {
 };
 
 export const getTopicBySlug = (slug: string) => {
-  return api.get(`/admin/topics/${slug}`);
+  return api.get(`/admin/topics/slug/${slug}`);
 };
 
 export const getTopics = (pageRequest: PageRequest) => {
@@ -29,6 +29,10 @@ export const updateTopicActivation = (topicId: number, activated: boolean) => {
 
 export const deleteTopic = (topicId: number) => {
   return api.delete(`/admin/topics/${topicId}`);
+};
+
+export const getTopicStats = () => {
+  return api.get("/admin/topics/stats");
 };
 
 export const createTopicDifficulty = (

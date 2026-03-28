@@ -63,3 +63,7 @@ export const updateCategoryActivation = (
 export const deleteCategory = (categoryId: number) => {
   return api.delete(`/admin/categories/${categoryId}`);
 };
+
+export const getCategoryStats = () => {
+  return api.get("/admin/categories/stats");
+};
