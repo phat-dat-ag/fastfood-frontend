@@ -2,12 +2,13 @@
 import type { UploadFile, UploadUserFile } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import { useApiHandler } from '../../composables/useApiHandler';
-import { deleteImage, getChallengeIntroductionPageImages, uploadImage } from '../../service/image.service';
+import { getChallengeIntroductionPageImages } from '../../service/image.service';
 import { CHALLENGE_INTRODUCTION_PAGE_IMAGE_MESSAGE } from '../../constants/messages';
 import type { ChallengeIntroductionImage, Image, ImageCreateRequest } from '../../types/image.types';
 import { PAGE_TYPE } from '../../constants/page-type';
 import UploadImagesSection from './components/UploadImagesSection.vue';
 import { SECTION_TYPE } from '../../constants/section-type';
+import { deleteImage, uploadImage } from '../../service/admin-image.service';
 
 const carouselImages = ref<UploadUserFile[]>([]);
 

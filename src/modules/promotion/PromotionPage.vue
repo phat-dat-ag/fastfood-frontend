@@ -3,9 +3,9 @@ import { onMounted, ref } from 'vue'
 import { useApiHandler } from '../../composables/useApiHandler'
 import { PROMOTION_PAGE_IMAGE_MESSAGE } from '../../constants/messages'
 import { getItemPromotionImages } from '../../service/promotion.service'
-import type { ItemPromotionImageResponse } from '../../types/image.types'
 import PromotionImageSection from './components/PromotionImageSection.vue'
 import EmptyPage from '../../components/EmptyPage.vue'
+import type { ItemPromotionImageResponse } from '../../types/promotion.types'
 
 const itemPromotionImageResponse = ref<ItemPromotionImageResponse | null>(null);
 

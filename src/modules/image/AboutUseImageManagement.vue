@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import type { UploadUserFile, UploadFile } from "element-plus";
-import { deleteImage, getAboutUsPageImages, uploadImage } from "../../service/image.service";
+import { getAboutUsPageImages } from "../../service/image.service";
 import { useApiHandler } from "../../composables/useApiHandler";
 import { ABOUT_US_PAGE_IMAGE_MESSAGE } from "../../constants/messages";
 import type { AboutUsPageImage, Image, ImageCreateRequest } from "../../types/image.types";
 import { PAGE_TYPE } from "../../constants/page-type";
 import { SECTION_TYPE } from "../../constants/section-type";
 import UploadImagesSection from "./components/UploadImagesSection.vue";
+import { deleteImage, uploadImage } from "../../service/admin-image.service";
 
 const carouselImages = ref<UploadUserFile[]>([]);
 const showcaseImages = ref<UploadUserFile[]>([]);

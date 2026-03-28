@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ItemPromotionImage } from '../../../types/image.types';
+import type { ItemPromotionImage } from '../../../types/promotion.types';
 import { formatCurrencyVND } from '../../../utils/currency.utils';
 import { formatDateString } from '../../../utils/time.utils';
 
