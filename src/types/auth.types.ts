@@ -5,19 +5,6 @@ export interface OTPResponse {
   expiredAt: string;
 }
 
-export interface SignUpRequest {
-  name: string;
-  phone: string;
-  birthdayString: string;
-  email: string;
-  password: string;
-}
-
-export interface SignUpConfirmRequest {
-  phone: string;
-  otp: string;
-}
-
 export interface SignInRequest {
   phone: string;
   password: string;

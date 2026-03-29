@@ -1,3 +1,16 @@
+export interface SignUpRequest {
+  name: string;
+  phone: string;
+  birthdayString: string;
+  email: string;
+  password: string;
+}
+
+export interface SignUpConfirmRequest {
+  phone: string;
+  otp: string;
+}
+
 export interface User {
   id: number;
   name: string;

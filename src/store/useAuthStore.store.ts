@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import type { ForgetPasswordRequest, SignUpRequest } from "../types/auth.types";
+import type { ForgetPasswordRequest } from "../types/auth.types";
+import type { SignUpRequest } from "../types/user.types";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({

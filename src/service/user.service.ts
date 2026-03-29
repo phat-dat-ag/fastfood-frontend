@@ -2,7 +2,17 @@ import api from "../api/axios";
 import type {
   ChangePasswordRequest,
   EidtUserRequest,
+  SignUpConfirmRequest,
+  SignUpRequest,
 } from "../types/user.types";
+
+export const signUp = (data: SignUpRequest) => {
+  return api.post("/users", data);
+};
+
+export const verifySignUp = (data: SignUpConfirmRequest) => {
+  return api.post("/users/verification", data);
+};
 
 export const updateAvatar = (file: File) => {
   const formData = new FormData();

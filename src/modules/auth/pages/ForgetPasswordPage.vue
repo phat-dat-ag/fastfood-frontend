@@ -4,13 +4,13 @@ import * as yup from 'yup';
 import type { OTPResponse } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
 import { useAuthStore } from '../../../store/useAuthStore.store';
-import { forgetPassword, verifyForgetPassword } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
 import type { ApiResponse } from '../../../types/api.types';
 import { ROUTE_NAMES } from '../../../constants/route-names';
 import { useOtpHandler } from '../../../composables/useOtpHandler';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
 import SecondaryButton from '../../../components/buttons/SecondaryButton.vue';
+import { forgetPassword, verifyForgetPassword } from '../../../service/password-reset.service';
 
 const schema = yup.object({
     phone: yup

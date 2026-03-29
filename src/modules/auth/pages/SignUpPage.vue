@@ -4,7 +4,6 @@ import * as yup from 'yup';
 import { nomarlizeSpaces } from '../../../utils/string.utils';
 import type { OTPResponse } from '../../../types/auth.types';
 import OTPModal from '../components/OTPModal.vue';
-import { signUp, verifySignUp } from '../../../service/auth.service';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../../store/useAuthStore.store';
 import type { ApiResponse } from '../../../types/api.types';
@@ -13,6 +12,7 @@ import { useOtpHandler } from '../../../composables/useOtpHandler';
 import PrimaryButton from '../../../components/buttons/PrimaryButton.vue';
 import SecondaryButton from '../../../components/buttons/SecondaryButton.vue';
 import TextButton from '../../../components/buttons/TextButton.vue';
+import { signUp, verifySignUp } from '../../../service/user.service';
 
 const schema = yup.object({
     name: yup
